@@ -22,6 +22,21 @@
             android:name=".presentation.resultsearch.ResultSearchActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.seatbook.SeatBookActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.order.OrderInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.flightdetail.FlightDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.biodata.PassengerBioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.biodata.OrdererBioActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true">
             <intent-filter>

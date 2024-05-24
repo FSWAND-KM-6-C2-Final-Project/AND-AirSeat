@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.order.OrderInfoActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_flight_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_theme_primary"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="12dp"
+        android:gravity="center">
+
+        <ImageButton
+            android:layout_marginStart="8dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/btn_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Order Information"
+            android:textColor="@color/md_theme_onPrimary"
+            android:textSize="18sp"
+            android:layout_marginHorizontal="18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_flight_detail"
+        app:layout_constraintStart_toStartOf="parent"
+        android:backgroundTint="@color/success"
+        app:cardCornerRadius="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Issued"
+            android:layout_marginVertical="4dp"
+            android:textColor="@color/md_theme_onPrimary"
+            android:layout_marginHorizontal="12dp"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <include
+        android:id="@+id/layout_flight_info"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_order_info"
+        app:layout_constraintTop_toBottomOf="@id/cv_status"
+        />
+
+    <TextView
+        android:id="@+id/tv_detail_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/layout_flight_info"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:text="Detail Price"
+        android:layout_marginVertical="12dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_price_adults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_detail_price"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="8dp"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 Adults"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IDR 9.550.000"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textAlignment="textEnd"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_price_baby"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_price_adults"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="8dp"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1 Baby"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IDR 0"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textAlignment="textEnd"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_tax"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_price_baby"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="8dp"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tax"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IDR 300.000"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textAlignment="textEnd"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_promo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_tax"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="8dp"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Promo"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IDR 0"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textAlignment="textEnd"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_total"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_promo"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="8dp"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IDR 9.850.000"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textAlignment="textEnd"
+            />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="18dp"
+        android:layout_marginBottom="36dp"
+        android:padding="12dp"
+        android:text="Home"
+        android:textSize="16sp"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
