@@ -4,6 +4,35 @@
     <string name="title_tab_history">Riwayat</string>
     <string name="title_tab_notification">Notifikasi</string>
     <string name="title_tab_profile">Akun</string>
+
+    <!-- feature login -->
+    <string name="confirm_password">Confirm Password</string>
+    <string name="hint_password">Input your password</string>
+    <string name="your_name">Your name</string>
+    <string name="title_email">Email</string>
+    <string name="title_password">Password</string>
+    <string name="forget_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="not_registered">Don\'t have an account? Sign up here</string>
+    <string name="already_have_an_account_login_here">Already have an Account? Login Here</string>
+    <string name="register">Register</string>
+    <string name="hint_phone">Input your phone number</string>
+    <string name="text_register">Register</string>
+    <string name="text_login">Login</string>
+    <string name="title_name">Name</string>
+    <string name="title_phone">Phone number</string>
+    <string name="title_confirm_password">Confirm Password</string>
+    <string name="text_input_otp">Input OTP</string>
+    <string name="text_type_the_6_digit_code_sent_to">Type the 6 digit code sent to </string>
+    <string name="text_resend_otp">Resend OTP within 60 seconds</string>
+    <string name="text_request_a_new_code_via_email">Request a new code via Email</string>
+    <string name="text_reset_password">Reset password</string>
+    <string name="text_new_password">New Password</string>
+    <string name="hint_new_password">Input your new password</string>
+    <string name="hint_confirm_new_password">Confirm new password</string>
+    <string name="text_save">Save</string>
+    <string name="text_email_gw">lopeynope@gmail.com</string>
+
     <string name="text_header_account">Account</string>
     <string name="text_header_notification">Notification</string>
     <string name="text_depart_place">Jakarta (JKT)</string>
@@ -22,7 +51,6 @@
     <string name="text_duration_flight">(4h 50m)</string>
     <string name="text_total">Total</string>
     <string name="text_price">IDR. 4.950.000/pax</string>
-    <string name="text_save">Save</string>
     <string name="text_favorite_title">Favorite Destination</string>
     <string name="text_welcome">Hi, Where will you go?</string>
     <string name="text_flight_option">Flight Options</string>

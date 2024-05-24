@@ -81,6 +81,9 @@ ktlint {
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
+    //otp
+    implementation("com.github.mukeshsolanki.android-otpview-pinview:otpview:3.1.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
