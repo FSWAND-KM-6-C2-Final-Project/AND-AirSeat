@@ -79,6 +79,9 @@ ktlint {
 
 dependencies {
 
+    //otp
+    implementation("com.github.mukeshsolanki.android-otpview-pinview:otpview:3.1.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
