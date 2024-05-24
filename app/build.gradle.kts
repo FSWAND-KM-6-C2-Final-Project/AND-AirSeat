@@ -102,6 +102,8 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp)
     implementation(libs.koin.android)
+    implementation("com.google.android.material:material:1.4.0")
+    implementation("com.github.JahidHasanCO:SeatBookView:1.0.4")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

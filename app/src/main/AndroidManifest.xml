@@ -16,7 +16,22 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="com.nafi.airseat.presentation.main.MainActivity"
+            android:name=".presentation.seatbook.SeatBookActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.order.OrderInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.flightdetail.FlightDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.biodata.PassengerBioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.biodata.OrdererBioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +39,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
     </application>
 
 </manifest>
