@@ -22,6 +22,9 @@
             android:name=".presentation.resultsearch.ResultSearchActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.payment.WebViewMidtransActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.seatbook.SeatBookActivity"
             android:exported="false" />
         <activity
@@ -29,7 +32,7 @@
             android:exported="false" />
         <activity
             android:name=".presentation.flightdetail.FlightDetailActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".presentation.biodata.PassengerBioActivity"
             android:exported="false" />
@@ -39,8 +42,8 @@
         <activity
             android:name=".presentation.main.MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
