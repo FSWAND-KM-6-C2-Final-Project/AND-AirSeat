@@ -29,7 +29,7 @@
             android:id="@+id/tv_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Flight Detail"
+            android:text="@string/flight_detail"
             android:textColor="@color/md_theme_onPrimary"
             android:textSize="18sp"
             android:layout_marginHorizontal="18dp" />
@@ -198,6 +198,7 @@
     </LinearLayout>
 
     <include
+        android:id="@+id/cv_section_checkout"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         layout="@layout/section_checkout"
