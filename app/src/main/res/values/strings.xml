@@ -4,4 +4,7 @@
     <string name="title_tab_history">Riwayat</string>
     <string name="title_tab_notification">Notifikasi</string>
     <string name="title_tab_profile">Akun</string>
+    <string name="string_loading">loading</string>
+    <string name="close">Close</string>
+    <string name="flight_detail">Flight Detail</string>
 </resources>
