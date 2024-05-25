@@ -71,14 +71,26 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/tv_nav_to_login"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_to_login"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="6dp"
-        android:text="@string/already_have_an_account_login_here"
+        android:layout_marginTop="4dp"
+        android:text="@string/already_have_an_account"
         android:textAlignment="center"
+        android:layout_marginLeft="88dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fl_btn_loading_state"
         tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
+        android:id="@+id/tv_nav_to_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_login_here"
+        android:textColor="#1A4BFF"
+        android:textStyle="bold"
+        android:layout_marginLeft="2dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_to_login"
+        app:layout_constraintTop_toTopOf="@+id/tv_to_login"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

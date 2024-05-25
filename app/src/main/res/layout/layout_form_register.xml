@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/title_name"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -26,6 +25,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_name"
             android:layout_width="match_parent"
+            android:inputType="textPersonName"
+            android:background="@drawable/custom_input"
             android:layout_height="wrap_content"
             android:hint="@string/your_name" />
 
@@ -34,9 +35,8 @@
         android:id="@+id/tv_title_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/title_phone"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -50,17 +50,17 @@
             android:id="@+id/et_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
             android:hint="@string/hint_phone"
-            android:inputType="textEmailAddress" />
+            android:inputType="phone" />
 
     </com.google.android.material.textfield.TextInputLayout>
     <TextView
         android:id="@+id/tv_title_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/title_email"
-        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:text="@string/text_email"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -74,6 +74,7 @@
             android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress" />
 
@@ -82,9 +83,8 @@
         android:id="@+id/tv_title_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/title_password"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -99,6 +99,7 @@
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
             android:hint="@string/hint_password"
             android:inputType="textPassword" />
 
@@ -107,9 +108,8 @@
         android:id="@+id/tv_title_confirm_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/title_confirm_password"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
          />
 
@@ -117,6 +117,7 @@
         android:id="@+id/til_confirm_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:visibility="gone"
         app:passwordToggleEnabled="true"
         tools:visibility="visible">
@@ -125,6 +126,7 @@
             android:id="@+id/et_confirm_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
             android:hint="@string/confirm_password"
             android:inputType="textPassword" />
 
