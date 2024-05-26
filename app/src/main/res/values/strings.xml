@@ -4,4 +4,7 @@
     <string name="title_tab_history">Riwayat</string>
     <string name="title_tab_notification">Notifikasi</string>
     <string name="title_tab_profile">Akun</string>
+    <string name="text_header_history">History</string>
+    <string name="text_login_protection">Sorry, You Have to Log In First</string>
+    <string name="text_button_login_protection">Login</string>
 </resources>
