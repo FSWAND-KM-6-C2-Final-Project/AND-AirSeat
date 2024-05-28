@@ -47,14 +47,14 @@ android {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "\"https://\"",
+                value = "\"https://plucky-agent-424606-s3.et.r.appspot.com/api/v1/\"",
             )
         }
         create("integration") {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "\"https://\"",
+                value = "\"https://plucky-agent-424606-s3.et.r.appspot.com/api/v1/\"",
             )
         }
     }
@@ -81,7 +81,7 @@ ktlint {
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
-    //otp
+    // otp
     implementation("com.github.mukeshsolanki.android-otpview-pinview:otpview:3.1.0")
 
     implementation(libs.androidx.core.ktx)
@@ -109,6 +109,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation("com.google.android.material:material:1.4.0")
     implementation("com.github.JahidHasanCO:SeatBookView:1.0.4")
+    implementation(libs.http.logging)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

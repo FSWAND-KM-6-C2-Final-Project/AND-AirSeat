@@ -30,6 +30,7 @@
         android:id="@+id/til_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:hintEnabled="false"
         android:layout_marginVertical="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_email">
@@ -61,6 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="2dp"
         app:endIconMode="password_toggle"
+        app:hintEnabled="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title_password">
 
@@ -98,6 +100,7 @@
 
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="18dp"
@@ -136,7 +139,5 @@
         android:layout_marginLeft="2dp"
         app:layout_constraintStart_toEndOf="@+id/tv_to_register"
         app:layout_constraintTop_toTopOf="@+id/tv_to_register"/>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
