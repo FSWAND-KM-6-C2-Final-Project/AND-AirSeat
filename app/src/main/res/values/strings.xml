@@ -37,5 +37,16 @@
     <string name="text_email">Email</string>
     <string name="text_login_here">Login Here</string>
     <string name="text_timer_otp">1 hour</string>
+    <string name="cancel">Cancel</string>
+    <string name="send">Send</string>
+    <string name="error">Error: %1$s</string>
+    <string name="create_email_input_dialog">createEmailInputDialog: %1$s</string>
+    <string name="dialog_req_update_password">Password change request has been sent to your email</string>
+    <string name="ok">OK</string>
+    <string name="proceed_login">proceedLogin %1$s</string>
+    <string name="password_is_incorrect">Password is incorrect</string>
+    <string name="error_password_empty">Password cannot be empty</string>
+    <string name="error_email_empty">Email cannot be empty</string>
+    <string name="error_email_invalid">Input your email according to the format</string>
 
 </resources>

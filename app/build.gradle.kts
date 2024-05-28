@@ -46,14 +46,14 @@ android {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "\"https://\"",
+                value = "\"https://plucky-agent-424606-s3.et.r.appspot.com/api/v1/\"",
             )
         }
         create("integration") {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "\"https://\"",
+                value = "\"https://plucky-agent-424606-s3.et.r.appspot.com/api/v1/\"",
             )
         }
     }
@@ -79,7 +79,7 @@ ktlint {
 
 dependencies {
 
-    //otp
+    // otp
     implementation("com.github.mukeshsolanki.android-otpview-pinview:otpview:3.1.0")
 
     implementation(libs.androidx.core.ktx)
@@ -105,6 +105,7 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp)
     implementation(libs.koin.android)
+    implementation(libs.http.logging)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
