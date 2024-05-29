@@ -17,6 +17,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_name"
+        app:hintEnabled="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -44,6 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        app:hintEnabled="false"
         tools:visibility="visible">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -68,6 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        app:hintEnabled="false"
         tools:visibility="visible">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -92,6 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        app:hintEnabled="false"
         app:passwordToggleEnabled="true"
         tools:visibility="visible">
 
@@ -117,7 +121,7 @@
         android:id="@+id/til_confirm_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        app:hintEnabled="false"
         android:visibility="gone"
         app:passwordToggleEnabled="true"
         tools:visibility="visible">

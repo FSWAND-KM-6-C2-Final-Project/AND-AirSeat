@@ -48,5 +48,16 @@
     <string name="error_password_empty">Password cannot be empty</string>
     <string name="error_email_empty">Email cannot be empty</string>
     <string name="error_email_invalid">Input your email according to the format</string>
+    <string name="text_register_success">Anda Telah Terdaftar\nSilahkan Login</string>
+    <string name="text_error_name_cannot_empty">Name cannot be empty</string>
+    <string name="text_error_email_empty">Email should not be empty</string>
+    <string name="text_error_email_invalid">Enter a valid format email</string>
+    <string name="text_error_password_empty">Password should not be empty</string>
+    <string name="text_error_password_less_than_8_char">Password cannot less than 8 character</string>
+    <string name="text_password_does_not_match">Password doesn\'t match</string>
+    <string name="text_error_phone_cannot_empty">Phone Number cannot be empty</string>
+    <string name="text_logout">Logout</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="enter_email">Input your email</string>
 
 </resources>

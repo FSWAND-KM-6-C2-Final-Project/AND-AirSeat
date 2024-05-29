@@ -15,6 +15,26 @@ interface AirSeatApiService {
         @Body loginRequest: LoginRequest,
     ): Response<LoginResponse>
 
+    @POST("auth/register")
+    suspend fun register(
+        @Body registerRequest: RegisterRequest,
+    ): Response<RegisterResponse>
+
+    @POST("auth/activation/verify")
+    suspend fun verifAccountOtp(
+        @Body verifAccountOtpRequest: VerifAccountOtpRequest,
+    ): Response<VerifAccountOtpResponse>
+
+    @POST("auth/activation/resend")
+    suspend fun verifAccountOtpResend(
+        @Body verifAccountOtpRequest: VerifAccountOtpResendRequest,
+    ): Response<VerifAccountOtpResendResponse>
+
+    @POST("auth/password-reset/resend")
+    suspend fun resetPassword(
+        @Body resetPasswordRequest: ResetPasswordRequest,
+    ): Response<ResetPasswordResponse>
+
     companion object {
         @JvmStatic
         operator fun invoke(): AirSeatApiService {

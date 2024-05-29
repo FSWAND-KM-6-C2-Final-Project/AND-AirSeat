@@ -12,4 +12,9 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     ) = repository
         .doLogin(email, password)
         .asLiveData(Dispatchers.IO)
+
+    fun reqChangePasswordByEmail(email: String) =
+        repository
+            .reqChangePasswordByEmail(email)
+            .asLiveData(Dispatchers.IO)
 }
