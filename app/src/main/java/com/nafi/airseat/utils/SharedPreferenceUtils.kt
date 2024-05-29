@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 
 object SharedPreferenceUtils {
-
     fun createPreference(
         context: Context,
         name: String,

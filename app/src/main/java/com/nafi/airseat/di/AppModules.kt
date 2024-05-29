@@ -7,12 +7,17 @@ import com.nafi.airseat.data.AuthService
 import com.nafi.airseat.data.AuthServiceImpl
 import com.nafi.airseat.data.UserRepository
 import com.nafi.airseat.data.UserRepositoryImpl
+import com.nafi.airseat.presentation.home.HomeViewModel
 import com.nafi.airseat.presentation.login.LoginViewModel
+import com.nafi.airseat.presentation.otp.OtpViewModel
+import com.nafi.airseat.presentation.register.RegisterViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
+import org.koin.core.scope.get
 import org.koin.dsl.module
 
 object AppModules {
@@ -44,8 +49,16 @@ object AppModules {
         module {
             viewModelOf(::OrdererBioViewModel)
             viewModelOf(::PassengerBioViewModel)
+            viewModelOf(::HomeViewModel)
+
             viewModel {
                 LoginViewModel(get())
+            }
+            viewModel {
+                RegisterViewModel(get())
+            }
+            viewModel {
+                OtpViewModel(get())
             }
         }
 

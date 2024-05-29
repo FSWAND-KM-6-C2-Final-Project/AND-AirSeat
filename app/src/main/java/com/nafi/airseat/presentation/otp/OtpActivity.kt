@@ -1,24 +1,38 @@
 package com.nafi.airseat.presentation.otp
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.nafi.airseat.databinding.ActivityOtpBinding
+import com.nafi.airseat.presentation.login.LoginActivity
+import com.nafi.airseat.presentation.register.RegisterActivity
+import com.nafi.airseat.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OtpActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOtpBinding
+
+    private val otpViewModel: OtpViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOtpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setClickListeners()
+
+        val email = intent.getStringExtra("email")
+        binding.textEmail.text = email
 
         binding.otpview.setText("")
-        binding.otpview.setOtpCompletionListener {
+        binding.otpview.setOtpCompletionListener { otp ->
             hidekeyboard()
-            Toast.makeText(this, "Enter Pin: $it", Toast.LENGTH_LONG).show()
+            if (email != null) {
+                verifyOtp(email, otp)
+            }
         }
     }
 
@@ -28,5 +42,85 @@ class OtpActivity : AppCompatActivity() {
         currentFocus?.let {
             imm.hideSoftInputFromWindow(it.windowToken, 0)
         }
+    }
+
+    private fun setClickListeners() {
+        binding.icDetailBackButton.setOnClickListener {
+            navigateToRegister()
+        }
+        binding.textNewCodeOTP.setOnClickListener {
+            val email = binding.textEmail.text.toString()
+            resendOtp(email)
+        }
+    }
+
+    private fun navigateToRegister() {
+        startActivity(
+            Intent(this, RegisterActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
+    }
+
+    private fun resendOtp(email: String) {
+        otpViewModel.doVerifResendOtp(email).observe(this) { result ->
+            result.proceedWhen(
+                doOnSuccess = {
+                    binding.textNewCodeOTP.isVisible = true
+                    Toast.makeText(
+                        this,
+                        "OTP sent to $email",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                },
+                doOnError = {
+                    binding.textNewCodeOTP.isVisible = true
+                    Toast.makeText(
+                        this,
+                        "Failed to send OTP: ${it.exception?.message.orEmpty()}",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                },
+                doOnLoading = {
+                    binding.textNewCodeOTP.isVisible = false
+                },
+            )
+        }
+    }
+
+    private fun verifyOtp(
+        email: String,
+        code: String,
+    ) {
+        otpViewModel.doVerif(email, code).observe(this) { result ->
+            result.proceedWhen(
+                doOnSuccess = {
+                    Toast.makeText(
+                        this,
+                        "OTP verification successful",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                    navigateToLogin() // Replace with actual navigation
+                },
+                doOnError = {
+                    Toast.makeText(
+                        this,
+                        "OTP verification failed: ${it.exception?.message.orEmpty()}",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                },
+                doOnLoading = {
+                    // Show loading indicator if needed
+                },
+            )
+        }
+    }
+
+    private fun navigateToLogin() {
+        startActivity(
+            Intent(this, LoginActivity::class.java).apply { // Replace with actual target activity
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 }

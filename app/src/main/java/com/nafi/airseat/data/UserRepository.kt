@@ -11,9 +11,30 @@ interface UserRepository {
         password: String,
     ): Flow<ResultWrapper<Boolean>>
 
+    @Throws(exceptionClasses = [java.lang.Exception::class])
+    fun doRegister(
+        fullName: String,
+        email: String,
+        phoneNumber: String,
+        password: String,
+        confirmPassword: String,
+    ): Flow<ResultWrapper<Boolean>>
+
+    @Throws(exceptionClasses = [java.lang.Exception::class])
+    fun doVerif(
+        email: String,
+        code: String,
+    ): Flow<ResultWrapper<Boolean>>
+
+    fun doVerifResendOtp(email: String): Flow<ResultWrapper<Boolean>>
+
+    fun reqChangePasswordByEmail(email: String): Flow<ResultWrapper<Boolean>>
+
     fun getCurrentUser(): User?
 
     fun isLoggedIn(): Boolean
+
+    fun doLogout(): Boolean
 }
 
 class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepository {
@@ -24,8 +45,37 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
         return proceedFlow { dataSource.doLogin(email, password) }
     }
 
+    override fun doRegister(
+        fullName: String,
+        email: String,
+        phoneNumber: String,
+        password: String,
+        confirmPassword: String,
+    ): Flow<ResultWrapper<Boolean>> {
+        return proceedFlow { dataSource.doRegister(fullName, email, phoneNumber, password, confirmPassword) }
+    }
+
+    override fun doVerif(
+        email: String,
+        code: String,
+    ): Flow<ResultWrapper<Boolean>> {
+        return proceedFlow { dataSource.doVerif(email, code) }
+    }
+
+    override fun doVerifResendOtp(email: String): Flow<ResultWrapper<Boolean>> {
+        return proceedFlow { dataSource.doVerifResendOtp(email) }
+    }
+
+    override fun reqChangePasswordByEmail(email: String): Flow<ResultWrapper<Boolean>> {
+        return proceedFlow { dataSource.reqChangePasswordByEmail(email) }
+    }
+
     override fun isLoggedIn(): Boolean {
         return dataSource.isLoggedIn()
+    }
+
+    override fun doLogout(): Boolean {
+        return dataSource.doLogout()
     }
 
     override fun getCurrentUser(): User? {
