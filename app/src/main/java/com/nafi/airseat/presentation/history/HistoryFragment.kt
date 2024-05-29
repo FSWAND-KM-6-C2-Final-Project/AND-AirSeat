@@ -11,6 +11,7 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.nafi.airseat.databinding.FragmentHistoryBinding
+import com.nafi.airseat.presentation.calendar.CalendarBottomSheetFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -36,7 +37,9 @@ class HistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.ivSearchHistory.setOnClickListener {
-            showDateRangePicker()
+            // showDateRangePicker()
+            val dialog = CalendarBottomSheetFragment()
+            dialog.show(childFragmentManager, dialog.tag)
         }
     }
 
