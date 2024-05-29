@@ -1,12 +1,10 @@
 package com.nafi.airseat.presentation.calendar
 
-import android.app.Dialog
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.children
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -115,30 +113,7 @@ class CalendarBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.let {
-            val bottomSheet = it.findViewById<View>(R.id.calendarView)
-            bottomSheet?.layoutParams?.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            bottomSheet?.requestLayout()
-        }
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState)
-        /*val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-        dialog.setOnShowListener { dialogInterface ->
-            val bottomSheetDialog = dialogInterface as BottomSheetDialog
-            val bottomSheet = bottomSheetDialog.findViewById<View>(R.id.calendar_dialog) as? View
-            bottomSheet?.let {
-                val behavior = BottomSheetBehavior.from(it)
-                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                behavior.peekHeight = 0
-            }
-        }*/
-    }
-
-    private fun expandBottomSheet(bottomSheetBehavior: BottomSheetBehavior<LinearLayout>) {
-        bottomSheetBehavior.skipCollapsed = true
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun bindSummaryViews() {
