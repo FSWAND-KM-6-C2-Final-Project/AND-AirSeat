@@ -7,32 +7,43 @@
     android:layout_height="match_parent"
     tools:context=".presentation.payment.WebViewMidtransActivity">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_closeSnap"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_payment_method"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_x="189dp"
-        android:layout_y="631dp"
-        android:text="@string/close"
-        android:textColor="@color/md_theme_onPrimary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/myWebView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/myWebView"
-        app:layout_constraintTop_toTopOf="@+id/myWebView"/>
+        android:background="@color/md_theme_primary"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="12dp"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/btn_back_webview"
+            android:layout_marginStart="8dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/btn_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/payment_method"
+            android:textColor="@color/md_theme_onPrimary"
+            android:textSize="18sp"
+            android:layout_marginHorizontal="18dp" />
+
+    </LinearLayout>
 
     <WebView
         android:id="@+id/myWebView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@id/ll_payment_method" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

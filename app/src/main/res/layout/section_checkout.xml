@@ -23,7 +23,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total"
+                android:text="@string/total"
                 android:textStyle="bold"
                 android:layout_weight="1"
                 android:textSize="18sp"
@@ -50,7 +50,7 @@
             android:layout_marginTop="18dp"
             android:layout_marginBottom="36dp"
             android:padding="12dp"
-            android:text="Payment"
+            android:text="@string/payment"
             android:textSize="16sp"
             app:cornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent"

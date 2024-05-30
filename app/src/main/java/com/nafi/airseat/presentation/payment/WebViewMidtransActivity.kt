@@ -23,7 +23,7 @@ class WebViewMidtransActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.btnCloseSnap.setOnClickListener {
+        binding.btnBackWebview.setOnClickListener {
             val intent = Intent(this, FlightDetailActivity::class.java)
             startActivity(intent)
         }
