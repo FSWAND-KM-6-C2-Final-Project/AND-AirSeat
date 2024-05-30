@@ -1,10 +1,10 @@
 package com.nafi.airseat.di
 
-import com.nafi.airseat.data.APIAuthDataSource
+import com.nafi.airseat.data.datasource.APIAuthDataSource
 import com.nafi.airseat.data.AirSeatApiService
-import com.nafi.airseat.data.AuthDataSource
-import com.nafi.airseat.data.AuthService
-import com.nafi.airseat.data.AuthServiceImpl
+import com.nafi.airseat.data.datasource.AuthDataSource
+import com.nafi.airseat.data.datasource.AuthService
+import com.nafi.airseat.data.datasource.AuthServiceImpl
 import com.nafi.airseat.data.UserRepository
 import com.nafi.airseat.data.UserRepositoryImpl
 import com.nafi.airseat.presentation.home.HomeViewModel

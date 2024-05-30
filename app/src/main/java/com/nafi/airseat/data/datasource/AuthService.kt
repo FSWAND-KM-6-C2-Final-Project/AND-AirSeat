@@ -1,4 +1,17 @@
-package com.nafi.airseat.data
+package com.nafi.airseat.data.datasource
+
+import com.nafi.airseat.data.AirSeatApiService
+import com.nafi.airseat.data.LoginRequest
+import com.nafi.airseat.data.RegisterRequest
+import com.nafi.airseat.data.ResetPasswordRequest
+import com.nafi.airseat.data.ResetPasswordResendOtpRequest
+import com.nafi.airseat.data.User
+import com.nafi.airseat.data.UserChangePassword
+import com.nafi.airseat.data.UserOtp
+import com.nafi.airseat.data.UserOtpResend
+import com.nafi.airseat.data.VerifAccountOtpRequest
+import com.nafi.airseat.data.VerifAccountOtpResendRequest
+import com.nafi.airseat.data.VerifyPasswordChangeOtpRequest
 
 interface AuthService {
     @Throws(exceptionClasses = [Exception::class])
