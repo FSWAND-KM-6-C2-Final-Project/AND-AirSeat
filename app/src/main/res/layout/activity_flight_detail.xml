@@ -36,166 +36,181 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/destination"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/ll_flight_detail"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Jakarta -> Melbourne"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="20dp"
-        android:textColor="@color/md_theme_primary"
-        />
+        app:layout_constraintBottom_toTopOf="@id/cv_section_checkout"
+        android:layout_marginBottom="24dp">
 
-    <TextView
-        android:id="@+id/flight_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/destination"
-        android:text="(4h 0m)"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:layout_marginHorizontal="4dp"
-        app:layout_constraintStart_toEndOf="@id/destination"
-        />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <include
-        android:id="@+id/layout_flight_info"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/layout_flight_info"
-        app:layout_constraintTop_toBottomOf="@id/flight_time"
-        />
+            <TextView
+                android:id="@+id/destination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jakarta -> Melbourne"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/md_theme_primary"
+                />
 
-    <TextView
-        android:id="@+id/tv_detail_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/layout_flight_info"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginHorizontal="20dp"
-        android:text="Detail Price"
-        android:layout_marginVertical="12dp"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        />
+            <TextView
+                android:id="@+id/flight_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/destination"
+                android:text="(4h 0m)"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="4dp"
+                app:layout_constraintStart_toEndOf="@id/destination"
+                />
 
-    <LinearLayout
-        android:id="@+id/ll_price_adults"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_detail_price"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="8dp"
-        android:weightSum="2">
+            <include
+                android:id="@+id/layout_flight_info"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/layout_flight_info"
+                app:layout_constraintTop_toBottomOf="@id/flight_time"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2 Adults"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            />
+            <TextView
+                android:id="@+id/tv_detail_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/layout_flight_info"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginHorizontal="20dp"
+                android:text="@string/detail_price"
+                android:layout_marginVertical="12dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="IDR 9.550.000"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"
-            />
+            <LinearLayout
+                android:id="@+id/ll_price_adults"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_price"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="8dp"
+                android:weightSum="2">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 Adults"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    />
 
-    <LinearLayout
-        android:id="@+id/ll_price_baby"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ll_price_adults"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="8dp"
-        android:weightSum="2">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IDR 9.550.000"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1 Baby"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="IDR 0"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"
-            />
+            <LinearLayout
+                android:id="@+id/ll_price_baby"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/ll_price_adults"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="8dp"
+                android:weightSum="2">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 Baby"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    />
 
-    <LinearLayout
-        android:id="@+id/ll_tax"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ll_price_baby"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="8dp"
-        android:weightSum="2">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IDR 0"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tax"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="IDR 300.000"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"
-            />
+            <LinearLayout
+                android:id="@+id/ll_tax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/ll_price_baby"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="8dp"
+                android:weightSum="2">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tax"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    />
 
-    <LinearLayout
-        android:id="@+id/ll_promo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ll_tax"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="8dp"
-        android:weightSum="2">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IDR 300.000"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Promo"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="IDR 0"
-            android:layout_weight="1"
-            android:textAlignment="textEnd"
-            />
+            <LinearLayout
+                android:id="@+id/ll_promo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/ll_tax"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="8dp"
+                android:weightSum="2">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/promo"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IDR 0"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <include
         android:id="@+id/cv_section_checkout"

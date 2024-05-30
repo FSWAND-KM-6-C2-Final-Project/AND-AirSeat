@@ -29,7 +29,7 @@
             android:id="@+id/tv_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Orderer Biodata"
+            android:text="@string/orderer_biodata"
             android:textColor="@color/md_theme_onPrimary"
             android:textSize="18sp"
             android:layout_marginHorizontal="18dp"
@@ -39,6 +39,7 @@
     </LinearLayout>
 
     <include
+        android:id="@+id/layout_form_ticket_booker"
         layout="@layout/layout_form_ticket_booker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,12 +48,13 @@
         app:layout_constraintTop_toBottomOf="@id/ll_bio_orderer" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/mb_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="18dp"
         android:layout_marginBottom="36dp"
         android:padding="12dp"
-        android:text="Save"
+        android:text="@string/save"
         android:textSize="16sp"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent" />

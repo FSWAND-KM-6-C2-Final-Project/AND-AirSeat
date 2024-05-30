@@ -20,7 +20,7 @@
             android:background="@color/md_theme_primaryContainer"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
-            android:text="Orderer Personal Data"
+            android:text="@string/orderer_personal_data"
             android:textColor="@color/md_theme_onPrimary"
             android:textSize="18sp"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,18 +30,19 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="18dp"
             android:paddingTop="16dp"
-            android:text="Fullname"
+            android:text="@string/fullName"
             android:textColor="@color/md_theme_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/et_fullname"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="4dp"
             android:background="@drawable/custom_input"
-            android:hint="asdsdadsadadasdasda"
+            android:hint="@string/hint_full_name"
             android:paddingHorizontal="12dp"
             android:textSize="16sp" />
 
@@ -55,7 +56,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="Have a Family Name?"
+                android:text="@string/have_a_family_name"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -78,21 +79,25 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+            android:id="@+id/tv_fm_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="18dp"
-            android:text="Family Name"
+            android:text="@string/family_name"
             android:textColor="@color/md_theme_primary"
             android:textSize="16sp"
+            android:visibility="gone"
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/et_family_name"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="4dp"
+            android:visibility="gone"
             android:background="@drawable/custom_input"
-            android:hint="asdsdadsadadasdasda"
+            android:hint="@string/hint_family_name"
             android:paddingHorizontal="12dp"
             android:textSize="16sp" />
 
@@ -101,18 +106,19 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="18dp"
             android:paddingTop="6dp"
-            android:text="Number Phone"
+            android:text="@string/number_phone"
             android:textColor="@color/md_theme_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/et_no_phone"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/custom_input"
-            android:hint="asdsdadsadadasdasda"
+            android:hint="@string/hint_phone_number"
             android:paddingHorizontal="12dp"
             android:textSize="16sp" />
 
@@ -121,19 +127,20 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="18dp"
             android:paddingTop="6dp"
-            android:text="Email"
+            android:text="@string/email"
             android:textColor="@color/md_theme_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="18dp"
             android:background="@drawable/custom_input"
-            android:hint="asdsdadsadadasdasda"
+            android:hint="@string/hint_email"
             android:paddingHorizontal="12dp"
             android:textSize="16sp" />
 
