@@ -2,7 +2,7 @@ package com.nafi.airseat.data
 
 import com.google.gson.annotations.SerializedName
 
-data class ResetPasswordData(
+class ResetPasswordResendOtpData(
     @SerializedName("id")
     var id: Int?,
     @SerializedName("email")
@@ -11,5 +11,4 @@ data class ResetPasswordData(
     var reset_password_resend_at: String?,
     @SerializedName("reset_password_expired_at")
     var reset_password_expired_at: String?,
-
-    )
+)
