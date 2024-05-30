@@ -24,7 +24,17 @@ interface AuthDataSource {
 
     suspend fun doVerifResendOtp(email: String): Boolean
 
+    //reset password
+
     suspend fun reqChangePasswordByEmail(email: String): Boolean
+    suspend fun reqChangePasswordByEmailResendOtp(email: String): Boolean
+    @Throws(exceptionClasses = [java.lang.Exception::class])
+    suspend fun verifChangePasswordOtp(
+        code: String,
+        email: String,
+        password: String,
+        confirmPassword: String,
+    ): Boolean
 
     fun getCurrentUser(): User?
 
@@ -62,8 +72,22 @@ class APIAuthDataSource(private val service: AuthService) : AuthDataSource {
         return service.doVerifResendOtp(email)
     }
 
+    //reset password
     override suspend fun reqChangePasswordByEmail(email: String): Boolean {
         return service.reqChangePasswordByEmail(email)
+    }
+
+    override suspend fun reqChangePasswordByEmailResendOtp(email: String): Boolean {
+        return service.reqChangePasswordByEmailResendOtp(email)
+    }
+
+    override suspend fun verifChangePasswordOtp(
+        code: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ): Boolean {
+        return service.verifChangePasswordOtp(code,email,password, confirmPassword)
     }
 
     override fun isLoggedIn(): Boolean {
