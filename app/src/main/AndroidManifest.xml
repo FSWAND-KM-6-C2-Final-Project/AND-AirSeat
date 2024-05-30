@@ -20,7 +20,7 @@
             android:name=".presentation.resetpassword.ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.otp.OtpActivity"
+            android:name=".presentation.otpaccount.OtpActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.register.RegisterActivity"

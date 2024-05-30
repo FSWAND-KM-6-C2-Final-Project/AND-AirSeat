@@ -30,10 +30,20 @@ interface AirSeatApiService {
         @Body verifAccountOtpRequest: VerifAccountOtpResendRequest,
     ): Response<VerifAccountOtpResendResponse>
 
+    //reset password
     @POST("auth/password-reset/resend")
+    suspend fun resetPasswordResendOtp(
+        @Body resetPasswordResendOtpRequest: ResetPasswordResendOtpRequest,
+    ): Response<ResetPasswordResendOtpResponse>
+    @POST("auth/password-reset")
     suspend fun resetPassword(
         @Body resetPasswordRequest: ResetPasswordRequest,
     ): Response<ResetPasswordResponse>
+    @POST("auth/password-reset/verify")
+    suspend fun verifyPasswordChangeOtp(
+        @Body verifyPasswordChangeOtpRequest: VerifyPasswordChangeOtpRequest,
+    ): Response<VerifyPasswordChangeOtpResponse>
+
 
     companion object {
         @JvmStatic

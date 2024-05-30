@@ -24,7 +24,18 @@ interface AuthService {
 
     suspend fun doVerifResendOtp(email: String): Boolean
 
+    //reset password
     suspend fun reqChangePasswordByEmail(email: String): Boolean
+    suspend fun reqChangePasswordByEmailResendOtp(email: String): Boolean
+    @Throws(exceptionClasses = [java.lang.Exception::class])
+    suspend fun verifChangePasswordOtp(
+        code: String,
+        email: String,
+        password: String,
+        confirmPassword: String,
+    ): Boolean
+
+
 
     fun isLoggedIn(): Boolean
 
@@ -37,6 +48,8 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
     private var currentUser: User? = null
     private var otpUser: UserOtp? = null
     private var otpUserResend: UserOtpResend? = null
+    private var userChangePassword: UserChangePassword? = null
+
 
     override suspend fun doLogin(
         email: String,
@@ -94,6 +107,7 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
         }
     }
 
+    //reset password
     override suspend fun reqChangePasswordByEmail(email: String): Boolean {
         val resetPasswordRequest = ResetPasswordRequest(email)
         val response = apiService.resetPassword(resetPasswordRequest)
@@ -104,6 +118,34 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
             false
         }
     }
+
+    override suspend fun reqChangePasswordByEmailResendOtp(email: String): Boolean {
+        val resetPasswordResendOtpRequest = ResetPasswordResendOtpRequest(email)
+        val response = apiService.resetPasswordResendOtp(resetPasswordResendOtpRequest)
+        return if (response.isSuccessful && response.body()?.status == true) {
+            otpUserResend = UserOtpResend(email = response.body()?.requestAt ?: "") // bingung
+            true
+        } else {
+            false
+        }
+    }
+
+    override suspend fun verifChangePasswordOtp(
+        code: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ): Boolean {
+        val verifChangePasswordOtpRequest = VerifyPasswordChangeOtpRequest(code,email,password,confirmPassword)
+        val response = apiService.verifyPasswordChangeOtp(verifChangePasswordOtpRequest)
+        return if (response.isSuccessful && response.body()?.status == true) {
+            userChangePassword = UserChangePassword(code,email, password,confirmPassword = response.body()?.requestAt ?: "") // bingung
+            true
+        } else {
+            false
+        }
+    }
+
 
     override fun isLoggedIn(): Boolean {
         return currentUser != null
