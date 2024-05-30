@@ -1,4 +1,4 @@
-package com.nafi.airseat.presentation.otp
+package com.nafi.airseat.presentation.otpaccount
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData

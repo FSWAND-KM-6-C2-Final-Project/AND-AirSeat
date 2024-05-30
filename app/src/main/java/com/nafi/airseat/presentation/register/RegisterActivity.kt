@@ -11,7 +11,7 @@ import com.kom.foodapp.utils.highLightWord
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityRegisterBinding
 import com.nafi.airseat.presentation.login.LoginActivity
-import com.nafi.airseat.presentation.otp.OtpActivity
+import com.nafi.airseat.presentation.otpaccount.OtpActivity
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

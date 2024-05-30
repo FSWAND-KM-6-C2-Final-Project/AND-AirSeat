@@ -1,4 +1,4 @@
-package com.nafi.airseat.presentation.otp
+package com.nafi.airseat.presentation.otpaccount
 
 import android.app.Activity
 import android.content.Intent
