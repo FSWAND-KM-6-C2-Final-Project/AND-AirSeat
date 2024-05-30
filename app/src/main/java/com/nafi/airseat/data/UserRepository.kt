@@ -1,5 +1,6 @@
 package com.nafi.airseat.data
 
+import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.utils.ResultWrapper
 import com.nafi.airseat.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +29,16 @@ interface UserRepository {
 
     fun doVerifResendOtp(email: String): Flow<ResultWrapper<Boolean>>
 
+    //reset password
     fun reqChangePasswordByEmail(email: String): Flow<ResultWrapper<Boolean>>
+    fun reqChangePasswordByEmailResendOtp(email: String):Flow<ResultWrapper<Boolean>>
+    @Throws(exceptionClasses = [java.lang.Exception::class])
+    fun verifChangePasswordOtp(
+        code: String,
+        email: String,
+        password: String,
+        confirmPassword: String,
+    ): Flow<ResultWrapper<Boolean>>
 
     fun getCurrentUser(): User?
 
@@ -66,8 +76,22 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
         return proceedFlow { dataSource.doVerifResendOtp(email) }
     }
 
+    // reset password
     override fun reqChangePasswordByEmail(email: String): Flow<ResultWrapper<Boolean>> {
         return proceedFlow { dataSource.reqChangePasswordByEmail(email) }
+    }
+
+    override fun reqChangePasswordByEmailResendOtp(email: String): Flow<ResultWrapper<Boolean>> {
+        return proceedFlow { dataSource.reqChangePasswordByEmailResendOtp(email) }
+    }
+
+    override fun verifChangePasswordOtp(
+        code: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ): Flow<ResultWrapper<Boolean>> {
+        return proceedFlow { dataSource.verifChangePasswordOtp(code, email, password, confirmPassword) }
     }
 
     override fun isLoggedIn(): Boolean {
