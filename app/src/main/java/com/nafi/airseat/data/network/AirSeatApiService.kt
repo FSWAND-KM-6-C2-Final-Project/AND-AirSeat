@@ -1,6 +1,14 @@
-package com.nafi.airseat.data
+package com.nafi.airseat.data.network
 
 import com.nafi.airseat.BuildConfig
+import com.nafi.airseat.data.ResetPasswordResendOtpResponse
+import com.nafi.airseat.data.ResetPasswordResponse
+import com.nafi.airseat.data.VerifAccountOtpRequest
+import com.nafi.airseat.data.VerifAccountOtpResendRequest
+import com.nafi.airseat.data.VerifAccountOtpResendResponse
+import com.nafi.airseat.data.VerifAccountOtpResponse
+import com.nafi.airseat.data.VerifyPasswordChangeOtpRequest
+import com.nafi.airseat.data.VerifyPasswordChangeOtpResponse
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit

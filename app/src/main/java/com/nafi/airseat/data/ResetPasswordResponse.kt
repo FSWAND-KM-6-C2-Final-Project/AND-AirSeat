@@ -1,6 +1,7 @@
 package com.nafi.airseat.data
 
 import com.google.gson.annotations.SerializedName
+import com.nafi.airseat.data.network.ResetPasswordData
 
 data class ResetPasswordResponse(
     @SerializedName("status")

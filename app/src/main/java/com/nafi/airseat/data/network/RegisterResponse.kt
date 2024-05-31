@@ -1,6 +1,7 @@
-package com.nafi.airseat.data
+package com.nafi.airseat.data.network
 
 import com.google.gson.annotations.SerializedName
+import com.nafi.airseat.data.network.RegisterData
 
 data class RegisterResponse(
     @SerializedName("status")
