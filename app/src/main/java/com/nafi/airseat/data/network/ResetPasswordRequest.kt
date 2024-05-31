@@ -1,8 +1,8 @@
-package com.nafi.airseat.data
+package com.nafi.airseat.data.network
 
 import com.google.gson.annotations.SerializedName
 
-class ResetPasswordResendOtpRequest(
+data class ResetPasswordRequest(
     @SerializedName("email")
     var email: String?,
 )

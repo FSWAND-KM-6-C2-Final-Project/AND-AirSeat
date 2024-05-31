@@ -1,7 +1,7 @@
 package com.nafi.airseat.di
 
 import com.nafi.airseat.data.datasource.APIAuthDataSource
-import com.nafi.airseat.data.AirSeatApiService
+import com.nafi.airseat.data.network.AirSeatApiService
 import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthService
 import com.nafi.airseat.data.datasource.AuthServiceImpl

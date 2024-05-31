@@ -1,10 +1,10 @@
 package com.nafi.airseat.data.datasource
 
-import com.nafi.airseat.data.AirSeatApiService
-import com.nafi.airseat.data.LoginRequest
-import com.nafi.airseat.data.RegisterRequest
-import com.nafi.airseat.data.ResetPasswordRequest
-import com.nafi.airseat.data.ResetPasswordResendOtpRequest
+import com.nafi.airseat.data.network.AirSeatApiService
+import com.nafi.airseat.data.network.LoginRequest
+import com.nafi.airseat.data.network.RegisterRequest
+import com.nafi.airseat.data.network.ResetPasswordRequest
+import com.nafi.airseat.data.network.ResetPasswordResendOtpRequest
 import com.nafi.airseat.data.User
 import com.nafi.airseat.data.UserChangePassword
 import com.nafi.airseat.data.UserOtp
