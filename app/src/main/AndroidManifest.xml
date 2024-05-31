@@ -33,7 +33,8 @@
             android:exported="false" />
         <activity
             android:name=".presentation.login.LoginActivity"
-            android:exported="true" >
+            android:exported="true" />
+        <activity
             android:name=".presentation.DetailNotificationActivity"
             android:exported="false" />
         <activity
@@ -69,10 +70,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".presentation.main.MainActivity"
-            android:exported="false" >
-        </activity>
+
     </application>
 
 </manifest>

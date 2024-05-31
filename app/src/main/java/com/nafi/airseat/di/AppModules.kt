@@ -7,6 +7,8 @@ import com.nafi.airseat.data.datasource.AuthServiceImpl
 import com.nafi.airseat.data.network.services.AirSeatApiService
 import com.nafi.airseat.data.repository.UserRepository
 import com.nafi.airseat.data.repository.UserRepositoryImpl
+import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
+import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
 import com.nafi.airseat.presentation.home.HomeViewModel
 import com.nafi.airseat.presentation.login.LoginViewModel
 import com.nafi.airseat.presentation.otpaccount.OtpViewModel
@@ -15,9 +17,6 @@ import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
-import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
-import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
 import org.koin.dsl.module
