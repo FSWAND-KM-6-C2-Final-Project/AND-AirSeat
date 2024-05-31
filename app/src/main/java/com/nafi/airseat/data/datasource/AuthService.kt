@@ -1,17 +1,17 @@
 package com.nafi.airseat.data.datasource
 
-import com.nafi.airseat.data.network.AirSeatApiService
-import com.nafi.airseat.data.network.LoginRequest
-import com.nafi.airseat.data.network.RegisterRequest
-import com.nafi.airseat.data.network.ResetPasswordRequest
-import com.nafi.airseat.data.network.ResetPasswordResendOtpRequest
-import com.nafi.airseat.data.User
-import com.nafi.airseat.data.UserChangePassword
-import com.nafi.airseat.data.UserOtp
-import com.nafi.airseat.data.UserOtpResend
-import com.nafi.airseat.data.VerifAccountOtpRequest
-import com.nafi.airseat.data.VerifAccountOtpResendRequest
-import com.nafi.airseat.data.VerifyPasswordChangeOtpRequest
+import com.nafi.airseat.data.network.services.AirSeatApiService
+import com.nafi.airseat.data.network.login.LoginRequest
+import com.nafi.airseat.data.network.register.RegisterRequest
+import com.nafi.airseat.data.network.resetpassword.ResetPasswordRequest
+import com.nafi.airseat.data.network.resetpassword.ResetPasswordResendOtpRequest
+import com.nafi.airseat.data.model.User
+import com.nafi.airseat.data.model.UserChangePassword
+import com.nafi.airseat.data.model.UserOtp
+import com.nafi.airseat.data.model.UserOtpResend
+import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpRequest
+import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResendRequest
+import com.nafi.airseat.data.network.resetpassword.VerifyPasswordChangeOtpRequest
 
 interface AuthService {
     @Throws(exceptionClasses = [Exception::class])

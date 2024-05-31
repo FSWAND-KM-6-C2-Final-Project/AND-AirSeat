@@ -1,6 +1,6 @@
 package com.nafi.airseat.data.datasource
 
-import com.nafi.airseat.data.User
+import com.nafi.airseat.data.model.User
 
 interface AuthDataSource {
     @Throws(exceptionClasses = [Exception::class])

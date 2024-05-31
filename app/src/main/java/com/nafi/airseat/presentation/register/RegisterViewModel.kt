@@ -2,7 +2,7 @@ package com.nafi.airseat.presentation.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.nafi.airseat.data.UserRepository
+import com.nafi.airseat.data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 
 class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
