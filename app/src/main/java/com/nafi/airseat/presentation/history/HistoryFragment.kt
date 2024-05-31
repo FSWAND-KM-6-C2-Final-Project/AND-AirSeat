@@ -6,26 +6,33 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.nafi.airseat.R
+import com.nafi.airseat.databinding.FragmentHistoryBinding
+import com.nafi.airseat.presentation.bottomsheet.ProtectedLoginBottomSheet
 
 class HistoryFragment : Fragment() {
-    companion object {
-        fun newInstance() = HistoryFragment()
-    }
-
     private val viewModel: HistoryViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    private lateinit var binding: FragmentHistoryBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        return inflater.inflate(R.layout.fragment_history, container, false)
+        binding = FragmentHistoryBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.ivSearchHistory.setOnClickListener {
+            // showDateRangePicker()
+            val dialog = ProtectedLoginBottomSheet()
+            dialog.show(childFragmentManager, dialog.tag)
+        }
     }
 }

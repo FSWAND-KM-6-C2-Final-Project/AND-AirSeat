@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafi.airseat.databinding.FragmentHomeBinding
-import com.nafi.airseat.presentation.bottomsheetcalendar.BottomSheetCalendarFragment
+import com.nafi.airseat.presentation.calendar.CalendarBottomSheetFragment
 import com.nafi.airseat.presentation.passengers.PassengersFragment
 import com.nafi.airseat.presentation.resultsearch.ResultSearchActivity
 import com.nafi.airseat.presentation.searchticket.SearchTicketFragment
@@ -45,12 +45,12 @@ class HomeFragment : Fragment() {
 
         binding.layoutHome.tvDepartChoose.setOnClickListener {
             Log.d("HomeFragment", "Calendar button clicked")
-            showBottomSheet(BottomSheetCalendarFragment())
+            showBottomSheet(CalendarBottomSheetFragment())
         }
 
         binding.layoutHome.tvArrivalChoose.setOnClickListener {
             Log.d("HomeFragment", "Calendar button clicked")
-            showBottomSheet(BottomSheetCalendarFragment())
+            showBottomSheet(CalendarBottomSheetFragment())
         }
 
         binding.layoutHome.tvPassengersCount.setOnClickListener {
