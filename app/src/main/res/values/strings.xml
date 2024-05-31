@@ -4,6 +4,7 @@
     <string name="title_tab_history">Riwayat</string>
     <string name="title_tab_notification">Notifikasi</string>
     <string name="title_tab_profile">Akun</string>
+    <string name="text_header_notification">Notification</string>
     <string name="text_depart_place">Jakarta (JKT)</string>
     <string name="text_from">From</string>
     <string name="text_to">To</string>
