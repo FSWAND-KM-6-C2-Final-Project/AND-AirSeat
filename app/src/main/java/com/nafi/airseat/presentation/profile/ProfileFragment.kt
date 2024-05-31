@@ -1,14 +1,18 @@
 package com.nafi.airseat.presentation.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.nafi.airseat.R
+import com.nafi.airseat.databinding.FragmentProfileBinding
+import com.nafi.airseat.presentation.login.LoginActivity
 
 class ProfileFragment : Fragment() {
+    private lateinit var binding: FragmentProfileBinding
+
     companion object {
         fun newInstance() = ProfileFragment()
     }
@@ -17,8 +21,6 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
     }
 
     override fun onCreateView(
@@ -26,6 +28,26 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.toLogin.setOnClickListener {
+            navigatoToLogin()
+        }
+    }
+
+    private fun navigatoToLogin() {
+        startActivity(
+            Intent(requireContext(), LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 }
