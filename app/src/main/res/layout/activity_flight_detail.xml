@@ -51,7 +51,7 @@
                 android:id="@+id/destination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Jakarta -> Melbourne"
+                tools:text="Jakarta -> Melbourne"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:textStyle="bold"
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="@id/destination"
-                android:text="(4h 0m)"
+                tools:text="(4h 0m)"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_marginHorizontal="4dp"
@@ -109,7 +109,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 Adults"
+                    tools:text="2 Adults"
                     android:layout_weight="1"
                     android:textSize="16sp"
                     />
@@ -117,7 +117,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IDR 9.550.000"
+                    tools:text="IDR 9.550.000"
                     android:layout_weight="1"
                     android:textAlignment="textEnd"
                     />
@@ -137,7 +137,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1 Baby"
+                    tools:text="1 Baby"
                     android:layout_weight="1"
                     android:textSize="16sp"
                     />
@@ -145,7 +145,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IDR 0"
+                    tools:text="IDR 0"
                     android:layout_weight="1"
                     android:textAlignment="textEnd"
                     />
@@ -173,7 +173,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IDR 300.000"
+                    tools:text="IDR 300.000"
                     android:layout_weight="1"
                     android:textAlignment="textEnd"
                     />
@@ -201,7 +201,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IDR 0"
+                    tools:text="IDR 0"
                     android:layout_weight="1"
                     android:textAlignment="textEnd"
                     />

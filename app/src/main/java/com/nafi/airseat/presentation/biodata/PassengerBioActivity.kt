@@ -21,7 +21,7 @@ class PassengerBioActivity : AppCompatActivity() {
 
     private val itemTitle = listOf("Mr", "Ms")
 
-    val countryNames =
+    private val countryNames =
         listOf(
             "Afghanistan",
             "Albania",
