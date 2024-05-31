@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.nafi.airseat.databinding.ActivityOtpResetPasswordBinding
-import com.nafi.airseat.presentation.register.RegisterActivity
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordActivity
+import com.nafi.airseat.presentation.resetpasswordverifyemail.ResetPasswordEmailActivity
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,7 +36,7 @@ class OtpResetPasswordActivity : AppCompatActivity() {
             val confirmPassword = "userConfirmPassword" // Placeholder, replace with actual input
 
             if (email != null) {
-                verifyOtpChangePassword(email, otp, password, confirmPassword)
+                verifyOtpChangePassword(email, code, password, confirmPassword)
             }
         }
     }
@@ -51,7 +51,7 @@ class OtpResetPasswordActivity : AppCompatActivity() {
 
     private fun setClickListeners() {
         binding.icDetailBackButton.setOnClickListener {
-            navigateToRegister()
+            navigateToResetPasswordEmail()
         }
         binding.textNewCodeOTP.setOnClickListener {
             val email = binding.textEmail.text.toString()
@@ -59,9 +59,9 @@ class OtpResetPasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToRegister() {
+    private fun navigateToResetPasswordEmail() {
         startActivity(
-            Intent(this, RegisterActivity::class.java).apply {
+            Intent(this, ResetPasswordEmailActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )

@@ -47,7 +47,7 @@
     <string name="error_password_empty">Password cannot be empty</string>
     <string name="error_email_empty">Email cannot be empty</string>
     <string name="error_email_invalid">Input your email according to the format</string>
-    <string name="text_register_success">Anda Telah Terdaftar\nSilahkan Login</string>
+    <string name="text_register_success">You Have Registered\nPlease Verify Account</string>
     <string name="text_error_name_cannot_empty">Name cannot be empty</string>
     <string name="text_error_email_empty">Email should not be empty</string>
     <string name="text_error_email_invalid">Enter a valid format email</string>
@@ -60,6 +60,8 @@
     <string name="enter_email">Input your email</string>
     <string name="text_verify_email">Verify Email</string>
     <string name="text_verify">Verify</string>
+    <string name="text_verify_change_password_success">You Have Been Verified\nPlease Verify Otp</string>
+    <string name="text_change_password_success">You Have Changed Your Password\nPlease Login</string>
 
     <string name="text_header_account">Account</string>
     <string name="text_header_notification">Notification</string>
