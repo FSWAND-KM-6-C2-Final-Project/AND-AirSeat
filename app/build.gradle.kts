@@ -32,7 +32,6 @@ android {
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -98,6 +97,7 @@ dependencies {
     implementation(libs.coroutine.core)
     implementation(libs.coroutine.android)
     implementation(libs.androidx.legacy.support.v4)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation("junit:junit:4.12")
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
