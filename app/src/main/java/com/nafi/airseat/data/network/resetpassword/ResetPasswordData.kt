@@ -11,5 +11,4 @@ data class ResetPasswordData(
     var reset_password_resend_at: String?,
     @SerializedName("reset_password_expired_at")
     var reset_password_expired_at: String?,
-
-    )
+)
