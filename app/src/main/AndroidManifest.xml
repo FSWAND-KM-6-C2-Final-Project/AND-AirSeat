@@ -20,6 +20,12 @@
             android:name=".presentation.resetpassword.ResetPasswordActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.resetpasswordverifyemail.ResetPasswordEmailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.otpresetpassword.OtpResetPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.otpaccount.OtpActivity"
             android:exported="false" />
         <activity

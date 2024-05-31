@@ -30,9 +30,11 @@ interface UserRepository {
 
     fun doVerifResendOtp(email: String): Flow<ResultWrapper<Boolean>>
 
-    //reset password
+    // reset password
     fun reqChangePasswordByEmail(email: String): Flow<ResultWrapper<Boolean>>
-    fun reqChangePasswordByEmailResendOtp(email: String):Flow<ResultWrapper<Boolean>>
+
+    fun reqChangePasswordByEmailResendOtp(email: String): Flow<ResultWrapper<Boolean>>
+
     @Throws(exceptionClasses = [java.lang.Exception::class])
     fun verifChangePasswordOtp(
         code: String,
@@ -90,7 +92,7 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
         code: String,
         email: String,
         password: String,
-        confirmPassword: String
+        confirmPassword: String,
     ): Flow<ResultWrapper<Boolean>> {
         return proceedFlow { dataSource.verifChangePasswordOtp(code, email, password, confirmPassword) }
     }
