@@ -1,6 +1,7 @@
-package com.nafi.airseat.data
+package com.nafi.airseat.data.repository
 
 import com.nafi.airseat.data.datasource.AuthDataSource
+import com.nafi.airseat.data.model.User
 import com.nafi.airseat.utils.ResultWrapper
 import com.nafi.airseat.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
