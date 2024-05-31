@@ -4,15 +4,6 @@
     <string name="title_tab_history">Riwayat</string>
     <string name="title_tab_notification">Notifikasi</string>
     <string name="title_tab_profile">Akun</string>
-    <string name="text_header_history">History</string>
-    <string name="text_login_protection">Sorry, You Have to Log In First</string>
-    <string name="text_button_login_protection">Login</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="start_date">Start Date</string>
-    <string name="end_date">End Date</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="start_date">Start date</string>
-    <string name="end_date">End date</string>
     <string name="text_depart_place">Jakarta (JKT)</string>
     <string name="text_from">From</string>
     <string name="text_to">To</string>
