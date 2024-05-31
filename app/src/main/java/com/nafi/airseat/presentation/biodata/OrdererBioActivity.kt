@@ -54,13 +54,13 @@ class OrdererBioActivity : AppCompatActivity() {
         val email = binding.layoutFormTicketBooker.etEmail.text.toString().trim()
         val isFamilyNameMode = ordererBioViewModel.isFamilyNameMode.value ?: false
 
-        return checkFullnameValidation(fullName) &&
+        return checkFullNameValidation(fullName) &&
             checkPhoneNumberValidation(phoneNumber) &&
             checkEmailValidation(email) &&
             (!isFamilyNameMode || checkFamilyNameValidation(binding.layoutFormTicketBooker.etFamilyName.text.toString().trim()))
     }
 
-    private fun checkFullnameValidation(fullName: String): Boolean {
+    private fun checkFullNameValidation(fullName: String): Boolean {
         return if (fullName.isEmpty()) {
             binding.layoutFormTicketBooker.etFullname.error =
                 getString(R.string.text_error_fullName_cannot_be_empty)

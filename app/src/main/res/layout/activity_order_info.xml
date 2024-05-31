@@ -63,7 +63,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Issued"
+                    tools:text="Issued"
                     android:layout_marginVertical="4dp"
                     android:textColor="@color/md_theme_onPrimary"
                     android:layout_marginHorizontal="12dp"/>
@@ -106,7 +106,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 Adults"
+                    tools:text="2 Adults"
                     android:layout_weight="1"
                     android:textSize="16sp"
                     />
@@ -114,7 +114,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IDR 9.550.000"
+                    tools:text="IDR 9.550.000"
                     android:layout_weight="1"
                     android:textSize="16sp"
                     android:textAlignment="textEnd"
@@ -135,7 +135,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1 Baby"
+                    tools:text="1 Baby"
                     android:layout_weight="1"
                     android:textSize="16sp"
                     />
@@ -143,7 +143,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IDR 0"
+                    tools:text="IDR 0"
                     android:layout_weight="1"
                     android:textSize="16sp"
                     android:textAlignment="textEnd"
@@ -172,7 +172,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IDR 300.000"
+                    tools:text="IDR 300.000"
                     android:layout_weight="1"
                     android:textSize="16sp"
                     android:textAlignment="textEnd"
@@ -201,7 +201,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IDR 0"
+                    tools:text="IDR 0"
                     android:layout_weight="1"
                     android:textSize="16sp"
                     android:textAlignment="textEnd"
@@ -231,7 +231,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IDR 9.850.000"
+                    tools:text="IDR 9.850.000"
                     android:layout_weight="1"
                     android:textSize="18sp"
                     android:textStyle="bold"

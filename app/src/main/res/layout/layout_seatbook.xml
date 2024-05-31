@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_seat"
@@ -25,7 +26,7 @@
                 android:background="@color/md_theme_primaryContainer"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="8dp"
-                android:text="Economy - 64 Seats Available"
+                tools:text="Economy - 64 Seats Available"
                 android:textColor="@color/md_theme_onPrimary"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent" />
