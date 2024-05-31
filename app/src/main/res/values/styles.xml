@@ -1,0 +1,44 @@
+<resources>
+
+    <!--<style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorPrimaryDark">@color/md_theme_onSecondaryContainer</item>
+        <item name="colorAccent">@color/md_theme_inversePrimary</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
+    <style name="Example4ToolbarTheme" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="colorControlNormal">@color/md_theme_outline</item>
+    </style>
+
+    <style name="Example4ButtonTheme" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="colorPrimary">@color/md_theme_primaryContainer</item>
+    </style>-->
+    <style name="CustomSwitch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="track">@drawable/switch_track</item>
+        <item name="android:thumb">@drawable/switch_thumb</item>
+        <item name="android:thumbTint">@null</item>
+        <item name="android:trackTint">@null</item>
+        <item name="searchViewStyle">@style/CustomSearchViewStyle</item>
+        <item name="android:closeIcon">@drawable/custom_search_close_button</item>
+    </style>
+
+    <style name="CustomSearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/custom_search_view_background</item>
+        <item name="android:iconifiedByDefault">false</item>
+        <item name="android:queryHint">Search</item>
+        <item name="android:textColorHint">@android:color/darker_gray</item>
+        <item name="android:closeIcon">@color/md_theme_onSurface</item> <!-- Menyesuaikan ukuran -->
+    </style>
+
+</resources>
