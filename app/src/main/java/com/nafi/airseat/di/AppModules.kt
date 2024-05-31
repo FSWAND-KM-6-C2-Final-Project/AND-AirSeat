@@ -1,16 +1,19 @@
 package com.nafi.airseat.di
 
 import com.nafi.airseat.data.datasource.APIAuthDataSource
-import com.nafi.airseat.data.network.services.AirSeatApiService
 import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthService
 import com.nafi.airseat.data.datasource.AuthServiceImpl
+import com.nafi.airseat.data.network.services.AirSeatApiService
 import com.nafi.airseat.data.repository.UserRepository
 import com.nafi.airseat.data.repository.UserRepositoryImpl
 import com.nafi.airseat.presentation.home.HomeViewModel
 import com.nafi.airseat.presentation.login.LoginViewModel
 import com.nafi.airseat.presentation.otpaccount.OtpViewModel
+import com.nafi.airseat.presentation.otpresetpassword.OtpResetPasswordViewModel
 import com.nafi.airseat.presentation.register.RegisterViewModel
+import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
+import com.nafi.airseat.presentation.resetpasswordverifyemail.ResetPasswordEmailViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
@@ -58,6 +61,15 @@ object AppModules {
             }
             viewModel {
                 OtpViewModel(get())
+            }
+            viewModel {
+                OtpResetPasswordViewModel(get())
+            }
+            viewModel {
+                ResetPasswordViewModel(get())
+            }
+            viewModel {
+                ResetPasswordEmailViewModel(get())
             }
         }
 

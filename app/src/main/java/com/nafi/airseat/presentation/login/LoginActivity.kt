@@ -2,12 +2,9 @@ package com.nafi.airseat.presentation.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.util.Patterns
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputLayout
@@ -16,6 +13,7 @@ import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityLoginBinding
 import com.nafi.airseat.presentation.main.MainActivity
 import com.nafi.airseat.presentation.register.RegisterActivity
+import com.nafi.airseat.presentation.resetpasswordverifyemail.ResetPasswordEmailActivity
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -41,13 +39,21 @@ class LoginActivity : AppCompatActivity() {
             navigateToRegister()
         }
         binding.layoutFormLogin.tvForgetPassword.setOnClickListener {
-            showResetPasswordDialog()
+            navigateToResetPasswordEmail()
         }
     }
 
     private fun navigateToRegister() {
         startActivity(
             Intent(this, RegisterActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
+    }
+
+    private fun navigateToResetPasswordEmail() {
+        startActivity(
+            Intent(this, ResetPasswordEmailActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
@@ -139,62 +145,5 @@ class LoginActivity : AppCompatActivity() {
             tilEmail.isVisible = true
             tilPassword.isVisible = true
         }
-    }
-
-    private fun showResetPasswordDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.reset_password))
-
-        val input = EditText(this)
-        input.hint = getString(R.string.enter_email)
-        input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-        builder.setView(input)
-
-        builder.setPositiveButton(getString(R.string.send)) { dialog, _ ->
-            val email = input.text.toString().trim()
-            if (email.isNotEmpty()) {
-                handleResetPassword(email)
-            } else {
-                Toast.makeText(this, getString(R.string.enter_email), Toast.LENGTH_SHORT).show()
-            }
-            dialog.dismiss()
-        }
-        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        builder.show()
-    }
-
-    private fun handleResetPassword(email: String) {
-        loginViewModel.reqChangePasswordByEmail(email).observe(this) { result ->
-            result.proceedWhen(
-                doOnSuccess = {
-                    showResetPasswordSuccessDialog()
-                },
-                doOnError = {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.error, it.exception?.message),
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    Log.d(
-                        "reqChangePasswordByEmail",
-                        getString(R.string.create_email_input_dialog, it.exception?.message),
-                    )
-                },
-            )
-        }
-    }
-
-    private fun showResetPasswordSuccessDialog() {
-        val dialog =
-            AlertDialog.Builder(this)
-                .setMessage(getString(R.string.dialog_req_update_password))
-                .setPositiveButton(
-                    getString(R.string.ok),
-                ) { dialog, id ->
-                }.create()
-        dialog.show()
     }
 }

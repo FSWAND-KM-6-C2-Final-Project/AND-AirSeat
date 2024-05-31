@@ -1,8 +1,6 @@
 package com.nafi.airseat.data.network.services
 
 import com.nafi.airseat.BuildConfig
-import com.nafi.airseat.data.network.resetpassword.VerifyPasswordChangeOtpRequest
-import com.nafi.airseat.data.network.resetpassword.VerifyPasswordChangeOtpResponse
 import com.nafi.airseat.data.network.login.LoginRequest
 import com.nafi.airseat.data.network.login.LoginResponse
 import com.nafi.airseat.data.network.register.RegisterRequest
@@ -11,6 +9,8 @@ import com.nafi.airseat.data.network.resetpassword.ResetPasswordRequest
 import com.nafi.airseat.data.network.resetpassword.ResetPasswordResendOtpRequest
 import com.nafi.airseat.data.network.resetpassword.ResetPasswordResendOtpResponse
 import com.nafi.airseat.data.network.resetpassword.ResetPasswordResponse
+import com.nafi.airseat.data.network.resetpassword.VerifyPasswordChangeOtpRequest
+import com.nafi.airseat.data.network.resetpassword.VerifyPasswordChangeOtpResponse
 import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpRequest
 import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResendRequest
 import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResendResponse
@@ -44,20 +44,21 @@ interface AirSeatApiService {
         @Body verifAccountOtpRequest: VerifAccountOtpResendRequest,
     ): Response<VerifAccountOtpResendResponse>
 
-    //reset password
+    // reset password
     @POST("auth/password-reset/resend")
     suspend fun resetPasswordResendOtp(
         @Body resetPasswordResendOtpRequest: ResetPasswordResendOtpRequest,
     ): Response<ResetPasswordResendOtpResponse>
+
     @POST("auth/password-reset")
     suspend fun resetPassword(
         @Body resetPasswordRequest: ResetPasswordRequest,
     ): Response<ResetPasswordResponse>
+
     @POST("auth/password-reset/verify")
     suspend fun verifyPasswordChangeOtp(
         @Body verifyPasswordChangeOtpRequest: VerifyPasswordChangeOtpRequest,
     ): Response<VerifyPasswordChangeOtpResponse>
-
 
     companion object {
         @JvmStatic
