@@ -1,4 +1,4 @@
-package com.nafi.airseat.data
+package com.nafi.airseat.data.model
 
 data class UserChangePassword(
     val code: String,
