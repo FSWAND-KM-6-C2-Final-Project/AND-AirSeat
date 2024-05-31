@@ -13,12 +13,12 @@ import com.nafi.airseat.presentation.otpresetpassword.OtpResetPasswordActivity
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ResetPasswordEmailActivity : AppCompatActivity() {
+class ReqChangePasswordActivity : AppCompatActivity() {
     private val binding: ActivityResetPasswordEmailBinding by lazy {
         ActivityResetPasswordEmailBinding.inflate(layoutInflater)
     }
 
-    private val resetPasswordEmailViewModel: ResetPasswordEmailViewModel by viewModel()
+    private val resetPasswordEmailViewModel: ReqChangePasswordViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

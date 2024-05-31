@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.nafi.airseat.databinding.ActivityOtpResetPasswordBinding
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordActivity
-import com.nafi.airseat.presentation.resetpasswordverifyemail.ResetPasswordEmailActivity
+import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordActivity
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -61,7 +61,7 @@ class OtpResetPasswordActivity : AppCompatActivity() {
 
     private fun navigateToResetPasswordEmail() {
         startActivity(
-            Intent(this, ResetPasswordEmailActivity::class.java).apply {
+            Intent(this, ReqChangePasswordActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
