@@ -9,7 +9,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityResetPasswordBinding
 import com.nafi.airseat.presentation.login.LoginActivity
-import com.nafi.airseat.presentation.resetpasswordverifyemail.ResetPasswordEmailActivity
+import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordActivity
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -45,7 +45,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private fun navigateToReqChangePasswordByEmail() {
         startActivity(
-            Intent(this, ResetPasswordEmailActivity::class.java).apply {
+            Intent(this, ReqChangePasswordActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )

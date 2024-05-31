@@ -20,7 +20,7 @@
             android:name=".presentation.resetpassword.ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.resetpasswordverifyemail.ResetPasswordEmailActivity"
+            android:name=".presentation.resetpasswordverifyemail.ReqChangePasswordActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.otpresetpassword.OtpResetPasswordActivity"

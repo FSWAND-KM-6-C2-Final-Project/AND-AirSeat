@@ -13,7 +13,7 @@ import com.nafi.airseat.presentation.otpaccount.OtpViewModel
 import com.nafi.airseat.presentation.otpresetpassword.OtpResetPasswordViewModel
 import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
-import com.nafi.airseat.presentation.resetpasswordverifyemail.ResetPasswordEmailViewModel
+import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
@@ -69,7 +69,7 @@ object AppModules {
                 ResetPasswordViewModel(get())
             }
             viewModel {
-                ResetPasswordEmailViewModel(get())
+                ReqChangePasswordViewModel(get())
             }
         }
 
