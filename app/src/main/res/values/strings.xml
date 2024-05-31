@@ -88,4 +88,9 @@
     <string name="text_error_id_card_must_be_number">ID Card must be number</string>
     <string name="text_error_the_id_card_validity_period_must_not_be_empty">The ID card validity period must not be empty</string>
     <string name="text_hint_select_title">Select Title</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="text_header_history">History</string>
+    <string name="text_button_login_protection">Login</string>
+    <string name="text_login_protection">Oops!, You have to login first</string>
 </resources>

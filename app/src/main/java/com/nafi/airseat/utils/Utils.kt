@@ -10,9 +10,9 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+/*import androidx.fragment.app.Fragment
 import androidx.lifecycle.findViewTreeLifecycleOwner
-import com.nafi.airseat.utils.calendar.StatusBarColorLifecycleObserver
+import com.nafi.airseat.utils.calendar.StatusBarColorLifecycleObserver*/
 
 fun View.makeVisible() {
     visibility = View.VISIBLE
@@ -54,7 +54,7 @@ internal fun TextView.setTextColorRes(
     @ColorRes color: Int,
 ) = setTextColor(context.getColorCompat(color))
 
-fun Fragment.addStatusBarColorUpdate(
+/*fun Fragment.addStatusBarColorUpdate(
     @ColorRes colorRes: Int,
 ) {
     view?.findViewTreeLifecycleOwner()?.lifecycle?.addObserver(
@@ -63,4 +63,4 @@ fun Fragment.addStatusBarColorUpdate(
             requireContext().getColorCompat(colorRes),
         ),
     )
-}
+}*/

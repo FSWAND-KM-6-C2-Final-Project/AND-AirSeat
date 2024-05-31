@@ -20,17 +20,17 @@ import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.FragmentCalendarBottomSheetBinding
-import com.nafi.airseat.databinding.LayoutDayBinding
-import com.nafi.airseat.utils.ContinuousSelectionHelper.getSelection
-import com.nafi.airseat.utils.ContinuousSelectionHelper.isInDateBetweenSelection
-import com.nafi.airseat.utils.ContinuousSelectionHelper.isOutDateBetweenSelection
-import com.nafi.airseat.utils.DateSelection
-import com.nafi.airseat.utils.dateRangeDisplayText
-import com.nafi.airseat.utils.displayText
-import com.nafi.airseat.utils.getDrawableCompat
-import com.nafi.airseat.utils.makeInVisible
-import com.nafi.airseat.utils.makeVisible
-import com.nafi.airseat.utils.setTextColorRes
+import com.nafi.airseat.databinding.ItemSingleDayBinding
+import com.nafi.airseat.utils.calendar.ContinuousSelectionHelper.getSelection
+import com.nafi.airseat.utils.calendar.ContinuousSelectionHelper.isInDateBetweenSelection
+import com.nafi.airseat.utils.calendar.ContinuousSelectionHelper.isOutDateBetweenSelection
+import com.nafi.airseat.utils.calendar.DateSelection
+import com.nafi.airseat.utils.calendar.dateRangeDisplayText
+import com.nafi.airseat.utils.calendar.displayText
+import com.nafi.airseat.utils.calendar.getDrawableCompat
+import com.nafi.airseat.utils.calendar.makeInVisible
+import com.nafi.airseat.utils.calendar.makeVisible
+import com.nafi.airseat.utils.calendar.setTextColorRes
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -158,7 +158,7 @@ class CalendarBottomSheetFragment : BottomSheetDialogFragment() {
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
-            val binding = LayoutDayBinding.bind(view)
+            val binding = ItemSingleDayBinding.bind(view)
 
             val textView = view.findViewById<TextView>(R.id.calendarDayText)
 
@@ -189,8 +189,8 @@ class CalendarBottomSheetFragment : BottomSheetDialogFragment() {
                 ) {
                     container.day = data
                     val textView = container.binding.calendarDayText
-                    val roundBgView = container.binding.exFourRoundBackgroundView
-                    val continuousBgView = container.binding.exFourContinuousBackgroundView
+                    val roundBgView = container.binding.RoundBackgroundView
+                    val continuousBgView = container.binding.ContinuousBackgroundView
 
                     textView.text = null
                     roundBgView.makeInVisible()
@@ -209,24 +209,29 @@ class CalendarBottomSheetFragment : BottomSheetDialogFragment() {
                                         textView.setTextColorRes(R.color.md_theme_surface)
                                         roundBgView.applyBackground(singleBackground)
                                     }
+
                                     data.date == startDate -> {
                                         textView.setTextColorRes(R.color.md_theme_surface)
                                         continuousBgView.applyBackground(rangeStartBackground)
                                         roundBgView.applyBackground(singleBackground)
                                     }
+
                                     startDate != null && endDate != null && (data.date > startDate && data.date < endDate) -> {
                                         textView.setTextColorRes(R.color.md_theme_outline)
                                         continuousBgView.applyBackground(rangeMiddleBackground)
                                     }
+
                                     data.date == endDate -> {
                                         textView.setTextColorRes(R.color.md_theme_surface)
                                         continuousBgView.applyBackground(rangeEndBackground)
                                         roundBgView.applyBackground(singleBackground)
                                     }
+
                                     data.date == today -> {
                                         textView.setTextColorRes(R.color.md_theme_scrim)
                                         roundBgView.applyBackground(todayBackground)
                                     }
+
                                     else -> textView.setTextColorRes(R.color.md_theme_scrim)
                                 }
                             }
@@ -239,6 +244,7 @@ class CalendarBottomSheetFragment : BottomSheetDialogFragment() {
                             ) {
                                 continuousBgView.applyBackground(rangeMiddleBackground)
                             }
+
                         DayPosition.OutDate ->
                             if (startDate != null && endDate != null &&
                                 isOutDateBetweenSelection(data.date, startDate, endDate)

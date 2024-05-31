@@ -143,7 +143,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="14dp"
-        app:cv_dayViewResource="@layout/layout_day"
+        app:cv_dayViewResource="@layout/item_single_day"
         android:clipToPadding="false"
         android:paddingBottom="100dp"
         app:cv_outDateStyle="endOfGrid" />

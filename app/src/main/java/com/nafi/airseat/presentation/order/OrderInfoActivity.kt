@@ -1,7 +1,6 @@
 package com.nafi.airseat.presentation.order
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.nafi.airseat.databinding.ActivityOrderInfoBinding
 
