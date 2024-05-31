@@ -1,5 +1,8 @@
 package com.nafi.airseat.di
 
+import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
+import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -26,6 +29,8 @@ object AppModules {
 
     private val viewModelModule =
         module {
+            viewModelOf(::OrdererBioViewModel)
+            viewModelOf(::PassengerBioViewModel)
         }
 
     val modules =
