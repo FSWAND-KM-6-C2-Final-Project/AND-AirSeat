@@ -5,6 +5,9 @@ import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthService
 import com.nafi.airseat.data.datasource.AuthServiceImpl
 import com.nafi.airseat.data.network.services.AirSeatApiService
+import com.nafi.airseat.data.network.services.TokenInterceptor
+import com.nafi.airseat.data.repository.TokenRepository
+import com.nafi.airseat.data.repository.TokenRepositoryImpl
 import com.nafi.airseat.data.repository.UserRepository
 import com.nafi.airseat.data.repository.UserRepositoryImpl
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
@@ -16,6 +19,8 @@ import com.nafi.airseat.presentation.otpresetpassword.OtpResetPasswordViewModel
 import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
+import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
@@ -24,7 +29,11 @@ import org.koin.dsl.module
 object AppModules {
     private val networkModule =
         module {
-            single<AirSeatApiService> { AirSeatApiService.invoke() }
+            single<AirSeatApiService> {
+                val okHttpClient = OkHttpClient.Builder().addInterceptor(get<TokenInterceptor>()).build()
+                AirSeatApiService.invoke(okHttpClient)
+            }
+            single { TokenInterceptor(get()) }
         }
 
     private val serviceModule =
@@ -44,6 +53,7 @@ object AppModules {
     private val repository =
         module {
             single<UserRepository> { UserRepositoryImpl(get()) }
+            single<TokenRepository> { TokenRepositoryImpl(androidContext(), get()) }
         }
 
     private val viewModelModule =

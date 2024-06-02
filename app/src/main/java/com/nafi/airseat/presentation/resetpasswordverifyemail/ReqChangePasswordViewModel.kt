@@ -6,8 +6,8 @@ import com.nafi.airseat.data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 
 class ReqChangePasswordViewModel(private val repository: UserRepository) : ViewModel() {
-    fun reqChangePasswordByEmail(email: String) =
+    fun reqChangePasswordByEmailResendOtp(email: String) =
         repository
-            .reqChangePasswordByEmail(email)
+            .reqChangePasswordByEmailResendOtp(email)
             .asLiveData(Dispatchers.IO) // send otp to email
 }

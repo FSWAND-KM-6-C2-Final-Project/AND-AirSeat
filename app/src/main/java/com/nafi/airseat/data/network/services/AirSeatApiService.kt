@@ -16,6 +16,7 @@ import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResendRequest
 import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResendResponse
 import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResponse
 import okhttp3.OkHttpClient
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -60,9 +61,12 @@ interface AirSeatApiService {
         @Body verifyPasswordChangeOtpRequest: VerifyPasswordChangeOtpRequest,
     ): Response<VerifyPasswordChangeOtpResponse>
 
+    @POST("auth/me")
+    fun refreshToken(): Call<RefreshTokenResponse>
+
     companion object {
         @JvmStatic
-        operator fun invoke(): AirSeatApiService {
+        operator fun invoke(okHttpClient: OkHttpClient): AirSeatApiService {
             val okHttpClient =
                 OkHttpClient.Builder()
                     .connectTimeout(120, TimeUnit.SECONDS)
@@ -77,4 +81,6 @@ interface AirSeatApiService {
             return retrofit.create(AirSeatApiService::class.java)
         }
     }
+
+    data class RefreshTokenResponse(val token: String)
 }

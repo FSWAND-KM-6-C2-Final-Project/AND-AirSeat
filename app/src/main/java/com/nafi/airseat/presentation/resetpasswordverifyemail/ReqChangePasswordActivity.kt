@@ -18,7 +18,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
         ActivityResetPasswordEmailBinding.inflate(layoutInflater)
     }
 
-    private val resetPasswordEmailViewModel: ReqChangePasswordViewModel by viewModel()
+    private val reqChangePasswordViewModel: ReqChangePasswordViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +61,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
     }
 
     private fun proceedResetPasswordEmail(email: String) {
-        resetPasswordEmailViewModel.reqChangePasswordByEmail(email).observe(this) {
+        reqChangePasswordViewModel.reqChangePasswordByEmailResendOtp(email).observe(this) {
             it.proceedWhen(
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
@@ -119,7 +119,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
     }
 
     private fun sendOtp(email: String) {
-        resetPasswordEmailViewModel.reqChangePasswordByEmail(email).observe(this) { result ->
+        reqChangePasswordViewModel.reqChangePasswordByEmailResendOtp(email).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
@@ -129,7 +129,6 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                         "OTP sent to $email",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    // ini navigate to otp
                 },
                 doOnError = {
                     binding.pbLoading.isVisible = false
