@@ -66,7 +66,7 @@ interface AirSeatApiService {
 
     companion object {
         @JvmStatic
-        operator fun invoke(okHttpClient: OkHttpClient): AirSeatApiService {
+        operator fun invoke(): AirSeatApiService {
             val okHttpClient =
                 OkHttpClient.Builder()
                     .connectTimeout(120, TimeUnit.SECONDS)

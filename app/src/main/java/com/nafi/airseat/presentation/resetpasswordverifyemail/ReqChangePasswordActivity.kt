@@ -53,6 +53,14 @@ class ReqChangePasswordActivity : AppCompatActivity() {
         )
     }
 
+    private fun navigateToReqChangePassword() {
+        startActivity(
+            Intent(this, ReqChangePasswordActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
+    }
+
     private fun reqChangePasswordByEmail() {
         if (isFormValid()) {
             val email = binding.layoutFormResetPasswordEmail.etEmail.text.toString().trim()
@@ -61,7 +69,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
     }
 
     private fun proceedResetPasswordEmail(email: String) {
-        reqChangePasswordViewModel.reqChangePasswordByEmailResendOtp(email).observe(this) {
+        reqChangePasswordViewModel.reqChangePasswordByEmail(email).observe(this) {
             it.proceedWhen(
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
@@ -72,7 +80,6 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                         getString(R.string.text_verify_change_password_success),
                         Toast.LENGTH_SHORT,
                     ).show()
-                    navigateToOtpResetPassword(email)
                 },
                 doOnError = {
                     binding.pbLoading.isVisible = false
@@ -82,6 +89,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                         "Verify Change Password Failed : ${it.exception?.message.orEmpty()}",
                         Toast.LENGTH_SHORT,
                     ).show()
+                    navigateToReqChangePassword()
                 },
                 doOnLoading = {
                     binding.pbLoading.isVisible = true
@@ -119,7 +127,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
     }
 
     private fun sendOtp(email: String) {
-        reqChangePasswordViewModel.reqChangePasswordByEmailResendOtp(email).observe(this) { result ->
+        reqChangePasswordViewModel.reqChangePasswordByEmail(email).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
@@ -129,6 +137,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                         "OTP sent to $email",
                         Toast.LENGTH_SHORT,
                     ).show()
+                    navigateToOtpResetPassword(email)
                 },
                 doOnError = {
                     binding.pbLoading.isVisible = false
@@ -138,6 +147,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                         "Failed to send OTP: ${it.exception?.message.orEmpty()}",
                         Toast.LENGTH_SHORT,
                     ).show()
+                    navigateToReqChangePassword()
                 },
                 doOnLoading = {
                     binding.pbLoading.isVisible = true
