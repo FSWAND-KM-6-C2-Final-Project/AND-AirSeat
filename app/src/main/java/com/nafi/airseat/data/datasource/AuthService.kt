@@ -4,12 +4,12 @@ import com.nafi.airseat.data.model.User
 import com.nafi.airseat.data.model.UserChangePassword
 import com.nafi.airseat.data.model.UserOtp
 import com.nafi.airseat.data.model.UserOtpResend
-import com.nafi.airseat.data.network.login.LoginRequest
-import com.nafi.airseat.data.network.register.RegisterRequest
-import com.nafi.airseat.data.network.resetpassword.ResetPasswordRequest
-import com.nafi.airseat.data.network.resetpassword.ResetPasswordResendOtpRequest
-import com.nafi.airseat.data.network.resetpassword.VerifyPasswordChangeOtpRequest
-import com.nafi.airseat.data.network.services.AirSeatApiService
+import com.nafi.airseat.data.source.network.login.LoginRequest
+import com.nafi.airseat.data.source.network.register.RegisterRequest
+import com.nafi.airseat.data.source.network.resetpassword.ResetPasswordRequest
+import com.nafi.airseat.data.source.network.resetpassword.ResetPasswordResendOtpRequest
+import com.nafi.airseat.data.source.network.resetpassword.VerifyPasswordChangeOtpRequest
+import com.nafi.airseat.data.source.network.services.AirSeatApiService
 import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpRequest
 import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResendRequest
 
@@ -57,7 +57,7 @@ interface AuthService {
     fun doLogout(): Boolean
 }
 
-class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
+class AuthServiceImpl(private val apiService: com.nafi.airseat.data.source.network.services.AirSeatApiService) : AuthService {
     private var currentUser: User? = null
     private var otpUser: UserOtp? = null
     private var otpUserResend: UserOtpResend? = null
@@ -67,7 +67,7 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
         email: String,
         password: String,
     ): Boolean {
-        val loginRequest = LoginRequest(email, password)
+        val loginRequest = com.nafi.airseat.data.source.network.login.LoginRequest(email, password)
         val response = apiService.login(loginRequest)
         return if (response.isSuccessful && response.body()?.status == true) {
             currentUser = User(email = email, token = response.body()?.token ?: "")
@@ -84,7 +84,13 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
         password: String,
         confirmPassword: String,
     ): Boolean {
-        val registerRequest = RegisterRequest(fullName, email, phoneNumber, password, confirmPassword)
+        val registerRequest = com.nafi.airseat.data.source.network.register.RegisterRequest(
+            fullName,
+            email,
+            phoneNumber,
+            password,
+            confirmPassword
+        )
         val response = apiService.register(registerRequest)
         return if (response.isSuccessful && response.body()?.status == true) {
             currentUser = User(email = email, token = response.body()?.requestAt ?: "") // bingung
@@ -121,7 +127,8 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
 
     // reset password
     override suspend fun reqChangePasswordByEmail(email: String): Boolean {
-        val resetPasswordRequest = ResetPasswordRequest(email)
+        val resetPasswordRequest =
+            com.nafi.airseat.data.source.network.resetpassword.ResetPasswordRequest(email)
         val response = apiService.resetPassword(resetPasswordRequest)
         return if (response.isSuccessful && response.body()?.status == true) {
             otpUserResend = UserOtpResend(email = response.body()?.requestAt ?: "") // bingung
@@ -132,7 +139,8 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
     }
 
     override suspend fun reqChangePasswordByEmailResendOtp(email: String): Boolean {
-        val resetPasswordResendOtpRequest = ResetPasswordResendOtpRequest(email)
+        val resetPasswordResendOtpRequest =
+            com.nafi.airseat.data.source.network.resetpassword.ResetPasswordResendOtpRequest(email)
         val response = apiService.resetPasswordResendOtp(resetPasswordResendOtpRequest)
         return if (response.isSuccessful && response.body()?.status == true) {
             otpUserResend = UserOtpResend(email = response.body()?.requestAt ?: "") // bingung
@@ -148,7 +156,13 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
         password: String,
         confirmPassword: String,
     ): Boolean {
-        val verifChangePasswordOtpRequest = VerifyPasswordChangeOtpRequest(code, email, password, confirmPassword)
+        val verifChangePasswordOtpRequest =
+            com.nafi.airseat.data.source.network.resetpassword.VerifyPasswordChangeOtpRequest(
+                code,
+                email,
+                password,
+                confirmPassword
+            )
         val response = apiService.verifyPasswordChangeOtp(verifChangePasswordOtpRequest)
         return if (response.isSuccessful && response.body()?.status == true) {
             userChangePassword = UserChangePassword(code, email, password, confirmPassword = response.body()?.requestAt ?: "") // bingung

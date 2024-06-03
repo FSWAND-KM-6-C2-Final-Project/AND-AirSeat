@@ -1,4 +1,4 @@
-package com.nafi.airseat.data.network.login
+package com.nafi.airseat.data.source.network.login
 
 import com.google.gson.annotations.SerializedName
 
