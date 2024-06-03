@@ -31,12 +31,8 @@ class OtpResetPasswordActivity : AppCompatActivity() {
         binding.otpview.setOtpCompletionListener { otp ->
             hidekeyboard()
 
-            val code = otp // Get OTP from the otp view
-            val password = "userPassword" // Placeholder, replace with actual input
-            val confirmPassword = "userConfirmPassword" // Placeholder, replace with actual input
-
             if (email != null) {
-                verifyOtpChangePassword(email, code, password, confirmPassword)
+                verifyOtpChangePassword(email)
             }
         }
     }
@@ -94,12 +90,9 @@ class OtpResetPasswordActivity : AppCompatActivity() {
     }
 
     private fun verifyOtpChangePassword(
-        code: String,
         email: String,
-        password: String,
-        confirmPassword: String,
     ) {
-        otpResetPasswordViewModel.verifChangePasswordOtp(code, email, password, confirmPassword).observe(this) { result ->
+        otpResetPasswordViewModel.reqChangePasswordByEmailResendOtp(email).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     Toast.makeText(

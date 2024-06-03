@@ -1,4 +1,4 @@
-package com.nafi.airseat.data.network.register
+package com.nafi.airseat.data.source.network.register
 
 import com.google.gson.annotations.SerializedName
 
@@ -10,5 +10,5 @@ data class RegisterResponse(
     @SerializedName("requestAt")
     var requestAt: String?,
     @SerializedName("data")
-    var data: RegisterData,
+    var data: com.nafi.airseat.data.source.network.register.RegisterData,
 )

@@ -5,12 +5,12 @@ import com.nafi.airseat.data.datasource.APIAuthDataSource
 import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthService
 import com.nafi.airseat.data.datasource.AuthServiceImpl
-import com.nafi.airseat.data.network.services.AirSeatApiService
-import com.nafi.airseat.data.network.services.TokenInterceptor
 import com.nafi.airseat.data.repository.TokenRepository
 import com.nafi.airseat.data.repository.TokenRepositoryImpl
 import com.nafi.airseat.data.repository.UserRepository
 import com.nafi.airseat.data.repository.UserRepositoryImpl
+import com.nafi.airseat.data.source.network.services.AirSeatApiService
+import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
 import com.nafi.airseat.presentation.home.HomeViewModel
@@ -25,7 +25,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
-import org.koin.core.scope.get
 import org.koin.dsl.module
 
 object AppModules {

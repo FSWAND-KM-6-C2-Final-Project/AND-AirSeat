@@ -95,7 +95,6 @@ class LoginActivity : AppCompatActivity() {
                         getString(R.string.password_is_incorrect),
                         Toast.LENGTH_SHORT,
                     ).show()
-                    navigateToLogin()
                 },
                 doOnLoading = {
                     binding.layoutFormLogin.pbLoading.isVisible = true

@@ -74,7 +74,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
                     binding.btnVerify.isVisible = true
-                    sendOtp(email)
+                    navigateToOtpResetPassword(email)
                     Toast.makeText(
                         this,
                         getString(R.string.text_verify_change_password_success),
@@ -126,7 +126,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendOtp(email: String) {
+    /*private fun sendOtp(email: String) {
         reqChangePasswordViewModel.reqChangePasswordByEmail(email).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
@@ -137,7 +137,6 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                         "OTP sent to $email",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    navigateToOtpResetPassword(email)
                 },
                 doOnError = {
                     binding.pbLoading.isVisible = false
@@ -155,5 +154,5 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                 },
             )
         }
-    }
+    }*/
 }
