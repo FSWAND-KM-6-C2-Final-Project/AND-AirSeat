@@ -1,5 +1,6 @@
 package com.nafi.airseat.di
 
+import android.content.SharedPreferences
 import com.nafi.airseat.data.datasource.APIAuthDataSource
 import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthService
@@ -19,30 +20,33 @@ import com.nafi.airseat.presentation.otpresetpassword.OtpResetPasswordViewModel
 import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
-import okhttp3.OkHttpClient
+import com.nafi.airseat.utils.SharedPreferenceUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
+import org.koin.core.scope.get
 import org.koin.dsl.module
 
 object AppModules {
     private val networkModule =
         module {
-            single<AirSeatApiService> {
-                val okHttpClient = OkHttpClient.Builder().addInterceptor(get<TokenInterceptor>()).build()
-                AirSeatApiService.invoke(okHttpClient)
-            }
+            single<AirSeatApiService> { AirSeatApiService.invoke() }
             single { TokenInterceptor(get()) }
+            single<AuthService> { AuthServiceImpl(get()) }
         }
 
     private val serviceModule =
         module {
-            single<AuthService> { AuthServiceImpl(get()) }
         }
 
     private val localModule =
         module {
+            single<SharedPreferences> {
+                SharedPreferenceUtils.createPreference(
+                    androidContext(),
+                )
+            }
         }
 
     private val datasource =

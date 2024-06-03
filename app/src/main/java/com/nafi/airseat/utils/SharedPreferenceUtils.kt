@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 
 object SharedPreferenceUtils {
-    private const val PREFERENCE_NAME = "MyAppPreferences"
+    private const val PREFERENCE_NAME = "airseat-pref"
 
     fun createPreference(
         context: Context,
@@ -45,7 +45,7 @@ object SharedPreferenceUtils {
         }
 
     // Fungsi untuk menyimpan token ke SharedPreferences
-    fun saveToken(
+    /*fun saveToken(
         context: Context,
         token: String,
     ) {
@@ -57,5 +57,5 @@ object SharedPreferenceUtils {
     fun getToken(context: Context): String? {
         val sharedPreferences = createPreference(context)
         return sharedPreferences["token", null]
-    }
+    }*/
 }
