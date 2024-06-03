@@ -4,11 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 
 object SharedPreferenceUtils {
-    private const val PREFERENCE_NAME = "airseat-pref"
 
     fun createPreference(
         context: Context,
-        name: String = PREFERENCE_NAME,
+        name: String ,
     ): SharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
 
     private inline fun SharedPreferences.edit(operation: (SharedPreferences.Editor) -> Unit) {

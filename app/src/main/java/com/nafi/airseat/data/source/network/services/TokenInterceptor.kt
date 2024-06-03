@@ -1,4 +1,4 @@
-package com.nafi.airseat.data.network.services
+package com.nafi.airseat.data.source.network.services
 
 import com.nafi.airseat.data.repository.TokenRepository
 import okhttp3.Interceptor
