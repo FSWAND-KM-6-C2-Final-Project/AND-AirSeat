@@ -1,8 +1,8 @@
-package com.nafi.airseat.data.network.verifyaccount
+package com.nafi.airseat.data.source.network.resetpassword
 
 import com.google.gson.annotations.SerializedName
 
-data class VerifAccountOtpResponse(
+data class VerifyPasswordChangeOtpResponse(
     @SerializedName("status")
     var status: Boolean?,
     @SerializedName("message")
