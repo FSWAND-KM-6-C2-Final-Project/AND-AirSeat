@@ -11,10 +11,10 @@ import com.nafi.airseat.data.source.network.resetpassword.ResetPasswordResendOtp
 import com.nafi.airseat.data.source.network.resetpassword.ResetPasswordResponse
 import com.nafi.airseat.data.source.network.resetpassword.VerifyPasswordChangeOtpRequest
 import com.nafi.airseat.data.source.network.resetpassword.VerifyPasswordChangeOtpResponse
-import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpRequest
-import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResendRequest
-import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResendResponse
-import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResponse
+import com.nafi.airseat.data.source.network.verifyaccount.VerifAccountOtpRequest
+import com.nafi.airseat.data.source.network.verifyaccount.VerifAccountOtpResendRequest
+import com.nafi.airseat.data.source.network.verifyaccount.VerifAccountOtpResendResponse
+import com.nafi.airseat.data.source.network.verifyaccount.VerifAccountOtpResponse
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Response
@@ -27,13 +27,13 @@ import java.util.concurrent.TimeUnit
 interface AirSeatApiService {
     @POST("auth/login")
     suspend fun login(
-        @Body loginRequest: com.nafi.airseat.data.source.network.login.LoginRequest,
-    ): Response<com.nafi.airseat.data.source.network.login.LoginResponse>
+        @Body loginRequest: LoginRequest,
+    ): Response<LoginResponse>
 
     @POST("auth/register")
     suspend fun register(
-        @Body registerRequest: com.nafi.airseat.data.source.network.register.RegisterRequest,
-    ): Response<com.nafi.airseat.data.source.network.register.RegisterResponse>
+        @Body registerRequest: RegisterRequest,
+    ): Response<RegisterResponse>
 
     @POST("auth/activation/verify")
     suspend fun verifAccountOtp(
@@ -48,25 +48,25 @@ interface AirSeatApiService {
     // reset password
     @POST("auth/password-reset/resend")
     suspend fun resetPasswordResendOtp(
-        @Body resetPasswordResendOtpRequest: com.nafi.airseat.data.source.network.resetpassword.ResetPasswordResendOtpRequest,
-    ): Response<com.nafi.airseat.data.source.network.resetpassword.ResetPasswordResendOtpResponse>
+        @Body resetPasswordResendOtpRequest: ResetPasswordResendOtpRequest,
+    ): Response<ResetPasswordResendOtpResponse>
 
     @POST("auth/password-reset")
     suspend fun resetPassword(
-        @Body resetPasswordRequest: com.nafi.airseat.data.source.network.resetpassword.ResetPasswordRequest,
-    ): Response<com.nafi.airseat.data.source.network.resetpassword.ResetPasswordResponse>
+        @Body resetPasswordRequest: ResetPasswordRequest,
+    ): Response<ResetPasswordResponse>
 
     @POST("auth/password-reset/verify")
     suspend fun verifyPasswordChangeOtp(
-        @Body verifyPasswordChangeOtpRequest: com.nafi.airseat.data.source.network.resetpassword.VerifyPasswordChangeOtpRequest,
-    ): Response<com.nafi.airseat.data.source.network.resetpassword.VerifyPasswordChangeOtpResponse>
+        @Body verifyPasswordChangeOtpRequest: VerifyPasswordChangeOtpRequest,
+    ): Response<VerifyPasswordChangeOtpResponse>
 
     @POST("auth/me")
-    fun refreshToken(): Call<com.nafi.airseat.data.source.network.services.AirSeatApiService.RefreshTokenResponse>
+    fun refreshToken(): Call<RefreshTokenResponse>
 
     companion object {
         @JvmStatic
-        operator fun invoke(): com.nafi.airseat.data.source.network.services.AirSeatApiService {
+        operator fun invoke(): AirSeatApiService {
             val okHttpClient =
                 OkHttpClient.Builder()
                     .connectTimeout(120, TimeUnit.SECONDS)
@@ -78,7 +78,7 @@ interface AirSeatApiService {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(okHttpClient)
                     .build()
-            return retrofit.create(com.nafi.airseat.data.source.network.services.AirSeatApiService::class.java)
+            return retrofit.create(AirSeatApiService::class.java)
         }
     }
 

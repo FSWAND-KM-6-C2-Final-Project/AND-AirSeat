@@ -28,11 +28,11 @@ class OtpResetPasswordActivity : AppCompatActivity() {
         binding.textEmail.text = email
 
         binding.otpview.setText("")
-        binding.otpview.setOtpCompletionListener { otp ->
+        binding.otpview.setOtpCompletionListener { code ->
             hidekeyboard()
 
             if (email != null) {
-                verifyOtpChangePassword(email)
+                navigateToResetPassword(code, email)
             }
         }
     }
@@ -89,18 +89,28 @@ class OtpResetPasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun verifyOtpChangePassword(
+    private fun navigateToResetPassword(
+        code: String,
         email: String,
     ) {
+        startActivity(
+            Intent(this, ResetPasswordActivity::class.java).apply { // Replace with actual target activity
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra("code", code)
+                putExtra("email", email)
+            },
+        )
+    }
+    /*private fun verifyOtpChangePassword(email: String) {
         otpResetPasswordViewModel.reqChangePasswordByEmailResendOtp(email).observe(this) { result ->
             result.proceedWhen(
-                doOnSuccess = {
+                doOnSuccess = { code ->
                     Toast.makeText(
                         this,
                         "OTP verification successful",
                         Toast.LENGTH_SHORT,
                     ).show()
-                    navigateToResetPassword() // Replace with actual navigation
+                    navigateToResetPassword(email, code.toString()) // Replace with actual navigation
                 },
                 doOnError = {
                     Toast.makeText(
@@ -114,13 +124,5 @@ class OtpResetPasswordActivity : AppCompatActivity() {
                 },
             )
         }
-    }
-
-    private fun navigateToResetPassword() {
-        startActivity(
-            Intent(this, ResetPasswordActivity::class.java).apply { // Replace with actual target activity
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            },
-        )
-    }
+    }*/
 }
