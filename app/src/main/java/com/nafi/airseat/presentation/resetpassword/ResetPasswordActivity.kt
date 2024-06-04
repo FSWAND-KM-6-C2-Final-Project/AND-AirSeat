@@ -20,15 +20,15 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private val resetPasswordViewModel: ResetPasswordViewModel by viewModel()
 
-    private lateinit var email: String
     private lateinit var code: String
+    private lateinit var email: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        email = intent.getStringExtra("email") ?: ""
         code = intent.getStringExtra("code") ?: ""
+        email = intent.getStringExtra("email") ?: ""
 
         setupForm()
         setClickListeners()

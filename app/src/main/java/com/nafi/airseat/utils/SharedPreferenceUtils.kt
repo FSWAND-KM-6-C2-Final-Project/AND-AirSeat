@@ -4,10 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 
 object SharedPreferenceUtils {
-
     fun createPreference(
         context: Context,
-        name: String ,
+        name: String,
     ): SharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
 
     private inline fun SharedPreferences.edit(operation: (SharedPreferences.Editor) -> Unit) {
@@ -16,6 +15,9 @@ object SharedPreferenceUtils {
         editor.apply()
     }
 
+    /**
+     * puts a value for the given [key].
+     */
     operator fun SharedPreferences.set(
         key: String,
         value: Any?,
@@ -29,6 +31,11 @@ object SharedPreferenceUtils {
         else -> throw UnsupportedOperationException("Not yet implemented")
     }
 
+    /**
+     * finds a preference based on the given [key].
+     * [T] is the type of value
+     * @param defaultValue optional defaultValue - will take a default defaultValue if it is not specified
+     */
     inline operator fun <reified T : Any> SharedPreferences.get(
         key: String,
         defaultValue: T? = null,
@@ -42,19 +49,4 @@ object SharedPreferenceUtils {
             Long::class -> getLong(key, defaultValue as? Long ?: -1) as T
             else -> throw UnsupportedOperationException("Not yet implemented")
         }
-
-    // Fungsi untuk menyimpan token ke SharedPreferences
-    /*fun saveToken(
-        context: Context,
-        token: String,
-    ) {
-        val sharedPreferences = createPreference(context)
-        sharedPreferences["token"] = token
-    }
-
-    // Fungsi untuk mengambil token dari SharedPreferences
-    fun getToken(context: Context): String? {
-        val sharedPreferences = createPreference(context)
-        return sharedPreferences["token", null]
-    }*/
 }
