@@ -1,8 +1,8 @@
-package com.nafi.airseat.data.source.network.user
+package com.nafi.airseat.data.source.network.model.resetpassword
 
 import com.google.gson.annotations.SerializedName
 
-data class CheckUserInformationResponse(
+class ResetPasswordResendOtpResponse(
     @SerializedName("status")
     var status: Boolean?,
     @SerializedName("message")
@@ -10,5 +10,5 @@ data class CheckUserInformationResponse(
     @SerializedName("requestAt")
     var requestAt: String?,
     @SerializedName("data")
-    var data: CheckUserInformationData,
+    var data: ResetPasswordResendOtpData,
 )

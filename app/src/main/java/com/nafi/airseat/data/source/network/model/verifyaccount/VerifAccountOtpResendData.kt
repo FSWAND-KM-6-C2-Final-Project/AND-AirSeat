@@ -1,8 +1,8 @@
-package com.nafi.airseat.data.source.network.register
+package com.nafi.airseat.data.source.network.model.verifyaccount
 
 import com.google.gson.annotations.SerializedName
 
-data class RegisterData(
+data class VerifAccountOtpResendData(
     @SerializedName("email")
     var email: String?,
     @SerializedName("verification_user_resend_at")

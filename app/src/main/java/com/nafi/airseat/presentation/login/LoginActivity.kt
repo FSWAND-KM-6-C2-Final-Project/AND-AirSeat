@@ -51,14 +51,6 @@ class LoginActivity : AppCompatActivity() {
         )
     }
 
-    private fun navigateToLogin() {
-        startActivity(
-            Intent(this, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            },
-        )
-    }
-
     private fun navigateToResetPasswordEmail() {
         startActivity(
             Intent(this, ReqChangePasswordActivity::class.java).apply {

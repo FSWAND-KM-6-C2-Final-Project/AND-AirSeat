@@ -1,4 +1,4 @@
-package com.nafi.airseat.data.source.network.user
+package com.nafi.airseat.data.source.network.model.user
 
 import com.google.gson.annotations.SerializedName
 

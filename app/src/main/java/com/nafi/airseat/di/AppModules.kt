@@ -79,6 +79,9 @@ object AppModules {
                 RegisterViewModel(get())
             }
             viewModel {
+                RegisterViewModel(get())
+            }
+            viewModel {
                 OtpViewModel(get())
             }
             viewModel {

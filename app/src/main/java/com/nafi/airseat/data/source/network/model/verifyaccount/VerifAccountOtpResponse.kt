@@ -1,12 +1,12 @@
-package com.nafi.airseat.data.source.network.login
+package com.nafi.airseat.data.source.network.model.verifyaccount
 
 import com.google.gson.annotations.SerializedName
 
-data class LoginResponse(
+data class VerifAccountOtpResponse(
     @SerializedName("status")
     var status: Boolean?,
     @SerializedName("message")
     var message: String?,
-    @SerializedName("token")
-    var token: String?,
+    @SerializedName("requestAt")
+    var requestAt: String?,
 )

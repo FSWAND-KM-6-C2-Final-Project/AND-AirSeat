@@ -1,4 +1,4 @@
-package com.nafi.airseat.data.source.network.verifyaccount
+package com.nafi.airseat.data.source.network.model.verifyaccount
 
 import com.google.gson.annotations.SerializedName
 

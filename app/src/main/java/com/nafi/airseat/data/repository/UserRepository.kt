@@ -37,8 +37,8 @@ interface UserRepository {
 
     @Throws(exceptionClasses = [java.lang.Exception::class])
     fun verifChangePasswordOtp(
-        email: String,
         code: String,
+        email: String,
         password: String,
         confirmPassword: String,
     ): Flow<ResultWrapper<Boolean>>
@@ -89,12 +89,12 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
     }
 
     override fun verifChangePasswordOtp(
-        email: String,
         code: String,
+        email: String,
         password: String,
         confirmPassword: String,
     ): Flow<ResultWrapper<Boolean>> {
-        return proceedFlow { dataSource.verifChangePasswordOtp(email, code, password, confirmPassword) }
+        return proceedFlow { dataSource.verifChangePasswordOtp(code, email, password, confirmPassword) }
     }
 
     override fun isLoggedIn(): Boolean {

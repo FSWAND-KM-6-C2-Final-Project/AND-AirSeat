@@ -1,8 +1,8 @@
-package com.nafi.airseat.data.source.network.verifyaccount
+package com.nafi.airseat.data.source.network.model.register
 
 import com.google.gson.annotations.SerializedName
 
-data class VerifAccountOtpResendResponse(
+data class RegisterResponse(
     @SerializedName("status")
     var status: Boolean?,
     @SerializedName("message")
@@ -10,5 +10,5 @@ data class VerifAccountOtpResendResponse(
     @SerializedName("requestAt")
     var requestAt: String?,
     @SerializedName("data")
-    var data: VerifAccountOtpResendData,
+    var data: RegisterData,
 )
