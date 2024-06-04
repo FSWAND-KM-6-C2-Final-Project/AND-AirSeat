@@ -7,7 +7,7 @@ interface AuthDataSource {
     suspend fun doLogin(
         email: String,
         password: String,
-    ): Boolean
+    ): Boolean // diganti string/sesuai menurespon project sebelumnya
 
     @Throws(exceptionClasses = [java.lang.Exception::class])
     suspend fun doRegister(

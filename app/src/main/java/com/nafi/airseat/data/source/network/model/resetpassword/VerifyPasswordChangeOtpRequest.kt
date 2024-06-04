@@ -1,14 +1,12 @@
-package com.nafi.airseat.data.source.network.register
+package com.nafi.airseat.data.source.network.model.resetpassword
 
 import com.google.gson.annotations.SerializedName
 
-data class RegisterRequest(
-    @SerializedName("full_name")
-    var fullName: String?,
+data class VerifyPasswordChangeOtpRequest(
+    @SerializedName("code")
+    var code: String?,
     @SerializedName("email")
     var email: String?,
-    @SerializedName("phone_number")
-    var phoneNumber: String?,
     @SerializedName("password")
     var password: String?,
     @SerializedName("confirm_password")
