@@ -5,6 +5,7 @@ import com.nafi.airseat.data.model.UserChangePassword
 import com.nafi.airseat.data.model.UserOtp
 import com.nafi.airseat.data.model.UserOtpResend
 import com.nafi.airseat.data.source.network.model.login.LoginRequest
+import com.nafi.airseat.data.source.network.model.login.LoginResponse
 import com.nafi.airseat.data.source.network.model.register.RegisterRequest
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordRequest
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpRequest
@@ -18,7 +19,7 @@ interface AuthService {
     suspend fun doLogin(
         email: String,
         password: String,
-    ): String
+    ): LoginResponse
 
     @Throws(exceptionClasses = [java.lang.Exception::class])
     suspend fun doRegister(
@@ -68,16 +69,8 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
     override suspend fun doLogin(
         email: String,
         password: String,
-    ): String {
-        val loginRequest = LoginRequest(email, password)
-        val response = apiService.login(loginRequest)
-        return if (response.isSuccessful && response.body()?.status == true) {
-            val token = response.body()?.token ?: ""
-            currentUser = User(email = email, token = token)
-            token
-        } else {
-            throw Exception("Login failed")
-        }
+    ): LoginResponse {
+        return apiService.login(LoginRequest(email, password))
     }
 
     override suspend fun doRegister(

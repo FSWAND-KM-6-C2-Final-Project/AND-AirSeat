@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class UserApi(
-    val status: Boolean,
+    val status: String,
     val message: String,
     val token: String,
 ) : Parcelable

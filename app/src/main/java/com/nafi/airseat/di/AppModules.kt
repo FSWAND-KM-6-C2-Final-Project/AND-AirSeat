@@ -1,8 +1,6 @@
 package com.nafi.airseat.di
 
 import android.content.SharedPreferences
-import com.nafi.airseat.data.datasource.APIAuthDataSource
-import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthService
 import com.nafi.airseat.data.datasource.AuthServiceImpl
 import com.nafi.airseat.data.datasource.UserDataSource
@@ -38,7 +36,6 @@ object AppModules {
         module {
             single<AirSeatApiService> { AirSeatApiService.invoke() }
             single { TokenInterceptor(get()) }
-            single<AuthService> { AuthServiceImpl(get()) }
         }
 
     private val serviceModule =
@@ -58,7 +55,7 @@ object AppModules {
 
     private val datasource =
         module {
-            single<AuthDataSource> { APIAuthDataSource(get()) }
+            single<AuthService> { AuthServiceImpl(get()) }
             single<UserDataSource> { UserDataSourceImpl(get()) }
         }
 
