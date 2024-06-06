@@ -76,10 +76,8 @@ class LoginActivity : AppCompatActivity() {
                 doOnSuccess = {
                     binding.layoutFormLogin.pbLoading.isVisible = false
                     binding.layoutFormLogin.btnLogin.isVisible = true
-                    val token = it.payload
-                    if (token != null) {
-                        loginViewModel.saveToken(token)
-                    }
+                    val token = it.payload.toString()
+                    loginViewModel.saveToken(token)
                     navigateToMain()
                 },
                 doOnError = {
@@ -88,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
                     Log.d("proceedLogin", getString(R.string.proceed_login, it.exception?.message))
                     Toast.makeText(
                         this,
-                        getString(R.string.password_is_incorrect),
+                        it.exception?.message,
                         Toast.LENGTH_SHORT,
                     ).show()
                 },

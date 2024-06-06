@@ -16,6 +16,7 @@ import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpR
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendResponse
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResponse
 import okhttp3.OkHttpClient
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,7 +30,7 @@ interface AirSeatApiService {
     @POST("auth/login")
     suspend fun login(
         @Body loginRequest: LoginRequest,
-    ): Response<LoginResponse>
+    ): LoginResponse
 
     @POST("auth/register")
     suspend fun register(
@@ -66,6 +67,9 @@ interface AirSeatApiService {
     suspend fun checkUserInformation(
         @Header("Authorization") token: String? = null,
     ): LoginResponse
+
+    @GET("auth/me")
+    fun refreshToken(): Call<RefreshTokenResponse>
 
     companion object {
         @JvmStatic

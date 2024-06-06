@@ -11,7 +11,7 @@ interface TokenRepository {
     fun refreshToken(): String?
 }
 
-class TokenRepositoryImpl(private val context: Context, private val authService: com.nafi.airseat.data.source.network.services.AirSeatApiService) : TokenRepository {
+class TokenRepositoryImpl(private val context: Context, private val authService: AirSeatApiService) : TokenRepository {
     private val preferences = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
 
     override fun saveToken(token: String) {
