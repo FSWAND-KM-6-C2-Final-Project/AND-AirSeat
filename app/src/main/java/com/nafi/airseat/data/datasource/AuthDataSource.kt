@@ -7,7 +7,7 @@ interface AuthDataSource {
     suspend fun doLogin(
         email: String,
         password: String,
-    ): Boolean // diganti string/sesuai menurespon project sebelumnya
+    ): String
 
     @Throws(exceptionClasses = [java.lang.Exception::class])
     suspend fun doRegister(
@@ -45,13 +45,15 @@ interface AuthDataSource {
     fun isLoggedIn(): Boolean
 
     fun doLogout(): Boolean
+
+//    suspend fun getToken(categoryName:String?=null): LoginResponse
 }
 
 class APIAuthDataSource(private val service: AuthService) : AuthDataSource {
     override suspend fun doLogin(
         email: String,
         password: String,
-    ): Boolean {
+    ): String {
         return service.doLogin(email, password)
     }
 
@@ -101,6 +103,10 @@ class APIAuthDataSource(private val service: AuthService) : AuthDataSource {
     override fun doLogout(): Boolean {
         return service.doLogout()
     }
+
+//    override suspend fun getToken(categoryName: String?): LoginResponse {
+//        return service.getToken(categoryName)
+//    }
 
     override fun getCurrentUser(): User? {
         return service.getCurrentUser()

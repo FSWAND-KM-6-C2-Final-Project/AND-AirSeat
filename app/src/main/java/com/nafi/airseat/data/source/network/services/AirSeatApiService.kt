@@ -16,11 +16,12 @@ import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpR
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendResponse
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResponse
 import okhttp3.OkHttpClient
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
@@ -61,8 +62,10 @@ interface AirSeatApiService {
         @Body verifyPasswordChangeOtpRequest: VerifyPasswordChangeOtpRequest,
     ): Response<VerifyPasswordChangeOtpResponse>
 
-    @POST("auth/me")
-    fun refreshToken(): Call<RefreshTokenResponse>
+    @GET("auth/me")
+    suspend fun checkUserInformation(
+        @Header("Authorization") token: String? = null,
+    ): LoginResponse
 
     companion object {
         @JvmStatic
