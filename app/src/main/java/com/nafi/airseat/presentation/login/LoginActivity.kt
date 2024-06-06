@@ -76,6 +76,10 @@ class LoginActivity : AppCompatActivity() {
                 doOnSuccess = {
                     binding.layoutFormLogin.pbLoading.isVisible = false
                     binding.layoutFormLogin.btnLogin.isVisible = true
+                    val token = it.payload
+                    if (token != null) {
+                        loginViewModel.saveToken(token)
+                    }
                     navigateToMain()
                 },
                 doOnError = {

@@ -11,7 +11,7 @@ interface UserRepository {
     fun doLogin(
         email: String,
         password: String,
-    ): Flow<ResultWrapper<Boolean>>
+    ): Flow<ResultWrapper<String>>
 
     @Throws(exceptionClasses = [java.lang.Exception::class])
     fun doRegister(
@@ -48,13 +48,15 @@ interface UserRepository {
     fun isLoggedIn(): Boolean
 
     fun doLogout(): Boolean
+
+//    fun getToken(categorynName: String? = null): Flow<ResultWrapper<List<UserApi>>>
 }
 
 class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepository {
     override fun doLogin(
         email: String,
         password: String,
-    ): Flow<ResultWrapper<Boolean>> {
+    ): Flow<ResultWrapper<String>> {
         return proceedFlow { dataSource.doLogin(email, password) }
     }
 
@@ -104,6 +106,12 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
     override fun doLogout(): Boolean {
         return dataSource.doLogout()
     }
+
+//    override fun getToken(categorynName: String?): Flow<ResultWrapper<List<UserApi>>> {
+//        return proceedFlow {
+//            dataSource.getToken(categorynName).toUser()
+//        }
+//    }
 
     override fun getCurrentUser(): User? {
         return dataSource.getCurrentUser()

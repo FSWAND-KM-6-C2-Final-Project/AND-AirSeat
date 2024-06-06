@@ -18,7 +18,7 @@ interface AuthService {
     suspend fun doLogin(
         email: String,
         password: String,
-    ): Boolean
+    ): String
 
     @Throws(exceptionClasses = [java.lang.Exception::class])
     suspend fun doRegister(
@@ -55,6 +55,8 @@ interface AuthService {
     fun getCurrentUser(): User?
 
     fun doLogout(): Boolean
+
+//    suspend fun getToken(categoryName:String?=null): LoginResponse
 }
 
 class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
@@ -66,14 +68,15 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
     override suspend fun doLogin(
         email: String,
         password: String,
-    ): Boolean {
+    ): String {
         val loginRequest = LoginRequest(email, password)
         val response = apiService.login(loginRequest)
         return if (response.isSuccessful && response.body()?.status == true) {
-            currentUser = User(email = email, token = response.body()?.token ?: "")
-            true
+            val token = response.body()?.token ?: ""
+            currentUser = User(email = email, token = token)
+            token
         } else {
-            false
+            throw Exception("Login failed")
         }
     }
 
@@ -182,4 +185,12 @@ class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
     override fun doLogout(): Boolean {
         return currentUser != null
     }
+
+//    override suspend fun getToken(categoryName: String?): LoginResponse {
+//        return if (currentUser !=null) {
+//            LoginResponse(true, currentUser?.token ?: "")
+//        }else{
+//            LoginResponse(false,"")
+//        }
+//    }
 }
