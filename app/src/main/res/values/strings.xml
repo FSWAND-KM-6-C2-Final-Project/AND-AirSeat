@@ -153,4 +153,11 @@
     <string name="text_header_history">History</string>
     <string name="text_button_login_protection">Login</string>
     <string name="text_login_protection">Oops!, You have to login first</string>
+    <string name="text_title_empty_data">Data Is Empty</string>
+    <string name="text_desc_empty_data">Tidak Ada Data yang ditampilkan</string>
+    <string name="text_title_error_general">Sorry we have some problem in our service</string>
+    <string name="text_desc_errol_general">Try again in a few moments</string>
+    <string name="text_title_loading_data">Try to loading data from server</string>
+    <string name="text_desc_no_internet">Please check you internet connection</string>
+    <string name="text_title_no_connection">There is no connection</string>
 </resources>
