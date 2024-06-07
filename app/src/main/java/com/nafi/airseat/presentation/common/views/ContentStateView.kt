@@ -29,7 +29,8 @@ constructor(
 
     fun setState(
         state: ContentState,
-        message: String? = null,
+        title: String? = null,
+        desc: String? = null,
         @DrawableRes imgRes: Int? = null,
     ) {
         when (state) {
@@ -37,6 +38,9 @@ constructor(
                 binding.root.isVisible = false
                 binding.layoutEmptyData.isVisible = false
                 binding.layoutLoginProtection.isVisible = false
+                binding.layoutErrorGeneral.isVisible = false
+                binding.layoutLoadingData.isVisible = false
+                binding.layoutNoConnection.isVisible = false
                 listener?.onContentShow(true)
             }
 
@@ -44,19 +48,29 @@ constructor(
                 binding.root.isVisible = true
                 binding.layoutEmptyData.isVisible = false
                 binding.layoutLoginProtection.isVisible = false
+                binding.layoutErrorGeneral.isVisible = false
+                binding.layoutLoadingData.isVisible = true
+                binding.layoutNoConnection.isVisible = false
                 listener?.onContentShow(false)
+                title?.let { binding.tvTitleLoadingData.text = it } ?: run {
+                    binding.tvTitleLoadingData.text = context.getString(R.string.text_title_loading_data)
+                }
             }
 
             ContentState.EMPTY -> {
                 binding.root.isVisible = true
-                binding.layoutEmptyData.isVisible = false
+                binding.layoutEmptyData.isVisible = true
                 binding.layoutLoginProtection.isVisible = false
+                binding.layoutErrorGeneral.isVisible = false
+                binding.layoutLoadingData.isVisible = false
+                binding.layoutNoConnection.isVisible = false
+                title?.let { binding.tvTitleEmptyData.text = it } ?: run {
+                    binding.tvTitleEmptyData.text = context.getString(R.string.text_title_empty_data)
+                }
 
-                /*imgRes?.let { binding.ivContentState.setImageResource(it) }
-                    ?: run { binding.ivContentState.setImageResource(R.drawable.ic_state_empty) }*/
-                /*message?.let { binding.tvTitleEmptyData.text = it } ?: run {
-                    binding.tvTitleEmptyData.text = context.getString(R.string.text_empty_data)
-                }*/
+                desc?.let { binding.tvTitleEmptyData.text = it } ?: run {
+                    binding.tvTitleEmptyData.text = context.getString(R.string.text_desc_empty_data)
+                }
                 listener?.onContentShow(false)
             }
 
@@ -64,11 +78,9 @@ constructor(
                 binding.root.isVisible = true
                 binding.layoutEmptyData.isVisible = false
                 binding.layoutLoginProtection.isVisible = false
-                /*imgRes?.let { binding.ivContentState.setImageResource(it) }
-                    ?: run { binding.ivContentState.setImageResource(R.drawable.ic_state_error_internet) }*/
-                /*message?.let { binding.tvError.text = it } ?: run {
-                    binding.tvError.text = context.getString(R.string.no_internet_connection)
-                }*/
+                binding.layoutErrorGeneral.isVisible = false
+                binding.layoutLoadingData.isVisible = false
+                binding.layoutNoConnection.isVisible = true
                 listener?.onContentShow(false)
             }
 
@@ -76,12 +88,9 @@ constructor(
                 binding.root.isVisible = true
                 binding.layoutEmptyData.isVisible = false
                 binding.layoutLoginProtection.isVisible = false
-                /*imgRes?.let { binding.ivContentState.setImageResource(it) }
-                    ?: run { binding.ivContentState.setImageResource(R.drawable.ic_state_error_general) }*/
-                /*message?.let { binding.tvTitleEmptyData.text = it } ?: run {
-                    binding.tvTitleEmptyData.text =
-                        context.getString(R.string.error_when_getting_the_data_please_try_again_later)
-                }*/
+                binding.layoutErrorGeneral.isVisible = true
+                binding.layoutLoadingData.isVisible = false
+                binding.layoutNoConnection.isVisible = false
                 listener?.onContentShow(false)
             }
         }
