@@ -14,7 +14,7 @@ import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpR
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendRequest
 import com.nafi.airseat.data.source.network.services.AirSeatApiService
 
-interface AuthService {
+interface AuthDataSource {
     @Throws(exceptionClasses = [Exception::class])
     suspend fun doLogin(
         email: String,
@@ -60,7 +60,7 @@ interface AuthService {
 //    suspend fun getToken(categoryName:String?=null): LoginResponse
 }
 
-class AuthServiceImpl(private val apiService: AirSeatApiService) : AuthService {
+class AuthDataSourceImpl(private val apiService: AirSeatApiService) : AuthDataSource {
     private var currentUser: User? = null
     private var otpUser: UserOtp? = null
     private var otpUserResend: UserOtpResend? = null

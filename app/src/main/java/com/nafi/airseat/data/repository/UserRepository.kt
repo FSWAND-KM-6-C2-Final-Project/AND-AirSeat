@@ -1,6 +1,6 @@
 package com.nafi.airseat.data.repository
 
-import com.nafi.airseat.data.datasource.AuthService
+import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.model.User
 import com.nafi.airseat.utils.ResultWrapper
 import com.nafi.airseat.utils.proceedFlow
@@ -52,7 +52,7 @@ interface UserRepository {
 //    fun getToken(categorynName: String? = null): Flow<ResultWrapper<List<UserApi>>>
 }
 
-class UserRepositoryImpl(private val dataSource: AuthService) : UserRepository {
+class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepository {
     override fun doLogin(
         email: String,
         password: String,
