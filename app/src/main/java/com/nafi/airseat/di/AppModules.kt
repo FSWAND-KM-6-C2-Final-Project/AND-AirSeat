@@ -1,8 +1,8 @@
 package com.nafi.airseat.di
 
 import android.content.SharedPreferences
-import com.nafi.airseat.data.datasource.AuthService
-import com.nafi.airseat.data.datasource.AuthServiceImpl
+import com.nafi.airseat.data.datasource.AuthDataSource
+import com.nafi.airseat.data.datasource.AuthDataSourceImpl
 import com.nafi.airseat.data.datasource.UserDataSource
 import com.nafi.airseat.data.datasource.UserDataSourceImpl
 import com.nafi.airseat.data.repository.PreferenceRepository
@@ -55,7 +55,7 @@ object AppModules {
 
     private val datasource =
         module {
-            single<AuthService> { AuthServiceImpl(get()) }
+            single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserDataSource> { UserDataSourceImpl(get()) }
         }
 
