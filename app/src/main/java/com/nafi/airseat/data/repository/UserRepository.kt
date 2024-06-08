@@ -107,12 +107,6 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
         return dataSource.doLogout()
     }
 
-//    override fun getToken(categorynName: String?): Flow<ResultWrapper<List<UserApi>>> {
-//        return proceedFlow {
-//            dataSource.getToken(categorynName).toUser()
-//        }
-//    }
-
     override fun getCurrentUser(): User? {
         return dataSource.getCurrentUser()
     }

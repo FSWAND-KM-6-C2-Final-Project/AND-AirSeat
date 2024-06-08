@@ -17,7 +17,5 @@ class LoginViewModel(
         .doLogin(email, password)
         .asLiveData(Dispatchers.IO)
 
-    fun getToken() = preferenceRepository.getToken()
-
     fun saveToken(token: String) = preferenceRepository.saveToken(token)
 }

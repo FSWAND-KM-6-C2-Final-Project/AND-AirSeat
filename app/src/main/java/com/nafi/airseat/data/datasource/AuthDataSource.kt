@@ -57,7 +57,6 @@ interface AuthDataSource {
 
     fun doLogout(): Boolean
 
-//    suspend fun getToken(categoryName:String?=null): LoginResponse
 }
 
 class AuthDataSourceImpl(private val apiService: AirSeatApiService) : AuthDataSource {
@@ -179,11 +178,4 @@ class AuthDataSourceImpl(private val apiService: AirSeatApiService) : AuthDataSo
         return currentUser != null
     }
 
-//    override suspend fun getToken(categoryName: String?): LoginResponse {
-//        return if (currentUser !=null) {
-//            LoginResponse(true, currentUser?.token ?: "")
-//        }else{
-//            LoginResponse(false,"")
-//        }
-//    }
 }
