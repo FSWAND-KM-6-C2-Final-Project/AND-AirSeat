@@ -1,5 +1,9 @@
 package com.nafi.airseat.utils
 
+/**
+Written with love by Muhammad Hermas Yuda Pamungkas
+Github : https://github.com/hermasyp
+ **/
 import android.content.Context
 import android.content.SharedPreferences
 

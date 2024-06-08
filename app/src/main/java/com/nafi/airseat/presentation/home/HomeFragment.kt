@@ -10,21 +10,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafi.airseat.databinding.FragmentHomeBinding
-import com.nafi.airseat.presentation.calendar.CalendarBottomSheetFragment
+import com.nafi.airseat.presentation.bottomsheetcalendar.BottomSheetCalendarFragment
+import com.nafi.airseat.presentation.departcalendar.DepartCalendarFragment
 import com.nafi.airseat.presentation.passengers.PassengersFragment
 import com.nafi.airseat.presentation.resultsearch.ResultSearchActivity
 import com.nafi.airseat.presentation.searchticket.SearchTicketFragment
 import com.nafi.airseat.presentation.seatclass.SeatClassFragment
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), BottomSheetCalendarFragment.OnDateSelectedListener, DepartCalendarFragment.OnDateSelectedListener {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    private var selectedStartDate: LocalDate? = null
+    private var selectedEndDate: LocalDate? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,13 +49,21 @@ class HomeFragment : Fragment() {
         }
 
         binding.layoutHome.tvDepartChoose.setOnClickListener {
-            Log.d("HomeFragment", "Calendar button clicked")
-            showBottomSheet(CalendarBottomSheetFragment())
+            if (binding.layoutHome.swDepartReturn.isChecked) {
+                val bottomSheet = BottomSheetCalendarFragment(isStartSelection = true)
+                bottomSheet.setOnDateSelectedListener(this)
+                bottomSheet.show(parentFragmentManager, bottomSheet.tag)
+            } else {
+                val bottomSheet = DepartCalendarFragment()
+                bottomSheet.setOnDateSelectedListenerDepart(this)
+                bottomSheet.show(parentFragmentManager, bottomSheet.tag)
+            }
         }
 
         binding.layoutHome.tvArrivalChoose.setOnClickListener {
-            Log.d("HomeFragment", "Calendar button clicked")
-            showBottomSheet(CalendarBottomSheetFragment())
+            val bottomSheet = BottomSheetCalendarFragment(isStartSelection = true)
+            bottomSheet.setOnDateSelectedListener(this)
+            bottomSheet.show(parentFragmentManager, bottomSheet.tag)
         }
 
         binding.layoutHome.tvPassengersCount.setOnClickListener {
@@ -68,11 +75,51 @@ class HomeFragment : Fragment() {
         }
 
         binding.layoutHome.btnSearchFlight.setOnClickListener {
-            startActivity(Intent(requireContext(), ResultSearchActivity::class.java))
+            val intent = Intent(requireContext(), ResultSearchActivity::class.java)
+            // Pastikan tanggal sudah dipilih
+            selectedStartDate?.let { startDate ->
+                selectedEndDate?.let { endDate ->
+                    intent.putExtra("startDate", startDate.toString())
+                    intent.putExtra("endDate", endDate.toString())
+                    startActivity(intent)
+                }
+            }
+        }
+
+        binding.layoutHome.swDepartReturn.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.layoutHome.tvReturnTitle.visibility = View.VISIBLE
+                binding.layoutHome.tvArrivalChoose.visibility = View.VISIBLE
+            }
         }
     }
 
     private fun showBottomSheet(bottomSheet: BottomSheetDialogFragment) {
         bottomSheet.show(parentFragmentManager, bottomSheet.tag)
+    }
+
+    override fun onDateSelected(
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+    ) {
+        // Menyimpan tanggal yang dipilih ke variabel
+        selectedStartDate = startDate
+        selectedEndDate = endDate
+
+        // Menampilkan tanggal yang dipilih di UI
+        if (startDate != null && endDate != null) {
+            binding.layoutHome.tvDepartChoose.text = startDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
+            binding.layoutHome.tvArrivalChoose.text = endDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
+        }
+    }
+
+    override fun onDateSelectedDepart(startDate: LocalDate?) {
+        // Menyimpan tanggal yang dipilih ke variabel
+        selectedStartDate = startDate
+
+        // Menampilkan tanggal yang dipilih di UI
+        if (startDate != null) {
+            binding.layoutHome.tvDepartChoose.text = startDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
+        }
     }
 }

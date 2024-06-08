@@ -2,13 +2,9 @@ package com.nafi.airseat.presentation.resultsearch
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import com.kizitonwose.calendar.core.WeekDay
-import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
@@ -19,27 +15,31 @@ import com.nafi.airseat.utils.calendar.displayText
 import com.nafi.airseat.utils.calendar.getWeekPageTitle
 import com.nafi.airseat.utils.getColorCompat
 import java.time.LocalDate
-import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 class ResultSearchActivity : AppCompatActivity() {
-    private var selectedDate = LocalDate.now()
-    private val dateFormatter = DateTimeFormatter.ofPattern("dd")
     private lateinit var binding: ActivityResultSearchBinding
+    private lateinit var startDate: LocalDate
+    private lateinit var endDate: LocalDate
+    private lateinit var selectedDate: LocalDate
+    private val dateFormatter = DateTimeFormatter.ofPattern("dd")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
-        // Inflate the layout using View Binding
         binding = ActivityResultSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Apply window insets using binding.root
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        // Get selected dates from intent
+        val startDateString = intent.getStringExtra("startDate")
+        val endDateString = intent.getStringExtra("endDate")
+
+        if (startDateString != null && endDateString != null) {
+            startDate = LocalDate.parse(startDateString)
+            endDate = LocalDate.parse(endDateString)
+            selectedDate = startDate
+        } else {
+            finish() // Close the activity if no dates are provided
+            return
         }
 
         class DayViewContainer(view: View) : ViewContainer(view) {
@@ -62,11 +62,10 @@ class ResultSearchActivity : AppCompatActivity() {
                 bind.exSevenDateText.text = dateFormatter.format(day.date)
                 bind.exSevenDayText.text = day.date.dayOfWeek.displayText()
 
-                val currentMonth = LocalDate.now().month
                 val colorRes =
                     when {
                         day.date == selectedDate -> R.color.md_theme_primaryContainer
-                        day.date.month == currentMonth -> R.color.md_theme_onPrimary
+                        day.date.month == startDate.month -> R.color.md_theme_onPrimary
                         else -> R.color.md_theme_onPrimary
                     }
                 bind.exSevenDateText.setTextColor(view.context.getColorCompat(colorRes))
@@ -88,12 +87,12 @@ class ResultSearchActivity : AppCompatActivity() {
             binding.exSevenToolbar.title = getWeekPageTitle(weekDays)
         }
 
-        val currentMonth = YearMonth.now()
+        // Setup calendar only with selected dates range
         binding.exSevenCalendar.setup(
-            currentMonth.minusMonths(5).atStartOfMonth(),
-            currentMonth.plusMonths(5).atEndOfMonth(),
+            startDate,
+            endDate,
             firstDayOfWeekFromLocale(),
         )
-        binding.exSevenCalendar.scrollToDate(LocalDate.now())
+        binding.exSevenCalendar.scrollToDate(startDate) // Scroll to start date
     }
 }
