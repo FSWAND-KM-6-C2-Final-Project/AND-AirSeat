@@ -2,10 +2,14 @@ package com.nafi.airseat.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.nafi.airseat.data.repository.PreferenceRepository
 import com.nafi.airseat.data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 
-class LoginViewModel(private val repository: UserRepository) : ViewModel() {
+class LoginViewModel(
+    private val repository: UserRepository,
+    private val preferenceRepository: PreferenceRepository,
+) : ViewModel() {
     fun doLogin(
         email: String,
         password: String,
@@ -13,8 +17,5 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
         .doLogin(email, password)
         .asLiveData(Dispatchers.IO)
 
-    fun reqChangePasswordByEmail(email: String) =
-        repository
-            .reqChangePasswordByEmail(email)
-            .asLiveData(Dispatchers.IO)
+    fun saveToken(token: String) = preferenceRepository.saveToken(token)
 }

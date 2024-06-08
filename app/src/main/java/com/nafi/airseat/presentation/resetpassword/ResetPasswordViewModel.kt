@@ -13,8 +13,8 @@ class ResetPasswordViewModel(private val repository: UserRepository) : ViewModel
         confirmPassword: String,
     ) = repository
         .verifChangePasswordOtp(
-            email = email,
             code = code,
+            email = email,
             password = password,
             confirmPassword = confirmPassword,
         )

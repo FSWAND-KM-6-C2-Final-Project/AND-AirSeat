@@ -1,13 +1,25 @@
 package com.nafi.airseat.data.datasource
 
 import com.nafi.airseat.data.model.User
+import com.nafi.airseat.data.model.UserChangePassword
+import com.nafi.airseat.data.model.UserOtp
+import com.nafi.airseat.data.model.UserOtpResend
+import com.nafi.airseat.data.source.network.model.login.LoginRequest
+import com.nafi.airseat.data.source.network.model.login.LoginResponse
+import com.nafi.airseat.data.source.network.model.register.RegisterRequest
+import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordRequest
+import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpRequest
+import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpRequest
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpRequest
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendRequest
+import com.nafi.airseat.data.source.network.services.AirSeatApiService
 
 interface AuthDataSource {
     @Throws(exceptionClasses = [Exception::class])
     suspend fun doLogin(
         email: String,
         password: String,
-    ): Boolean
+    ): LoginResponse
 
     @Throws(exceptionClasses = [java.lang.Exception::class])
     suspend fun doRegister(
@@ -27,7 +39,6 @@ interface AuthDataSource {
     suspend fun doVerifResendOtp(email: String): Boolean
 
     // reset password
-
     suspend fun reqChangePasswordByEmail(email: String): Boolean
 
     suspend fun reqChangePasswordByEmailResendOtp(email: String): Boolean
@@ -40,19 +51,24 @@ interface AuthDataSource {
         confirmPassword: String,
     ): Boolean
 
-    fun getCurrentUser(): User?
-
     fun isLoggedIn(): Boolean
+
+    fun getCurrentUser(): User?
 
     fun doLogout(): Boolean
 }
 
-class APIAuthDataSource(private val service: AuthService) : AuthDataSource {
+class AuthDataSourceImpl(private val apiService: AirSeatApiService) : AuthDataSource {
+    private var currentUser: User? = null
+    private var otpUser: UserOtp? = null
+    private var otpUserResend: UserOtpResend? = null
+    private var userChangePassword: UserChangePassword? = null
+
     override suspend fun doLogin(
         email: String,
         password: String,
-    ): Boolean {
-        return service.doLogin(email, password)
+    ): LoginResponse {
+        return apiService.login(LoginRequest(email, password))
     }
 
     override suspend fun doRegister(
@@ -62,27 +78,69 @@ class APIAuthDataSource(private val service: AuthService) : AuthDataSource {
         password: String,
         confirmPassword: String,
     ): Boolean {
-        return service.doRegister(fullName, email, phoneNumber, password, confirmPassword)
+        val registerRequest =
+            RegisterRequest(
+                fullName,
+                email,
+                phoneNumber,
+                password,
+                confirmPassword,
+            )
+        val response = apiService.register(registerRequest)
+        return if (response.isSuccessful && response.body()?.status == true) {
+            currentUser = User(email = email, token = response.body()?.requestAt ?: "") // bingung
+            true
+        } else {
+            false
+        }
     }
 
     override suspend fun doVerif(
         email: String,
         code: String,
     ): Boolean {
-        return service.doVerif(email, code)
+        val verifAccountOtpRequest = VerifAccountOtpRequest(email, code)
+        val response = apiService.verifAccountOtp(verifAccountOtpRequest)
+        return if (response.isSuccessful && response.body()?.status == true) {
+            otpUser = UserOtp(email = email, code = response.body()?.requestAt ?: "") // bingung
+            true
+        } else {
+            false
+        }
     }
 
     override suspend fun doVerifResendOtp(email: String): Boolean {
-        return service.doVerifResendOtp(email)
+        val verifAccountOtpResendRequest = VerifAccountOtpResendRequest(email)
+        val response = apiService.verifAccountOtpResend(verifAccountOtpResendRequest)
+        return if (response.isSuccessful && response.body()?.status == true) {
+            otpUserResend = UserOtpResend(email = response.body()?.requestAt ?: "") // bingung
+            true
+        } else {
+            false
+        }
     }
 
     // reset password
     override suspend fun reqChangePasswordByEmail(email: String): Boolean {
-        return service.reqChangePasswordByEmail(email)
+        val resetPasswordRequest = ResetPasswordRequest(email)
+        val response = apiService.resetPassword(resetPasswordRequest)
+        return if (response.isSuccessful && response.body()?.status == true) {
+            otpUserResend = UserOtpResend(email = response.body()?.requestAt ?: "") // bingung
+            true
+        } else {
+            false
+        }
     }
 
     override suspend fun reqChangePasswordByEmailResendOtp(email: String): Boolean {
-        return service.reqChangePasswordByEmailResendOtp(email)
+        val resetPasswordResendOtpRequest = ResetPasswordResendOtpRequest(email)
+        val response = apiService.resetPasswordResendOtp(resetPasswordResendOtpRequest)
+        return if (response.isSuccessful && response.body()?.status == true) {
+            otpUserResend = UserOtpResend(email = response.body()?.requestAt ?: "") // bingung
+            true
+        } else {
+            false
+        }
     }
 
     override suspend fun verifChangePasswordOtp(
@@ -91,18 +149,31 @@ class APIAuthDataSource(private val service: AuthService) : AuthDataSource {
         password: String,
         confirmPassword: String,
     ): Boolean {
-        return service.verifChangePasswordOtp(code, email, password, confirmPassword)
+        val verifChangePasswordOtpRequest =
+            VerifyPasswordChangeOtpRequest(
+                code,
+                email,
+                password,
+                confirmPassword,
+            )
+        val response = apiService.verifyPasswordChangeOtp(verifChangePasswordOtpRequest)
+        return if (response.isSuccessful && response.body()?.status == true) {
+            userChangePassword = UserChangePassword(code, email, password, confirmPassword = response.body()?.requestAt ?: "") // bingung
+            true
+        } else {
+            false
+        }
     }
 
     override fun isLoggedIn(): Boolean {
-        return service.isLoggedIn()
-    }
-
-    override fun doLogout(): Boolean {
-        return service.doLogout()
+        return currentUser != null
     }
 
     override fun getCurrentUser(): User? {
-        return service.getCurrentUser()
+        return currentUser
+    }
+
+    override fun doLogout(): Boolean {
+        return currentUser != null
     }
 }
