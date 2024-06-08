@@ -56,7 +56,6 @@ interface AuthDataSource {
     fun getCurrentUser(): User?
 
     fun doLogout(): Boolean
-
 }
 
 class AuthDataSourceImpl(private val apiService: AirSeatApiService) : AuthDataSource {
@@ -177,5 +176,4 @@ class AuthDataSourceImpl(private val apiService: AirSeatApiService) : AuthDataSo
     override fun doLogout(): Boolean {
         return currentUser != null
     }
-
 }
