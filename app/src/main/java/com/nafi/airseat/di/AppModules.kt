@@ -85,6 +85,7 @@ import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
 import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.presentation.splashscreen.SplashScreenViewModel
 import com.nafi.airseat.presentation.updateprofile.UpdateProfileViewModel
+import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -143,6 +144,7 @@ object AppModules {
         module {
             single<UserRepository> { UserRepositoryImpl(get()) }
             single<SeatRepository> { SeatRepositoryImpl(get()) }
+            single<SeatRepository> { SeatRepositoryImpl(get()) }
             single<AirportRepository> { AirportRepositoryImpl(get()) }
             single<FavoriteDestinationRepository> { FavoriteDestinationRepositoryImpl(get()) }
             single<SeatClassRepository> { SeatClassRepositoryImpl(get()) }
@@ -164,6 +166,8 @@ object AppModules {
             viewModelOf(::PassengerBioViewModel)
             viewModelOf(::HomeViewModel)
             viewModelOf(::LoginViewModel)
+            viewModelOf(::SeatViewModel)
+
             viewModelOf(::FlightDetailPriceViewModel)
             viewModel {
                 SeatViewModel(get())
