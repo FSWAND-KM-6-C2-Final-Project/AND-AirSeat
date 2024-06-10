@@ -5,25 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.nafi.airseat.core.BaseActivity
 import com.nafi.airseat.databinding.FragmentProfileBinding
 import com.nafi.airseat.presentation.login.LoginActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
 
-    companion object {
-        fun newInstance() = ProfileFragment()
-    }
+    private val viewModel: ProfileViewModel by viewModel()
 
-    private val viewModel: ProfileViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
+    // val token = (activity as BaseActivity).observeToken()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,11 +32,26 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        doLogout()
+        setOnclickListener()
+        setOptionMenu()
     }
 
-    private fun doLogout() {
-        binding.toLogin.setOnClickListener {
+    private fun setOptionMenu() {
+        (activity as BaseActivity).token.observe(viewLifecycleOwner) {
+            if (it.isNullOrEmpty()) {
+                binding.itemChangeProfile.isVisible = false
+                binding.itemProfileSetting.isVisible = false
+                binding.tvLogin.text = "Login"
+            } else {
+                binding.itemChangeProfile.isVisible = true
+                binding.itemProfileSetting.isVisible = true
+                binding.tvLogin.text = "Logout"
+            }
+        }
+    }
+
+    private fun setOnclickListener() {
+        binding.itemLogout.setOnClickListener {
             (activity as BaseActivity).cleatToken()
             navigateToLogin()
         }

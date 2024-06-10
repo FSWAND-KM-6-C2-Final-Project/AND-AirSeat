@@ -47,6 +47,7 @@ import com.nafi.airseat.presentation.login.LoginViewModel
 import com.nafi.airseat.presentation.notification.NotificationViewModel
 import com.nafi.airseat.presentation.otpaccount.OtpViewModel
 import com.nafi.airseat.presentation.otpresetpassword.OtpResetPasswordViewModel
+import com.nafi.airseat.presentation.profile.ProfileViewModel
 import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
@@ -145,6 +146,9 @@ object AppModules {
             }
             viewModel {
                 BaseViewModel(get())
+            }
+            viewModel {
+                ProfileViewModel(get())
             }
         }
 
