@@ -162,4 +162,18 @@
     <string name="text_title_no_connection">There is no connection</string>
     <string name="text_title_empty_notification">Opps! you don\'t have any notification</string>
     <string name="text_desc_empy_notification">Stay tune for notification come yet</string>
+    <string name="text_error_title_cannot_be_empty">Title cannot be empty</string>
+    <string name="hint_select_country">Select Country</string>
+    <string name="text_error_date_of_birth_is_required">Date of Birth is required</string>
+    <string name="hint_enter_your_citizenship">Enter your citizenship</string>
+    <string name="id_card_paspor">ID Card/Paspor</string>
+    <string name="hint_enter_your_id_card_or_passport_number">Enter your ID Card or Passport Number</string>
+    <string name="hint_identification_type">Identification Type</string>
+    <string name="hint_select_id_type">Select ID type</string>
+    <string name="hint_save">Save</string>
+    <string name="passenger_header">Passenger %1$d</string>
+    <string name="sum_adult">1</string>
+    <string name="sum_child">1</string>
+    <string name="sum_baby">1</string>
+    <string name="passenger_passengerindex">Passenger %1$d - %2$s</string>
 </resources>
