@@ -7,6 +7,6 @@ class BaseViewModel(
     private val userPrefRepository: UserPrefRepository,
 ) : ViewModel() {
     fun clearSession() {
-        userPrefRepository.cleatToken()
+        userPrefRepository.clearToken()
     }
 }

@@ -7,7 +7,7 @@ interface UserPrefRepository {
 
     fun getToken(): String?
 
-    fun cleatToken()
+    fun clearToken()
 }
 
 class UserPrefRepositoryImpl(private val userPrefDataSource: UserPrefDataSource) :
@@ -20,7 +20,7 @@ class UserPrefRepositoryImpl(private val userPrefDataSource: UserPrefDataSource)
         return userPrefDataSource.getToken()
     }
 
-    override fun cleatToken() {
+    override fun clearToken() {
         return userPrefDataSource.clearToken()
     }
 }
