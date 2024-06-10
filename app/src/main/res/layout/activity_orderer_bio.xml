@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,55 +8,250 @@
     tools:context=".presentation.biodata.OrdererBioActivity">
 
     <LinearLayout
-        android:id="@+id/ll_bio_orderer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_theme_primary"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="12dp"
-        android:gravity="center">
+        android:orientation="vertical">
 
-        <ImageButton
-            android:layout_marginStart="8dp"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/btn_back"
-            />
-
-        <TextView
-            android:id="@+id/tv_header"
+        <LinearLayout
+            android:id="@+id/ll_bio_orderer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/orderer_biodata"
-            android:textColor="@color/md_theme_onPrimary"
-            android:textSize="18sp"
-            android:layout_marginHorizontal="18dp"
+            android:background="@color/md_theme_primary"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="12dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/btn_back" />
+
+            <TextView
+                android:id="@+id/tv_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="18dp"
+                android:text="@string/orderer_biodata"
+                android:textColor="@color/md_theme_onPrimary"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_bio_orderer">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/layout_form_ticket_booker"
+                    layout="@layout/layout_form_ticket_booker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="18dp" />
+
+                <LinearLayout
+                    android:id="@+id/bottom_sheet"
+                    android:layout_width="match_parent"
+                    android:layout_height="320dp"
+                    android:layout_marginVertical="12dp"
+                    android:background="@android:color/white"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:id="@+id/tv_adult_pass"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:text="Adult\n(Over 12 years old)" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/minus_adult"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:textSize="24sp"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_theme_primary"
+                            app:strokeWidth="2dp"
+                            android:text="-" />
+
+                        <TextView
+                            android:id="@+id/adult_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="@string/sum_adult" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/plus_adult"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:textSize="24sp"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_theme_primary"
+                            app:strokeWidth="2dp"
+                            android:text="+" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/vw_line_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="8dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:id="@+id/tv_child_pass"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:text="Child\n(2 - 11 years old)" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/minus_child"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:textSize="24sp"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_theme_primary"
+                            app:strokeWidth="2dp"
+                            android:text="-" />
+
+                        <TextView
+                            android:id="@+id/child_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="@string/sum_child" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/plus_child"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:textSize="24sp"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_theme_primary"
+                            app:strokeWidth="2dp"
+                            android:text="+" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/vw_line_child"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="8dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingVertical="8dp">
+
+                        <TextView
+                            android:id="@+id/tv_baby_pass"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:text="Baby\n(Under 2 years old)" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/minus_baby"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:textSize="24sp"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_theme_primary"
+                            app:strokeWidth="2dp"
+                            android:text="-" />
+
+                        <TextView
+                            android:id="@+id/baby_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="@string/sum_baby" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/plus_baby"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:textSize="24sp"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="@color/md_theme_primary"
+                            app:strokeWidth="2dp"
+                            android:text="+" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/vw_line_baby"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginVertical="8dp"
+                        android:background="@android:color/darker_gray" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginBottom="36dp"
+            android:padding="12dp"
+            android:text="@string/save"
+            android:textSize="16sp"
+            app:cornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </LinearLayout>
 
-    <include
-        android:id="@+id/layout_form_ticket_booker"
-        layout="@layout/layout_form_ticket_booker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="18dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_bio_orderer" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="18dp"
-        android:layout_marginBottom="36dp"
-        android:padding="12dp"
-        android:text="@string/save"
-        android:textSize="16sp"
-        app:cornerRadius="12dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
