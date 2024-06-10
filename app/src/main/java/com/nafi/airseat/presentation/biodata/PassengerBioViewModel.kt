@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 
 class PassengerBioViewModel : ViewModel() {
     private val _isFamilyNameMode = MutableLiveData(false)
+
+    val passengerBioItemList = mutableListOf<PassengerBioItem>()
+
     val isFamilyNameMode: LiveData<Boolean> get() = _isFamilyNameMode
 
     fun changeInputMode() {
