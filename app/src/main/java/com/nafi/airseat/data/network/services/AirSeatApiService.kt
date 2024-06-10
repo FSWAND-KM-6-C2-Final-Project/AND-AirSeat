@@ -11,6 +11,7 @@ import com.nafi.airseat.data.network.resetpassword.ResetPasswordResendOtpRespons
 import com.nafi.airseat.data.network.resetpassword.ResetPasswordResponse
 import com.nafi.airseat.data.network.resetpassword.VerifyPasswordChangeOtpRequest
 import com.nafi.airseat.data.network.resetpassword.VerifyPasswordChangeOtpResponse
+import com.nafi.airseat.data.network.seat.SeatResponse
 import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpRequest
 import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResendRequest
 import com.nafi.airseat.data.network.verifyaccount.VerifAccountOtpResendResponse
@@ -20,6 +21,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
@@ -59,6 +61,9 @@ interface AirSeatApiService {
     suspend fun verifyPasswordChangeOtp(
         @Body verifyPasswordChangeOtpRequest: VerifyPasswordChangeOtpRequest,
     ): Response<VerifyPasswordChangeOtpResponse>
+
+    @GET("api/v1/seat/flight/1")
+    suspend fun getSeats(): SeatResponse
 
     companion object {
         @JvmStatic

@@ -1,5 +1,6 @@
 package com.nafi.airseat.presentation.biodata
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ class OrdererBioActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupForm()
         setClickListener()
+        observeData()
         observeInputMode()
     }
 
@@ -38,10 +40,41 @@ class OrdererBioActivity : AppCompatActivity() {
         binding.layoutFormTicketBooker.swFamilyName.setOnClickListener {
             ordererBioViewModel.changeInputMode()
         }
+        binding.minusAdult.setOnClickListener {
+            ordererBioViewModel.subAdult()
+        }
+        binding.plusAdult.setOnClickListener {
+            ordererBioViewModel.addAdult()
+        }
+        binding.minusChild.setOnClickListener {
+            ordererBioViewModel.subChild()
+        }
+        binding.plusChild.setOnClickListener {
+            ordererBioViewModel.addChild()
+        }
+        binding.minusBaby.setOnClickListener {
+            ordererBioViewModel.subBaby()
+        }
+        binding.plusBaby.setOnClickListener {
+            ordererBioViewModel.addBaby()
+        }
+    }
+
+    private fun observeData() {
+        ordererBioViewModel.adultCount.observe(this) {
+            binding.adultCount.text = it.toString()
+        }
+        ordererBioViewModel.childCount.observe(this) {
+            binding.childCount.text = it.toString()
+        }
+        ordererBioViewModel.babyCount.observe(this) {
+            binding.babyCount.text = it.toString()
+        }
     }
 
     private fun observeInputMode() {
         ordererBioViewModel.isFamilyNameMode.observe(this) { isFamilyNameMode ->
+            binding.layoutFormTicketBooker.tilFamilyName.isVisible = isFamilyNameMode
             binding.layoutFormTicketBooker.etFamilyName.isVisible = isFamilyNameMode
             binding.layoutFormTicketBooker.etFamilyName.isEnabled = isFamilyNameMode
             binding.layoutFormTicketBooker.tvFmName.isVisible = isFamilyNameMode
@@ -57,53 +90,62 @@ class OrdererBioActivity : AppCompatActivity() {
         return checkFullNameValidation(fullName) &&
             checkPhoneNumberValidation(phoneNumber) &&
             checkEmailValidation(email) &&
-            (!isFamilyNameMode || checkFamilyNameValidation(binding.layoutFormTicketBooker.etFamilyName.text.toString().trim()))
+            (
+                !isFamilyNameMode ||
+                    checkFamilyNameValidation(
+                        binding.layoutFormTicketBooker.etFamilyName.text.toString().trim(),
+                    )
+            )
     }
 
     private fun checkFullNameValidation(fullName: String): Boolean {
         return if (fullName.isEmpty()) {
-            binding.layoutFormTicketBooker.etFullname.error =
+            binding.layoutFormTicketBooker.tilFullname.isErrorEnabled = true
+            binding.layoutFormTicketBooker.tilFullname.error =
                 getString(R.string.text_error_fullName_cannot_be_empty)
             false
         } else {
-            binding.layoutFormTicketBooker.etFullname.error = null
+            binding.layoutFormTicketBooker.tilFullname.isErrorEnabled = false
             true
         }
     }
 
     private fun checkPhoneNumberValidation(phoneNumber: String): Boolean {
         return if (phoneNumber.isEmpty()) {
-            binding.layoutFormTicketBooker.etNoPhone.error =
+            binding.layoutFormTicketBooker.tilNoPhone.isErrorEnabled = true
+            binding.layoutFormTicketBooker.tilNoPhone.error =
                 getString(R.string.text_error_number_phone_cannot_be_empty)
             false
         } else {
-            binding.layoutFormTicketBooker.etNoPhone.error = null
+            binding.layoutFormTicketBooker.tilNoPhone.isErrorEnabled = false
             true
         }
     }
 
     private fun checkEmailValidation(email: String): Boolean {
         return if (email.isEmpty()) {
-            binding.layoutFormTicketBooker.etEmail.error =
+            binding.layoutFormTicketBooker.tilEmail.isErrorEnabled = true
+            binding.layoutFormTicketBooker.tilEmail.error =
                 getString(R.string.text_error_email_should_not_be_empty)
             false
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.layoutFormTicketBooker.etEmail.error =
+            binding.layoutFormTicketBooker.tilEmail.error =
                 getString(R.string.text_error_enter_a_valid_format_email)
             false
         } else {
-            binding.layoutFormTicketBooker.etEmail.error = null
+            binding.layoutFormTicketBooker.tilEmail.isErrorEnabled = false
             true
         }
     }
 
     private fun checkFamilyNameValidation(familyName: String): Boolean {
         return if (familyName.isEmpty()) {
-            binding.layoutFormTicketBooker.etFamilyName.error =
+            binding.layoutFormTicketBooker.tilFamilyName.isErrorEnabled = true
+            binding.layoutFormTicketBooker.tilFamilyName.error =
                 getString(R.string.text_error_family_name_cannot_be_empty)
             false
         } else {
-            binding.layoutFormTicketBooker.etFamilyName.error = null
+            binding.layoutFormTicketBooker.tilFamilyName.isErrorEnabled = false
             true
         }
     }
@@ -121,6 +163,18 @@ class OrdererBioActivity : AppCompatActivity() {
             } else {
                 saveDataWithoutFamilyName(fullName, numberPhone, email)
             }
+
+            val adultCount = ordererBioViewModel.adultCount.value ?: 0
+            val childCount = ordererBioViewModel.childCount.value ?: 0
+            val babyCount = ordererBioViewModel.babyCount.value ?: 0
+
+            val intent =
+                Intent(this, PassengerBioActivity::class.java).apply {
+                    putExtra("adult_count", adultCount)
+                    putExtra("child_count", childCount)
+                    putExtra("baby_count", babyCount)
+                }
+            startActivity(intent)
         }
     }
 
@@ -129,7 +183,6 @@ class OrdererBioActivity : AppCompatActivity() {
         numberPhone: String,
         email: String,
     ) {
-        TODO("Not yet implemented")
     }
 
     private fun saveDataWithFamilyName(
@@ -138,6 +191,5 @@ class OrdererBioActivity : AppCompatActivity() {
         email: String,
         familyName: String,
     ) {
-        TODO("Not yet implemented")
     }
 }

@@ -153,4 +153,18 @@
     <string name="text_header_history">History</string>
     <string name="text_button_login_protection">Login</string>
     <string name="text_login_protection">Oops!, You have to login first</string>
+    <string name="text_error_title_cannot_be_empty">Title cannot be empty</string>
+    <string name="hint_select_country">Select Country</string>
+    <string name="text_error_date_of_birth_is_required">Date of Birth is required</string>
+    <string name="hint_enter_your_citizenship">Enter your citizenship</string>
+    <string name="id_card_paspor">ID Card/Paspor</string>
+    <string name="hint_enter_your_id_card_or_passport_number">Enter your ID Card or Passport Number</string>
+    <string name="hint_identification_type">Identification Type</string>
+    <string name="hint_select_id_type">Select ID type</string>
+    <string name="hint_save">Save</string>
+    <string name="passenger_header">Passenger %1$d</string>
+    <string name="sum_adult">1</string>
+    <string name="sum_child">1</string>
+    <string name="sum_baby">1</string>
+    <string name="passenger_passengerindex">Passenger %1$d - %2$s</string>
 </resources>
