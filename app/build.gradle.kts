@@ -110,6 +110,8 @@ dependencies {
     implementation("com.google.android.material:material:1.4.0")
     implementation("com.github.JahidHasanCO:SeatBookView:1.0.4")
     implementation(libs.http.logging)
+    implementation("com.github.lisawray.groupie:groupie:2.10.1")
+    implementation("com.github.lisawray.groupie:groupie-viewbinding:2.10.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

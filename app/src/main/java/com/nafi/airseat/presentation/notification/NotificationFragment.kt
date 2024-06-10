@@ -5,20 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.nafi.airseat.R
+import com.nafi.airseat.data.model.NotificationModel
+import com.nafi.airseat.databinding.FragmentNotificationBinding
+import com.nafi.airseat.presentation.common.views.ContentState
+import com.nafi.airseat.presentation.detailnotification.DetailNotificationActivity
+import com.nafi.airseat.presentation.notification.adapter.NotificationAdapter
+import com.nafi.airseat.utils.NoInternetException
+import com.nafi.airseat.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NotificationFragment : Fragment() {
-    companion object {
-        fun newInstance() = NotificationFragment()
-    }
+    private val notificationViewModel: NotificationViewModel by viewModel()
 
-    private val viewModel: NotificationViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
+    private lateinit var binding: FragmentNotificationBinding
+    private val adapter: NotificationAdapter by lazy {
+        NotificationAdapter { data ->
+            navigateToDetailNotification(data)
+        }
     }
 
     override fun onCreateView(
@@ -26,6 +30,57 @@ class NotificationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        return inflater.inflate(R.layout.fragment_notification, container, false)
+        binding = FragmentNotificationBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+        setAdapter()
+        setData()
+    }
+
+    private fun setAdapter() {
+        binding.rvNotification.adapter = this@NotificationFragment.adapter
+    }
+
+    private fun setData() {
+        notificationViewModel.getNotification().observe(viewLifecycleOwner) { result ->
+            result.proceedWhen(
+                doOnLoading = {
+                    binding.csvNotification.setState(ContentState.LOADING)
+                },
+                doOnSuccess = {
+                    binding.csvNotification.setState(ContentState.SUCCESS)
+                    result.payload?.let {
+                        adapter.insertData(it)
+                    }
+                },
+                doOnError = {
+                    if (it.exception is NoInternetException) {
+                        binding.csvNotification.setState(ContentState.ERROR_NETWORK)
+                    } else {
+                        binding.csvNotification.setState(
+                            ContentState.ERROR_GENERAL,
+                            desc = result.exception?.message.orEmpty(),
+                        )
+                    }
+                },
+                doOnEmpty = {
+                    binding.csvNotification.setState(
+                        ContentState.EMPTY,
+                        title = getString(R.string.text_title_empty_notification),
+                        desc = getString(R.string.text_desc_empy_notification),
+                    )
+                },
+            )
+        }
+    }
+
+    private fun navigateToDetailNotification(data: NotificationModel) {
+        DetailNotificationActivity.startActivity(requireContext(), data)
     }
 }
