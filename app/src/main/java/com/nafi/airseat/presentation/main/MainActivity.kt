@@ -1,13 +1,13 @@
 package com.nafi.airseat.presentation.main
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.nafi.airseat.R
+import com.nafi.airseat.core.BaseActivity
 import com.nafi.airseat.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }

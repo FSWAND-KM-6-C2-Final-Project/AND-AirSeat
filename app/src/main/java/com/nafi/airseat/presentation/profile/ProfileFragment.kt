@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.nafi.airseat.core.BaseActivity
 import com.nafi.airseat.databinding.FragmentProfileBinding
 import com.nafi.airseat.presentation.login.LoginActivity
 
@@ -37,13 +38,17 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        doLogout()
+    }
 
+    private fun doLogout() {
         binding.toLogin.setOnClickListener {
-            navigatoToLogin()
+            (activity as BaseActivity).cleatToken()
+            navigateToLogin()
         }
     }
 
-    private fun navigatoToLogin() {
+    private fun navigateToLogin() {
         startActivity(
             Intent(requireContext(), LoginActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP

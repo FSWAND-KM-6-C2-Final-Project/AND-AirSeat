@@ -19,7 +19,7 @@ class TokenInterceptor(private val userPrefRepository: UserPrefRepository) : Int
         if (response.code == 401) {
             // Token is invalid, refresh it
             synchronized(this) {
-                userPrefRepository.cleatToken()
+                userPrefRepository.clearToken()
             }
         }
         return response
