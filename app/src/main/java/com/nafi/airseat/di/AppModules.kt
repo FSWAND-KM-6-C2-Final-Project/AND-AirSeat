@@ -10,6 +10,8 @@ import com.nafi.airseat.data.datasource.seat.SeatDataSource
 import com.nafi.airseat.data.network.services.AirSeatApiService
 import com.nafi.airseat.data.repository.SeatRepository
 import com.nafi.airseat.data.repository.SeatRepositoryImpl
+import com.nafi.airseat.data.repository.SeatRepository
+import com.nafi.airseat.data.repository.SeatRepositoryImpl
 import com.nafi.airseat.data.datasource.AuthDataSourceImpl
 import com.nafi.airseat.data.datasource.HistoryDataSource
 import com.nafi.airseat.data.datasource.HistoryDataSourceImpl
@@ -72,6 +74,7 @@ import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
 import com.nafi.airseat.presentation.seatbook.SeatViewModel
+import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
@@ -121,11 +124,13 @@ object AppModules {
             single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
             single<HistoryDataSource> { HistoryDataSourceImpl(get()) }
             single<HistoryDataSource> { HistoryDataSourceImpl(get()) }
+            single<SeatDataSource> { SeatApiDataSource(get()) }
         }
 
     private val repository =
         module {
             single<UserRepository> { UserRepositoryImpl(get()) }
+            single<SeatRepository> { SeatRepositoryImpl(get()) }
             single<SeatRepository> { SeatRepositoryImpl(get()) }
             single<AirportRepository> { AirportRepositoryImpl(get()) }
             single<FavoriteDestinationRepository> { FavoriteDestinationRepositoryImpl(get()) }

@@ -57,16 +57,16 @@
             android:exported="false" />
         <activity
             android:name=".presentation.seatbook.SeatBookActivity"
-            android:exported="true"/>
+            android:exported="false"/>
         <activity
             android:name=".presentation.order.OrderInfoActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.flightdetail.FlightDetailActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".presentation.biodata.PassengerBioActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".presentation.biodata.OrdererBioActivity"
             android:exported="false" />
