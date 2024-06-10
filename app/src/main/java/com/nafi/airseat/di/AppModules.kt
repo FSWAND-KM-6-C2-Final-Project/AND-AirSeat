@@ -148,7 +148,6 @@ object AppModules {
         module {
             single<UserRepository> { UserRepositoryImpl(get()) }
             single<SeatRepository> { SeatRepositoryImpl(get()) }
-            single<SeatRepository> { SeatRepositoryImpl(get()) }
             single<AirportRepository> { AirportRepositoryImpl(get()) }
             single<FavoriteDestinationRepository> { FavoriteDestinationRepositoryImpl(get()) }
             single<SeatClassRepository> { SeatClassRepositoryImpl(get()) }
@@ -170,7 +169,6 @@ object AppModules {
             viewModelOf(::PassengerBioViewModel)
             viewModelOf(::HomeViewModel)
             viewModelOf(::LoginViewModel)
-            viewModelOf(::SeatViewModel)
 
             viewModelOf(::FlightDetailPriceViewModel)
             viewModel {
