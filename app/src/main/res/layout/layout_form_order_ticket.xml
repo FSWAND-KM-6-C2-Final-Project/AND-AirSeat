@@ -339,7 +339,6 @@
                 android:textColor="@color/md_theme_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
-                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_id_card"
