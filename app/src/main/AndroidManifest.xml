@@ -63,7 +63,7 @@
             android:exported="false" />
         <activity
             android:name=".presentation.seatbook.SeatBookActivity"
-            android:exported="true"/>
+            android:exported="false"/>
         <activity
             android:name=".presentation.order.OrderInfoActivity"
             android:exported="false" />
