@@ -19,6 +19,7 @@
         android:gravity="center">
 
         <ImageButton
+            android:id="@+id/ib_btn_back"
             android:layout_marginStart="8dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -107,14 +108,15 @@
                 android:weightSum="2">
 
                 <TextView
+                    android:id="@+id/tv_adults"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="2 Adults"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:textSize="16sp"
-                    />
+                    android:text=" Adults" />
 
                 <TextView
+                    android:id="@+id/tv_adult_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="IDR 9.550.000"
@@ -125,7 +127,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_price_baby"
+                android:id="@+id/ll_price_child"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/ll_price_adults"
@@ -135,14 +137,46 @@
                 android:weightSum="2">
 
                 <TextView
+                    android:id="@+id/tv_child"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="1 Baby"
+                    android:text=" Child"
                     android:layout_weight="1"
                     android:textSize="16sp"
                     />
 
                 <TextView
+                    android:id="@+id/tv_child_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="IDR 0"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_price_baby"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/ll_price_child"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="8dp"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/tv_baby"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Baby"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_baby_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="IDR 0"
@@ -171,6 +205,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_tax_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="IDR 300.000"
@@ -199,6 +234,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_promo_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="IDR 0"
