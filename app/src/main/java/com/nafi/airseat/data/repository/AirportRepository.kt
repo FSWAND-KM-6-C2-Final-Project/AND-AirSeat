@@ -7,7 +7,6 @@ import com.nafi.airseat.utils.ResultWrapper
 import com.nafi.airseat.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
 
-
 interface AirportRepository {
     fun getAirportList(): Flow<ResultWrapper<List<Airport>>>
 }
@@ -15,7 +14,12 @@ interface AirportRepository {
 class AirportRepositoryImpl(private val dataSource: AirportDataSource) : AirportRepository {
     override fun getAirportList(): Flow<ResultWrapper<List<Airport>>> {
         return proceedFlow {
-            dataSource.getAirportList().toAirports()
-        }
+            dataSource.getAirportList().data?.airport.toAirports()
+        } /*{
+            val response = dataSource.getAirportList()
+            response.data?.airport.toAirports()
+        }.onStart {
+            emit(ResultWrapper.Loading())
+        }*/
     }
 }

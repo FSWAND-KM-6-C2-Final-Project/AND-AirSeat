@@ -34,7 +34,7 @@ class SeatClassFragment : BottomSheetDialogFragment() {
         // Initialize adapter
         adapter =
             SeatClassAdapter { seatclass ->
-                Toast.makeText(requireContext(), seatclass.name, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), seatclass.seatName, Toast.LENGTH_SHORT).show()
             }
 
         // Set layout manager and adapter to RecyclerView
@@ -44,9 +44,9 @@ class SeatClassFragment : BottomSheetDialogFragment() {
         // Add sample data (replace with your actual data)
         val seatClassList =
             listOf(
-                SeatClass(1, "Economy"),
-                SeatClass(2, "Business"),
-                SeatClass(3, "First Class"),
+                SeatClass(1, "Economy", 2000000),
+                SeatClass(2, "Business", 5000000),
+                SeatClass(3, "First Class", 70000000),
             )
         adapter.submitList(seatClassList)
 

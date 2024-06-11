@@ -10,9 +10,6 @@ fun AirportItemResponse?.toAirport() =
         airportCity = this?.airportCity.orEmpty(),
         airportCityCode = this?.airportCityCode.orEmpty(),
         airportPicture = this?.airportPicture.orEmpty(),
-        airportContinent = this?.airportContinent.orEmpty(),
-        createdAt = this?.createdAt.orEmpty(),
-        updatedAt = this?.updatedAt.orEmpty(),
     )
 
 fun Collection<AirportItemResponse>?.toAirports() =

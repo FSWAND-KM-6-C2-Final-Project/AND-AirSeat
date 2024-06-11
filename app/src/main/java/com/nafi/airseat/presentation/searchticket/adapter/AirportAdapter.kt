@@ -1,67 +1,61 @@
 package com.nafi.airseat.presentation.searchticket.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.nafi.airseat.data.model.Airport
 import com.nafi.airseat.databinding.ItemSearchAirportBinding
 
-class AirportAdapter(private val listener: (Airport) -> Unit) :
-    RecyclerView.Adapter<AirportAdapter.ItemAirportViewHolder>() {
-    private val dataDiffer =
-        AsyncListDiffer(
-            this,
-            object : DiffUtil.ItemCallback<Airport>() {
-                override fun areItemsTheSame(
-                    oldItem: Airport,
-                    newItem: Airport,
-                ): Boolean {
-                    return oldItem.id == newItem.id
-                }
+class AirportAdapter(
+    private var airportList: List<Airport>,
+    private val listener: AirportClickListener,
+) :
+    RecyclerView.Adapter<AirportAdapter.AirportViewHolder>() {
+    @SuppressLint("NotifyDataSetChanged")
+    fun filterList(filteredList: List<Airport>) {
+        airportList = filteredList
+        notifyDataSetChanged()
+    }
 
-                override fun areContentsTheSame(
-                    oldItem: Airport,
-                    newItem: Airport,
-                ): Boolean {
-                    return oldItem.hashCode() == newItem.hashCode()
-                }
-            },
-        )
+    interface AirportClickListener {
+        fun onAirportClicked(airport: Airport)
+    }
 
-    fun submitData(data: List<Airport>) {
-        dataDiffer.submitList(data)
+    private var airportClickListener: AirportClickListener? = null
+
+    fun setAirportClickListener(listener: AirportClickListener?) {
+        airportClickListener = listener
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
-    ): ItemAirportViewHolder {
+        viewType: Int,
+    ): AirportViewHolder {
         val binding = ItemSearchAirportBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemAirportViewHolder(binding, listener)
+        return AirportViewHolder(binding, listener)
     }
 
     override fun onBindViewHolder(
-        holder: ItemAirportViewHolder,
-        position: Int
+        holder: AirportViewHolder,
+        position: Int,
     ) {
-        holder.bindView(dataDiffer.currentList[position])
+        val airport = airportList[position]
+        holder.bind(airport)
+        // holder.itemView.setOnClickListener { listener(airport) }
     }
 
-    override fun getItemCount(): Int = dataDiffer.currentList.size
+    override fun getItemCount(): Int {
+        return airportList.size
+    }
 
-    class ItemAirportViewHolder(
+    class AirportViewHolder(
         private val binding: ItemSearchAirportBinding,
-        val itemClick: (Airport) -> Unit
+        val itemClick: AirportClickListener,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bindView(item: Airport) {
-            with(item) {
-                binding.tvAirportName.text = airportName
-                binding.root.setOnClickListener {
-                    itemClick(this)
-                }
-            }
+        fun bind(airport: Airport) {
+            binding.tvAirportName.text = airport.airportName
+            itemView.setOnClickListener { itemClick.onAirportClicked(airport) }
         }
     }
 }

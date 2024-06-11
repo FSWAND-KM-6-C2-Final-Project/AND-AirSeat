@@ -157,4 +157,6 @@
     <color name="md_theme_surfaceContainerHighest_highContrast">#DEE3EA</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="example_4_continuous_selection">#0F000000</color>
+    <color name="shimmercolor">#C2C2C2</color>
+
 </resources>

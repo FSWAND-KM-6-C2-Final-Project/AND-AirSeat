@@ -34,7 +34,7 @@ class SeatClassAdapter(private val itemClick: (SeatClass) -> Unit) :
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindView(item: SeatClass) {
             with(binding) {
-                optionText.text = item.name
+                optionText.text = item.seatName
                 root.setOnClickListener { itemClick(item) }
             }
         }

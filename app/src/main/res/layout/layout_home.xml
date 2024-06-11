@@ -41,7 +41,7 @@
                 android:layout_weight="1"
                 android:textSize="16sp"
                 android:paddingVertical="2dp"
-                android:text="@string/text_depart_place"
+                tools:text="@string/text_depart_place"
                 android:fontFamily="@font/font_plusjakartasans_bold"
                 android:layout_marginStart="12dp"
                 android:ellipsize="end"
@@ -102,7 +102,7 @@
                 android:layout_weight="1"
                 android:textSize="16sp"
                 android:paddingVertical="2dp"
-                android:text="@string/text_arrival_place"
+                tools:text="@string/text_arrival_place"
                 android:fontFamily="@font/font_plusjakartasans_bold"
                 android:layout_marginStart="12dp"
                 android:ellipsize="end"
@@ -220,7 +220,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/tv_border_radius"
                 android:paddingVertical="8dp"
-                android:text="@string/text_count_passengers"
+                tools:text="@string/text_count_passengers"
                 android:fontFamily="@font/font_plusjakartasans_bold"/>
             <TextView
                 android:layout_width="60dp"
@@ -234,7 +234,7 @@
                 android:paddingVertical="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@string/text_choosen_class"
+                tools:text="@string/text_choosen_class"
                 android:fontFamily="@font/font_plusjakartasans_bold"/>
         </LinearLayout>
 

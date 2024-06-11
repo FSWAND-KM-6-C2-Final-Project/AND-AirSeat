@@ -10,7 +10,4 @@ data class Airport(
     var airportCity: String,
     var airportCityCode: String,
     var airportPicture: String,
-    var airportContinent: String,
-    var createdAt: String,
-    var updatedAt: String,
 ) : Parcelable

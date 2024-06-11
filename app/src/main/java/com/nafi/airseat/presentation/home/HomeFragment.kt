@@ -6,11 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
+import com.nafi.airseat.data.model.Airport
+import com.nafi.airseat.data.model.FavoriteDestination
+import com.nafi.airseat.data.repository.FavoriteDestinationRepositoryImpl
 import com.nafi.airseat.databinding.FragmentHomeBinding
-import com.nafi.airseat.presentation.bottomsheetcalendar.BottomSheetCalendarFragment
+import com.nafi.airseat.presentation.blank.BlankActivity
+import com.nafi.airseat.presentation.calendar.CalendarBottomSheetFragment
+import com.nafi.airseat.presentation.common.sharedviewmodel.SharedViewModel
 import com.nafi.airseat.presentation.departcalendar.DepartCalendarFragment
+import com.nafi.airseat.presentation.home.adapter.FavoriteDestinationAdapter
 import com.nafi.airseat.presentation.passengers.PassengersFragment
 import com.nafi.airseat.presentation.resultsearch.ResultSearchActivity
 import com.nafi.airseat.presentation.searchticket.SearchTicketFragment
@@ -18,11 +25,18 @@ import com.nafi.airseat.presentation.seatclass.SeatClassFragment
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class HomeFragment : Fragment(), BottomSheetCalendarFragment.OnDateSelectedListener, DepartCalendarFragment.OnDateSelectedListener {
+class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListener, DepartCalendarFragment.OnDateSelectedListener, PassengersFragment.OnPassengerCountUpdatedListener {
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by viewModels()
+    private lateinit var viewModel: HomeViewModel
     private var selectedStartDate: LocalDate? = null
     private var selectedEndDate: LocalDate? = null
+    private lateinit var sharedViewModel: SharedViewModel
+    private val favoriteDestinationAdapter: FavoriteDestinationAdapter by lazy {
+        FavoriteDestinationAdapter {
+            BlankActivity.startActivity(requireContext(), it.id.toString())
+        }
+    }
+    var isDepartSelected = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +52,25 @@ class HomeFragment : Fragment(), BottomSheetCalendarFragment.OnDateSelectedListe
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
+        val favoriteDestinationRepository = FavoriteDestinationRepositoryImpl(FavoriteDestinationDataSourceImpl())
+        viewModel = HomeViewModel(favoriteDestinationRepository)
+
+        setupUI()
+        setupFavoriteDestination()
+        proceedFavoriteDestination()
+
+        sharedViewModel.departAirport.observe(viewLifecycleOwner) { airport ->
+            binding.layoutHome.tvDepart.text = airport.airportName
+        }
+
+        sharedViewModel.destinationAirport.observe(viewLifecycleOwner) { airport ->
+            binding.layoutHome.tvDestination.text = airport.airportName
+        }
+    }
+
+    private fun setupUI() {
         binding.layoutHome.tvDepart.setOnClickListener {
             showBottomSheet(SearchTicketFragment())
         }
@@ -49,7 +81,7 @@ class HomeFragment : Fragment(), BottomSheetCalendarFragment.OnDateSelectedListe
 
         binding.layoutHome.tvDepartChoose.setOnClickListener {
             if (binding.layoutHome.swDepartReturn.isChecked) {
-                val bottomSheet = BottomSheetCalendarFragment(isStartSelection = true)
+                val bottomSheet = CalendarBottomSheetFragment(isStartSelection = true)
                 bottomSheet.setOnDateSelectedListener(this)
                 bottomSheet.show(parentFragmentManager, bottomSheet.tag)
             } else {
@@ -60,13 +92,15 @@ class HomeFragment : Fragment(), BottomSheetCalendarFragment.OnDateSelectedListe
         }
 
         binding.layoutHome.tvArrivalChoose.setOnClickListener {
-            val bottomSheet = BottomSheetCalendarFragment(isStartSelection = true)
+            val bottomSheet = CalendarBottomSheetFragment(isStartSelection = true)
             bottomSheet.setOnDateSelectedListener(this)
             bottomSheet.show(parentFragmentManager, bottomSheet.tag)
         }
 
         binding.layoutHome.tvPassengersCount.setOnClickListener {
-            showBottomSheet(PassengersFragment())
+            val bottomSheet = PassengersFragment()
+            bottomSheet.setOnPassengerCountUpdatedListener(this)
+            bottomSheet.show(parentFragmentManager, bottomSheet.tag)
         }
 
         binding.layoutHome.tvSeatClassChoose.setOnClickListener {
@@ -75,7 +109,6 @@ class HomeFragment : Fragment(), BottomSheetCalendarFragment.OnDateSelectedListe
 
         binding.layoutHome.btnSearchFlight.setOnClickListener {
             val intent = Intent(requireContext(), ResultSearchActivity::class.java)
-            // Pastikan tanggal sudah dipilih
             selectedStartDate?.let { startDate ->
                 selectedEndDate?.let { endDate ->
                     intent.putExtra("startDate", startDate.toString())
@@ -97,15 +130,35 @@ class HomeFragment : Fragment(), BottomSheetCalendarFragment.OnDateSelectedListe
         bottomSheet.show(parentFragmentManager, bottomSheet.tag)
     }
 
+    fun onAirportSelected(airport: Airport) {
+        binding.layoutHome.tvDepart.text = airport.airportName
+    }
+
+    private fun setupFavoriteDestination() {
+        binding.rvFavorite.apply {
+            adapter = favoriteDestinationAdapter
+        }
+    }
+
+    private fun proceedFavoriteDestination() {
+        viewModel.getFavoriteDestinations().observe(viewLifecycleOwner) { data ->
+            data?.let {
+                bindFavoriteDestinationList(it)
+            }
+        }
+    }
+
+    private fun bindFavoriteDestinationList(data: List<FavoriteDestination>) {
+        favoriteDestinationAdapter.submitData(data)
+    }
+
     override fun onDateSelected(
         startDate: LocalDate?,
         endDate: LocalDate?,
     ) {
-        // Menyimpan tanggal yang dipilih ke variabel
         selectedStartDate = startDate
         selectedEndDate = endDate
 
-        // Menampilkan tanggal yang dipilih di UI
         if (startDate != null && endDate != null) {
             binding.layoutHome.tvDepartChoose.text = startDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
             binding.layoutHome.tvArrivalChoose.text = endDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
@@ -113,12 +166,14 @@ class HomeFragment : Fragment(), BottomSheetCalendarFragment.OnDateSelectedListe
     }
 
     override fun onDateSelectedDepart(startDate: LocalDate?) {
-        // Menyimpan tanggal yang dipilih ke variabel
         selectedStartDate = startDate
 
-        // Menampilkan tanggal yang dipilih di UI
         if (startDate != null) {
             binding.layoutHome.tvDepartChoose.text = startDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
         }
+    }
+
+    override fun onPassengerCountUpdated(count: Int) {
+        binding.layoutHome.tvPassengersCount.text = count.toString()
     }
 }

@@ -4,6 +4,20 @@ import android.content.SharedPreferences
 import com.nafi.airseat.core.BaseViewModel
 import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthDataSourceImpl
+import com.nafi.airseat.data.datasource.UserDataSource
+import com.nafi.airseat.data.datasource.UserDataSourceImpl
+import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
+import com.nafi.airseat.data.datasource.airport.AirportDataSource
+import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
+import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
+import com.nafi.airseat.data.repository.AirportRepository
+import com.nafi.airseat.data.repository.AirportRepositoryImpl
+import com.nafi.airseat.data.repository.FavoriteDestinationRepository
+import com.nafi.airseat.data.repository.FavoriteDestinationRepositoryImpl
+import com.nafi.airseat.data.repository.PreferenceRepository
+import com.nafi.airseat.data.repository.PreferenceRepositoryImpl
+import com.nafi.airseat.data.repository.TokenRepository
+import com.nafi.airseat.data.repository.TokenRepositoryImpl
 import com.nafi.airseat.data.datasource.NotificationDataSource
 import com.nafi.airseat.data.datasource.NotificationDataSourceImpl
 import com.nafi.airseat.data.datasource.UserPrefDataSource
@@ -29,11 +43,13 @@ import com.nafi.airseat.presentation.otpresetpassword.OtpResetPasswordViewModel
 import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
+import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
+import org.koin.core.scope.get
 import org.koin.dsl.module
 
 object AppModules {
@@ -64,11 +80,18 @@ object AppModules {
             single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
             single<NotificationDataSource> { NotificationDataSourceImpl(get()) }
+            single<UserDataSource> { UserDataSourceImpl(get()) }
+            single<AirportDataSource> { AirportApiDataSource(get()) }
+            single<FavoriteDestinationDataSource> { FavoriteDestinationDataSourceImpl() }
         }
 
     private val repository =
         module {
             single<UserRepository> { UserRepositoryImpl(get()) }
+            single<TokenRepository> { TokenRepositoryImpl(androidContext(), get()) }
+            single<PreferenceRepository> { PreferenceRepositoryImpl(get()) }
+            single<AirportRepository> { AirportRepositoryImpl(get()) }
+            single<FavoriteDestinationRepository> { FavoriteDestinationRepositoryImpl(get()) }
             single<UserPrefRepository> { UserPrefRepositoryImpl(get()) }
             single<NotificationRepository> { NotificationRepositoryImpl(get()) }
         }
@@ -96,6 +119,9 @@ object AppModules {
             }
             viewModel {
                 ReqChangePasswordViewModel(get())
+            }
+            viewModel {
+                SearchTicketViewModel(get())
             }
             viewModel {
                 NotificationViewModel(get())

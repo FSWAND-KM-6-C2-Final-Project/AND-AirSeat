@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="day_size_square">50dp</dimen>
+    <dimen name="day_size_rectangle">500dp</dimen>
+    <dimen name="day_size_seventhWidth">60dp</dimen>
+    <dimen name="day_size_freeForm">70dp</dimen>
+</resources>
