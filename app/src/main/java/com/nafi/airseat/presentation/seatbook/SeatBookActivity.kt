@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.nafi.airseat.R
-import com.nafi.airseat.data.model.Passenger
 import com.nafi.airseat.data.model.Seat
+import com.nafi.airseat.utils.proceedWhen
+import com.nafi.airseat.data.model.Passenger
 import com.nafi.airseat.data.model.SeatPassenger
 import com.nafi.airseat.databinding.ActivitySeatBookBinding
 import com.nafi.airseat.presentation.common.views.ContentState
