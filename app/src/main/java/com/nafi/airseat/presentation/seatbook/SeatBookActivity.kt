@@ -1,12 +1,14 @@
 package com.nafi.airseat.presentation.seatbook
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.nafi.airseat.R
 import com.nafi.airseat.data.model.Seat
+import com.nafi.airseat.databinding.ActivitySeatBookBinding
+import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.utils.proceedWhen
 import com.nafi.airseat.utils.seatbook.SeatBookView
 import dev.jahidhasanco.seatbookview.SeatClickListener
@@ -18,13 +20,19 @@ class SeatBookActivity : AppCompatActivity() {
 
     private val seatViewModel: SeatViewModel by viewModel()
 
+    private val binding: ActivitySeatBookBinding by lazy {
+        ActivitySeatBookBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_seat_book)
+        setContentView(binding.root)
         seatBookView = findViewById(R.id.layout_seat)
 
         getSeatData()
         setClickListenerSeat()
+
+        seatBookView.setSelectSeatLimit(5) // Set the desired seat select limit here
     }
 
     private fun getSeatData() {
@@ -33,15 +41,27 @@ class SeatBookActivity : AppCompatActivity() {
         ) { result ->
             result.proceedWhen(
                 doOnLoading = {
+                    binding.csvSeat.setState(ContentState.LOADING)
+                    binding.svSeatbook.isVisible = false
+                    binding.cvBtnSave.isVisible = false
                 },
                 doOnSuccess = {
+                    binding.csvSeat.setState(ContentState.SUCCESS)
+                    binding.svSeatbook.isVisible = true
+                    binding.cvBtnSave.isVisible = true
                     result.payload?.let {
                         showSeatBookView(it)
                     }
                 },
                 doOnError = {
+                    binding.csvSeat.setState(ContentState.ERROR_GENERAL)
+                    binding.svSeatbook.isVisible = false
+                    binding.cvBtnSave.isVisible = false
                 },
                 doOnEmpty = {
+                    binding.csvSeat.setState(ContentState.EMPTY)
+                    binding.svSeatbook.isVisible = false
+                    binding.cvBtnSave.isVisible = false
                 },
             )
         }
