@@ -107,6 +107,9 @@ interface AirSeatApiService {
     @GET("seat/flight/1")
     suspend fun getSeatData(): SeatResponse
 
+    @GET("seat/flight/1")
+    suspend fun getSeatData(): SeatResponse
+
     companion object {
         @JvmStatic
         operator fun invoke(): AirSeatApiService {
