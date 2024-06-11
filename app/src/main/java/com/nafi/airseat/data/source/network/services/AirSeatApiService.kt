@@ -18,6 +18,7 @@ import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordRes
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResponse
 import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpRequest
 import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpResponse
+import com.nafi.airseat.data.source.network.model.seat.SeatResponse
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpRequest
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendRequest
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendResponse
@@ -75,6 +76,9 @@ interface AirSeatApiService {
     suspend fun checkUserInformation(
         @Header("Authorization") token: String? = null,
     ): LoginResponse
+
+    @GET("seat/flight/1")
+    suspend fun getSeatData(): SeatResponse
 
     /*@GET("auth/me")
     fun refreshToken(): Call<RefreshTokenResponse>*/

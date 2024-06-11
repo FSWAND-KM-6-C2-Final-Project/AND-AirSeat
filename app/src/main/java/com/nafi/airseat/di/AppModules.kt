@@ -19,6 +19,8 @@ import com.nafi.airseat.data.datasource.ProfileDataSource
 import com.nafi.airseat.data.datasource.ProfileDataSourceImpl
 import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
+import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
+import com.nafi.airseat.data.datasource.seat.SeatDataSource
 import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
@@ -41,6 +43,8 @@ import com.nafi.airseat.data.repository.HistoryRepository
 import com.nafi.airseat.data.repository.HistoryRepositoryImpl
 import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
+import com.nafi.airseat.data.repository.SeatRepository
+import com.nafi.airseat.data.repository.SeatRepositoryImpl
 import com.nafi.airseat.data.repository.ProfileRepository
 import com.nafi.airseat.data.repository.ProfileRepositoryImpl
 import com.nafi.airseat.data.repository.SeatClassRepository
@@ -141,8 +145,9 @@ object AppModules {
             viewModelOf(::PassengerBioViewModel)
             viewModelOf(::HomeViewModel)
             viewModelOf(::LoginViewModel)
-            viewModelOf(::SeatViewModel)
-
+            viewModel {
+                SeatViewModel(get())
+            }
             viewModel {
                 RegisterViewModel(get())
             }
