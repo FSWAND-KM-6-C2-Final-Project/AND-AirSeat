@@ -166,6 +166,10 @@ class SeatBookView
             return this
         }
 
+        fun getSelectedSeatCount(): Int {
+            return selectedSeats
+        }
+
         fun setSeatGaping(size: Int): SeatBookView {
             seatGaping = (size / density).toInt()
             return this
