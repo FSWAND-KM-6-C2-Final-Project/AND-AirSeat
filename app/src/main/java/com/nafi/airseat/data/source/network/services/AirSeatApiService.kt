@@ -2,6 +2,8 @@ package com.nafi.airseat.data.source.network.services
 
 import com.nafi.airseat.BuildConfig
 import com.nafi.airseat.data.repository.UserPrefRepository
+import com.nafi.airseat.data.source.network.model.history.Data
+import com.nafi.airseat.data.source.network.model.history.HistoryResponse
 import com.nafi.airseat.data.source.network.model.airport.AirportResponse
 import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
 import com.nafi.airseat.data.source.network.model.flightdetail.FlightDetailResponse
@@ -125,6 +127,12 @@ interface AirSeatApiServiceWithAuthorization {
         @Query("limit") limit: Int = 10,
         @Query("page") page: Int = 1,
     ): NotificationResponse
+
+    @GET("booking/detail")
+    suspend fun getHistoryData(
+        @Query("limit") limit: Int = 10,
+        @Query("page") page: Int = 1,
+    ): HistoryResponse
 
     @GET("auth/me")
     suspend fun getUserProfile(): ProfileResponse

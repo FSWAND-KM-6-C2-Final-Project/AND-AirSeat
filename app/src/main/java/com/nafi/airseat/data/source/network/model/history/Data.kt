@@ -7,5 +7,5 @@ import androidx.annotation.Keep
 @Keep
 data class Data(
     @SerializedName("booking")
-    val booking: List<Booking?>?
+    val booking: List<Booking>?
 )
