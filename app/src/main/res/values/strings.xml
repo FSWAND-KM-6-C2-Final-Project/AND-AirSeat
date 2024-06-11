@@ -24,7 +24,7 @@
     <string name="title_confirm_password">Confirm Password</string>
     <string name="text_input_otp">Input OTP</string>
     <string name="text_type_the_6_digit_code_sent_to">Type the 6 digit code sent to </string>
-    <string name="text_resend_otp">Resend OTP within</string>
+    <string name="text_resend_otp">Resend OTP within %1$d seconds remaining</string>
     <string name="text_request_a_new_code_via_email">Request a new code via Email</string>
     <string name="text_reset_password">Reset password</string>
     <string name="text_new_password">New Password</string>
@@ -35,7 +35,7 @@
     <string name="text_sign_up_here">Sign up here</string>
     <string name="text_email">Email</string>
     <string name="text_login_here">Login Here</string>
-    <string name="text_timer_otp">1 hour</string>
+    <string name="text_timer_otp">%1$d seconds remaining</string>
     <string name="cancel">Cancel</string>
     <string name="send">Send</string>
     <string name="error">Error: %1$s</string>

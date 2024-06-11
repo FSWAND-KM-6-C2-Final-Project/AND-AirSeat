@@ -3,10 +3,12 @@ package com.nafi.airseat.presentation.otpresetpassword
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityOtpResetPasswordBinding
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordActivity
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordActivity
@@ -17,6 +19,8 @@ class OtpResetPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOtpResetPasswordBinding
 
     private val otpResetPasswordViewModel: OtpResetPasswordViewModel by viewModel()
+    private var countDownTimer: CountDownTimer? = null
+    private val timerDuration = 60000L // 60 seconds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +39,25 @@ class OtpResetPasswordActivity : AppCompatActivity() {
                 navigateToResetPassword(code, email)
             }
         }
+        startTimer()
+    }
+
+    private fun startTimer() {
+        countDownTimer?.cancel()
+        countDownTimer =
+            object : CountDownTimer(timerDuration, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val secondsRemaining = millisUntilFinished / 1000
+                    binding.textResendOTP.text = getString(R.string.text_resend_otp, secondsRemaining)
+                }
+
+                override fun onFinish() {
+                    binding.textNewCodeOTP.isVisible = true
+                    binding.textResendOTP.isVisible = false
+                }
+            }.start()
+        binding.textNewCodeOTP.isVisible = false
+        binding.textResendOTP.isVisible = true
     }
 
     private fun hidekeyboard() {
@@ -73,6 +96,7 @@ class OtpResetPasswordActivity : AppCompatActivity() {
                         "OTP sent to $email",
                         Toast.LENGTH_SHORT,
                     ).show()
+                    startTimer()
                 },
                 doOnError = {
                     binding.textNewCodeOTP.isVisible = true
