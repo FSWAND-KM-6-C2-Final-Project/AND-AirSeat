@@ -3,13 +3,6 @@ package com.nafi.airseat.di
 import android.content.SharedPreferences
 import com.nafi.airseat.core.BaseViewModel
 import com.nafi.airseat.data.datasource.AuthDataSource
-import com.nafi.airseat.data.datasource.AuthService
-import com.nafi.airseat.data.datasource.AuthServiceImpl
-import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
-import com.nafi.airseat.data.datasource.seat.SeatDataSource
-import com.nafi.airseat.data.network.services.AirSeatApiService
-import com.nafi.airseat.data.repository.SeatRepository
-import com.nafi.airseat.data.repository.SeatRepositoryImpl
 import com.nafi.airseat.data.datasource.AuthDataSourceImpl
 import com.nafi.airseat.data.datasource.HistoryDataSource
 import com.nafi.airseat.data.datasource.HistoryDataSourceImpl
@@ -88,13 +81,11 @@ import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
 import com.nafi.airseat.presentation.seatbook.SeatViewModel
-import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
 import com.nafi.airseat.presentation.splashscreen.SplashScreenViewModel
 import com.nafi.airseat.presentation.updateprofile.UpdateProfileViewModel
-import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -129,7 +120,6 @@ object AppModules {
 
     private val datasource =
         module {
-            single<AuthDataSource> { APIAuthDataSource(get()) }
             single<SeatDataSource> { SeatApiDataSource(get()) }
             single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
