@@ -81,7 +81,7 @@ class RegisterActivity : AppCompatActivity() {
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
                     binding.btnRegister.isVisible = true
-                    sendOtp(email)
+//                    sendOtp(email)
                     Toast.makeText(
                         this,
                         getString(R.string.text_register_success),
@@ -206,7 +206,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendOtp(email: String) {
+    /*private fun sendOtp(email: String) {
         registerViewModel.doVerifResendOtp(email).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
@@ -234,5 +234,5 @@ class RegisterActivity : AppCompatActivity() {
                 },
             )
         }
-    }
+    }*/
 }
