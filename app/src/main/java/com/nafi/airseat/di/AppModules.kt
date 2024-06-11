@@ -3,20 +3,17 @@ package com.nafi.airseat.di
 import android.content.SharedPreferences
 import com.nafi.airseat.core.BaseViewModel
 import com.nafi.airseat.data.datasource.AuthDataSource
-import com.nafi.airseat.data.datasource.AuthService
-import com.nafi.airseat.data.datasource.AuthServiceImpl
-import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
-import com.nafi.airseat.data.datasource.seat.SeatDataSource
-import com.nafi.airseat.data.network.services.AirSeatApiService
-import com.nafi.airseat.data.repository.SeatRepository
-import com.nafi.airseat.data.repository.SeatRepositoryImpl
 import com.nafi.airseat.data.datasource.AuthDataSourceImpl
 import com.nafi.airseat.data.datasource.NotificationDataSource
 import com.nafi.airseat.data.datasource.NotificationDataSourceImpl
 import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
+import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
+import com.nafi.airseat.data.datasource.seat.SeatDataSource
 import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
+import com.nafi.airseat.data.repository.SeatRepository
+import com.nafi.airseat.data.repository.SeatRepositoryImpl
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.repository.UserPrefRepositoryImpl
 import com.nafi.airseat.data.repository.UserRepository
@@ -69,7 +66,6 @@ object AppModules {
 
     private val datasource =
         module {
-            single<AuthDataSource> { APIAuthDataSource(get()) }
             single<SeatDataSource> { SeatApiDataSource(get()) }
             single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
@@ -90,8 +86,9 @@ object AppModules {
             viewModelOf(::PassengerBioViewModel)
             viewModelOf(::HomeViewModel)
             viewModelOf(::LoginViewModel)
-            viewModelOf(::SeatViewModel)
-
+            viewModel {
+                SeatViewModel(get())
+            }
             viewModel {
                 RegisterViewModel(get())
             }
