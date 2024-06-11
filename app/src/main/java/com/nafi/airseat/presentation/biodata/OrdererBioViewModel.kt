@@ -29,7 +29,7 @@ class OrdererBioViewModel : ViewModel() {
 
     fun subAdult() {
         val count = _adultCount.value ?: 0
-        if (count > 1) {
+        if (count > 0) {
             _adultCount.value = count - 1
         }
     }

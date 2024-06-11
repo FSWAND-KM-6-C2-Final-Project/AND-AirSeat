@@ -1,5 +1,6 @@
 package com.nafi.airseat.presentation.seatbook
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,6 +10,7 @@ import com.nafi.airseat.R
 import com.nafi.airseat.data.model.Seat
 import com.nafi.airseat.databinding.ActivitySeatBookBinding
 import com.nafi.airseat.presentation.common.views.ContentState
+import com.nafi.airseat.presentation.flightdetail.FlightDetailActivity
 import com.nafi.airseat.utils.proceedWhen
 import com.nafi.airseat.utils.seatbook.SeatBookView
 import dev.jahidhasanco.seatbookview.SeatClickListener
@@ -29,10 +31,34 @@ class SeatBookActivity : AppCompatActivity() {
         setContentView(binding.root)
         seatBookView = findViewById(R.id.layout_seat)
 
+        val adultCount = intent.getIntExtra("adult_count", 0)
+        val childCount = intent.getIntExtra("child_count", 0)
+        val babyCount = intent.getIntExtra("baby_count", 0)
+
+        val totalPassengers = adultCount + childCount + babyCount
         getSeatData()
         setClickListenerSeat()
 
-        seatBookView.setSelectSeatLimit(5) // Set the desired seat select limit here
+        seatBookView.setSelectSeatLimit(totalPassengers)
+
+        binding.btnSave.setOnClickListener {
+            if (seatBookView.getSelectedSeatCount() == totalPassengers) {
+                val intent =
+                    Intent(this, FlightDetailActivity::class.java).apply {
+                        putExtra("adults", adultCount)
+                        putExtra("child", childCount)
+                        putExtra("baby", babyCount)
+                        putExtra("adultsPrice", 3550000.0)
+                        putExtra("childPrice", 950000.0)
+                        putExtra("babyPrice", 350000.0)
+                        putExtra("tax", 300000.0)
+                        putExtra("promo", 0.0)
+                    }
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Please select seats for all passengers.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun getSeatData() {

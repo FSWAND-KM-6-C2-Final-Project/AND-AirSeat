@@ -1,9 +1,11 @@
 package com.nafi.airseat.presentation.biodata
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafi.airseat.databinding.ActivityPassengerBioBinding
+import com.nafi.airseat.presentation.seatbook.SeatBookActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -253,6 +255,15 @@ class PassengerBioActivity : AppCompatActivity() {
         }
 
         if (isValid) {
+            val intent =
+                Intent(this, SeatBookActivity::class.java).apply {
+                    putExtra("adult_count", intent.getIntExtra("adult_count", 0))
+                    putExtra("child_count", intent.getIntExtra("child_count", 0))
+                    putExtra("baby_count", intent.getIntExtra("baby_count", 0))
+                }
+            startActivity(intent)
+        }
+
             /*val payload =
                 PassengerRequest(
                     firstName = fullName,
@@ -265,7 +276,6 @@ class PassengerBioActivity : AppCompatActivity() {
                     identificationCountry = country,
                     identificationExpired = validId,
                 )*/
-        }
     }
 
     private fun setupRecyclerView() {
