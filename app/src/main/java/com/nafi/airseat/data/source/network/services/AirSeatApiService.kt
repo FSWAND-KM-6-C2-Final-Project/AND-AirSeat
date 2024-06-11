@@ -18,6 +18,12 @@ import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordReq
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpData
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpRequest
 import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpRequest
+import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpResponse
+import com.nafi.airseat.data.source.network.model.seat.SeatResponse
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpRequest
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendRequest
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendResponse
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResponse
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpRequest
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpResendData
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpResendRequest
