@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 
 @Keep
 data class FlightData(
-    @SerializedName("flight")
+    @SerializedName("flights")
     val flight: List<FlightItemResponse>?,
 )

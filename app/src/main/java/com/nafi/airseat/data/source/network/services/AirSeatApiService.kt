@@ -5,6 +5,7 @@ import com.nafi.airseat.data.source.network.model.airport.AirportsResponse
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.source.network.model.airport.AirportResponse
 import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
+import com.nafi.airseat.data.source.network.model.flightdetail.FlightDetailResponse
 import com.nafi.airseat.data.source.network.model.login.LoginRequest
 import com.nafi.airseat.data.source.network.model.login.LoginResponse
 import com.nafi.airseat.data.source.network.model.notification.NotificationResponse
@@ -28,6 +29,8 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 interface AirSeatApiService {
@@ -83,9 +86,18 @@ interface AirSeatApiService {
 
     @GET("flight")
     suspend fun getFlights(
-        @Query("searchDate") searchDate: String,
-        @Query("sortBy") sortBy: String,
+        @Query("searchDate") searchDate: String?,
+        @Query("sortBy") sortBy: String?,
+        @Query("continent") continent: String?,
+        @Query("limit") limit: Int = 20,
+        @Query("page") page: Int = 1,
+        @Query("order") order: String?,
     ): FlightsResponse
+
+    @GET("flight/{id}")
+    suspend fun getFlightsDetail(
+        @Path("id") id: String,
+    ): FlightDetailResponse
 
     companion object {
         @JvmStatic

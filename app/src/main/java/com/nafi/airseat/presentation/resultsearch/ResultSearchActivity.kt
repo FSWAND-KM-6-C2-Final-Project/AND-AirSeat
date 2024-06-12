@@ -1,7 +1,9 @@
 package com.nafi.airseat.presentation.resultsearch
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.kizitonwose.calendar.core.WeekDay
@@ -11,9 +13,13 @@ import com.kizitonwose.calendar.view.WeekDayBinder
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityResultSearchBinding
 import com.nafi.airseat.databinding.HorizontalDayBinding
+import com.nafi.airseat.presentation.detailflight.DetailFlightActivity
+import com.nafi.airseat.presentation.resultsearch.adapter.ResultSearchAdapter
 import com.nafi.airseat.utils.calendar.displayText
 import com.nafi.airseat.utils.calendar.getWeekPageTitle
 import com.nafi.airseat.utils.getColorCompat
+import com.nafi.airseat.utils.proceedWhen
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -22,6 +28,13 @@ class ResultSearchActivity : AppCompatActivity() {
     private lateinit var startDate: LocalDate
     private lateinit var endDate: LocalDate
     private lateinit var selectedDate: LocalDate
+    private val viewModel: ResultSearchViewModel by viewModel()
+    private val resultAdapter: ResultSearchAdapter by lazy {
+        ResultSearchAdapter {
+            // DetailFlightActivity.startActivity(this, it.id.toString())
+            navigateToDetailTicket(it.id.toString())
+        }
+    }
     private val dateFormatter = DateTimeFormatter.ofPattern("dd")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +65,7 @@ class ResultSearchActivity : AppCompatActivity() {
                         val oldDate = selectedDate
                         selectedDate = day.date
                         binding.exSevenCalendar.notifyDateChanged(day.date)
-                        oldDate?.let { binding.exSevenCalendar.notifyDateChanged(it) }
+                        oldDate.let { binding.exSevenCalendar.notifyDateChanged(it) }
                     }
                 }
             }
@@ -94,5 +107,42 @@ class ResultSearchActivity : AppCompatActivity() {
             firstDayOfWeekFromLocale(),
         )
         binding.exSevenCalendar.scrollToDate(startDate) // Scroll to start date
+        setupAdapter()
+        proceedResultTicket()
+    }
+
+    private fun proceedResultTicket() {
+        viewModel.getFlightData().observe(this) { result ->
+            result.proceedWhen(
+                doOnSuccess = {
+                    result.payload?.let {
+                        resultAdapter.submitData(it)
+                        Toast.makeText(this, "${it.size}", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                doOnLoading = {
+                    Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+                },
+                doOnError = {
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                },
+                doOnEmpty = {
+                    Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show()
+                },
+            )
+        }
+    }
+
+    private fun setupAdapter() {
+        binding.rvSearchTicket.adapter = this@ResultSearchActivity.resultAdapter
+    }
+
+    private fun navigateToDetailTicket(id: String) {
+        startActivity(
+            Intent(this, DetailFlightActivity::class.java).apply {
+                putExtra("id", id)
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 }

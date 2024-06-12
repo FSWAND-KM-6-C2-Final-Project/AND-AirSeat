@@ -11,6 +11,8 @@ data class FlightsResponse(
     val message: String?,
     @SerializedName("requestAt")
     val requestAt: String?,
+    @SerializedName("pagination")
+    val pagination: PaginationResponse?,
     @SerializedName("data")
-    val data: FlightData?,
+    val data: FlightData,
 )

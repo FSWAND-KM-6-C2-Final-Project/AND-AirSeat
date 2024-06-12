@@ -10,12 +10,16 @@ import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
+import com.nafi.airseat.data.datasource.flight.FlightApiDataSource
+import com.nafi.airseat.data.datasource.flight.FlightDataSource
 import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSource
 import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSourceImpl
 import com.nafi.airseat.data.repository.AirportRepository
 import com.nafi.airseat.data.repository.AirportRepositoryImpl
 import com.nafi.airseat.data.repository.FavoriteDestinationRepository
 import com.nafi.airseat.data.repository.FavoriteDestinationRepositoryImpl
+import com.nafi.airseat.data.repository.FlightRepository
+import com.nafi.airseat.data.repository.FlightRepositoryImpl
 import com.nafi.airseat.data.repository.PreferenceRepository
 import com.nafi.airseat.data.repository.PreferenceRepositoryImpl
 import com.nafi.airseat.data.repository.SeatClassRepository
@@ -35,7 +39,6 @@ import com.nafi.airseat.data.repository.UserRepositoryImpl
 import com.nafi.airseat.data.source.local.pref.UserPreference
 import com.nafi.airseat.data.source.local.pref.UserPreferenceImpl
 import com.nafi.airseat.data.source.network.services.AirSeatApiService
-import com.nafi.airseat.data.source.network.services.AirSeatApiServiceWithAuthorization
 import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
@@ -47,6 +50,7 @@ import com.nafi.airseat.presentation.otpresetpassword.OtpResetPasswordViewModel
 import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
+import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
 import org.koin.android.ext.koin.androidContext
@@ -88,6 +92,7 @@ object AppModules {
             single<AirportDataSource> { AirportApiDataSource(get()) }
             single<FavoriteDestinationDataSource> { FavoriteDestinationDataSourceImpl() }
             single<SeatClassDummyDataSource> { SeatClassDummyDataSourceImpl() }
+            single<FlightDataSource> { FlightApiDataSource(get()) }
         }
 
     private val repository =
@@ -128,6 +133,9 @@ object AppModules {
             }
             viewModel {
                 SearchTicketViewModel(get())
+            }
+            viewModel {
+                ResultSearchViewModel(get())
             }
             viewModel {
                 NotificationViewModel(get())

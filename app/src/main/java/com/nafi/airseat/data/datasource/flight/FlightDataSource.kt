@@ -1,7 +1,7 @@
 package com.nafi.airseat.data.datasource.flight
 
-import com.nafi.airseat.data.source.network.model.flight.FlightItemResponse
+import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
 
 interface FlightDataSource {
-    suspend fun getFlightList(): FlightItemResponse
+    suspend fun getFlightList(): FlightsResponse
 }

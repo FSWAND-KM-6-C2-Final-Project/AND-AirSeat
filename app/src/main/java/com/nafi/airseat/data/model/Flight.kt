@@ -14,4 +14,30 @@ data class Flight(
     var priceBusiness: Int,
     var priceFirstClass: Int,
     var airlineId: Int,
+    var createdAt: String,
+    var updatedAt: String,
+    var airline: FlightAirline,
+    var departureAirport: FlightAirportDeparture,
+    var arrivalAirport: FlightAirportArrival,
+)
+
+data class FlightAirline(
+    var airlineName: String,
+    var airlinePicture: String,
+)
+
+data class FlightAirportDeparture(
+    var airportName: String,
+    var airportCity: String,
+    var airportCityCode: String,
+    var airportPicture: String,
+    val airportContinent: String,
+)
+
+data class FlightAirportArrival(
+    var airportName: String,
+    var airportCity: String,
+    var airportCityCode: String,
+    var airportPicture: String,
+    val airportContinent: String,
 )

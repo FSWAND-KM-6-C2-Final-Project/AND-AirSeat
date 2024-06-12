@@ -35,4 +35,10 @@ data class FlightItemResponse(
     val createdAt: String?,
     @SerializedName("updated_at")
     val updatedAt: String?,
+    @SerializedName("airline")
+    val airline: FlightAirlineResponse,
+    @SerializedName("departureAirport")
+    val departureAirport: FlightAirportDepartureResponse,
+    @SerializedName("arrivalAirport")
+    val arrivalAirport: FlightAirportArrivalResponse,
 )

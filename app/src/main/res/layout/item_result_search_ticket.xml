@@ -132,7 +132,8 @@
                 android:fontFamily="@font/font_plusjakartasans_bold"
                 android:gravity="center"
                 android:paddingVertical="4dp"
-                android:paddingHorizontal="12dp"/>
+                android:paddingHorizontal="12dp"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_ticket_price"
@@ -155,7 +156,8 @@
             android:textSize="12sp"
             android:textColor="@android:color/white"
             android:fontFamily="@font/font_plusjakartasans_bold"
-            android:background="@drawable/promo_result_radius"/>
+            android:background="@drawable/promo_result_radius"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
