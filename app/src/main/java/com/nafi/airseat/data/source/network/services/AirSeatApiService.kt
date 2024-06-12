@@ -3,6 +3,7 @@ package com.nafi.airseat.data.source.network.services
 import com.nafi.airseat.BuildConfig
 import com.nafi.airseat.data.source.network.model.airport.AirportsResponse
 import com.nafi.airseat.data.repository.UserPrefRepository
+import com.nafi.airseat.data.source.network.model.airport.AirportResponse
 import com.nafi.airseat.data.source.network.model.login.LoginRequest
 import com.nafi.airseat.data.source.network.model.login.LoginResponse
 import com.nafi.airseat.data.source.network.model.notification.NotificationResponse
@@ -76,14 +77,9 @@ interface AirSeatApiService {
 
     @GET("airport")
     suspend fun getAirports(
-        /*@Query("id") id: Int? = null,
-        @Query("airport_name") airportName: String? = null,
-        @Query("airport_city") airportCity: String? = null,
-        @Query("airport_city_code") airportCityCode: String? = null,
-        @Query("airport_continent") airportContinent: String? = null,
-        @Query("created_at") createdAt: String? = null,
-        @Query("updated_at") updatedAt: String? = null,*/
-    ): AirportsResponse
+        @Query("limit") limit: Int = 20,
+        @Query("page") page: Int = 1,
+    ): AirportResponse
 
     companion object {
         @JvmStatic

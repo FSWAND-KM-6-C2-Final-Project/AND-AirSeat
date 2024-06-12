@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName
 
 @Keep
 data class AirportData(
-    @SerializedName("airport")
-    val airport: List<AirportItemResponse>?,
+    @SerializedName("airports")
+    val airports: List<AirportDetail>?,
+    @SerializedName("pagination")
+    val pagination: Pagination?,
 )

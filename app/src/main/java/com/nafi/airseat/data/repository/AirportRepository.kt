@@ -13,13 +13,6 @@ interface AirportRepository {
 
 class AirportRepositoryImpl(private val dataSource: AirportDataSource) : AirportRepository {
     override fun getAirportList(): Flow<ResultWrapper<List<Airport>>> {
-        return proceedFlow {
-            dataSource.getAirportList().data?.airport.toAirports()
-        } /*{
-            val response = dataSource.getAirportList()
-            response.data?.airport.toAirports()
-        }.onStart {
-            emit(ResultWrapper.Loading())
-        }*/
+        return proceedFlow { dataSource.getAirportList().data?.airports.toAirports() }
     }
 }

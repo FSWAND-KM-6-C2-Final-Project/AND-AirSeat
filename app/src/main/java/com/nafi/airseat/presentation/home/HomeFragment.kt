@@ -60,13 +60,33 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         setupUI()
         setupFavoriteDestination()
         proceedFavoriteDestination()
+        setTextFLight()
 
-        sharedViewModel.departAirport.observe(viewLifecycleOwner) { airport ->
-            binding.layoutHome.tvDepart.text = airport.airportName
+        /*sharedViewModel.departAirport.observe(viewLifecycleOwner) { airport ->
+            binding.layoutHome.tvDepart.text = airport.airportCity
         }
 
         sharedViewModel.destinationAirport.observe(viewLifecycleOwner) { airport ->
-            binding.layoutHome.tvDestination.text = airport.airportName
+            binding.layoutHome.tvDestination.text = airport.airportCity
+        }*/
+    }
+
+    private fun setTextFLight() {
+        sharedViewModel.airportCity.observe(viewLifecycleOwner) { airport ->
+
+            val textDeparture = binding.layoutHome.tvDepart.text.toString()
+            val textArrivals = binding.layoutHome.tvDestination.text.toString()
+
+            if (textDeparture == "Select Flight") {
+                binding.layoutHome.tvDepart.text = airport.airportCity
+            } else if (textArrivals == "Select Flight") {
+                binding.layoutHome.tvDestination.text = airport.airportCity
+            } else if (textDeparture != airport.airportCity) {
+                binding.layoutHome.tvDepart.text = airport.airportCity
+                binding.layoutHome.tvDestination.text = "Select Flight"
+            } else {
+                binding.layoutHome.tvDestination.text = airport.airportCity
+            }
         }
     }
 

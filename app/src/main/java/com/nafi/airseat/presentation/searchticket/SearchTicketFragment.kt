@@ -1,10 +1,14 @@
 package com.nafi.airseat.presentation.searchticket
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafi.airseat.data.model.Airport
 import com.nafi.airseat.databinding.FragmentSearchTicketBinding
@@ -15,23 +19,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchTicketFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSearchTicketBinding
-
-    // private val binding get() = _binding!!
-    //private var listener: OnAirportSelectedListener? = null
-    //private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var sharedViewModel: SharedViewModel
     private val viewModel: SearchTicketViewModel by viewModel()
     private val airportAdapter: AirportsAdapter by lazy {
         AirportsAdapter {
-        }
-    }
-
-    /*interface OnAirportSelectedListener {
-        fun onAirportSelected(airport: Airport)
-    }*/
-
-    private fun setupAirport() {
-        binding.rvRecentSearches.apply {
-            adapter = airportAdapter
+            getClickedData(it)
         }
     }
 
@@ -44,21 +36,24 @@ class SearchTicketFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        // val sharedViewModel: SharedViewModel by activityViewModels()
-        // setupAirportRecyclerView()
-        // setOnAirportSelectedListener()
-        /*viewModel.airports.observe(viewLifecycleOwner) { airports ->
-            airportAdapter.filterList(airports)
-        }*/
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        setAdapter()
+        getAirportsData()
+        handelSearchView()
+    }
 
-        // airportAdapter.setAirportClickListener(this)
-
-        /*val searchView = binding.searchView
+    private fun handelSearchView() {
+        val searchView = binding.searchView
         searchView.isIconified = false
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
@@ -67,24 +62,11 @@ class SearchTicketFragment : BottomSheetDialogFragment() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    viewModel.filterAirports(newText)
+                    airportAdapter.filter.filter(newText)
                     return true
                 }
             },
-        )*/
-
-        // airportAdapter.setAirportClickListener(this)
-        // setAdapter()
-        setupAirport()
-        getAirportsData()
-
-        // Set initial height of bottom sheet
-        dialog?.setOnShowListener {
-            val bottomSheet: View = dialog?.findViewById(com.google.android.material.R.id.design_bottom_sheet)!!
-            val behavior = BottomSheetBehavior.from(bottomSheet)
-            bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-        }
+        )
     }
 
     private fun setAdapter() {
@@ -95,57 +77,25 @@ class SearchTicketFragment : BottomSheetDialogFragment() {
         viewModel.getAirportData().observe(viewLifecycleOwner) { result ->
             result.proceedWhen(
                 doOnLoading = {
-                    binding.rvRecentSearches.visibility = View.GONE
                 },
                 doOnSuccess = {
-                    binding.rvRecentSearches.visibility = View.VISIBLE
-                    result.payload?.let { data ->
-                        bindAirportList(data)
-                        // Toast.makeText(requireContext(), "${it.size}", Toast.LENGTH_SHORT).show()
+                    result.payload?.let {
+                        airportAdapter.submitData(it)
                     }
+                },
+                doOnEmpty = {
+                    result.payload?.let {
+                        airportAdapter.submitData(it)
+                    }
+                },
+                doOnError = {
                 },
             )
         }
-
-        /*fun setOnAirportSelectedListener(listener: OnAirportSelectedListener) {
-            this.listener = listener
-        }*/
-
-    /*override fun onResume() {
-        super.onResume()
-        viewModel.clearAirports()
-    }*/
-
-    /*override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
-    override fun onAirportClicked(airport: Airport) {
-        sharedViewModel.setDepartAirport(airport)
-        Toast.makeText(requireContext(), "${airport.airportName}", Toast.LENGTH_SHORT).show()
-        dismiss() // Tutup bottom sheet setelah bandara dipilih
-    }
-
-    private fun setupAirportRecyclerView() {
-        airportAdapter =
-            AirportAdapter(emptyList(), this) */
-    /*{ selectedAirport ->
-                val homeFragment = parentFragment as? HomeFragment
-                homeFragment?.onAirportSelected(selectedAirport)
-                dismiss()
-            }*/
-    /*
-
-        binding.rvRecentSearches.apply {
-            adapter = airportAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-            setHasFixedSize(true)
-        }
-    }*/
-    }
-
-    private fun bindAirportList(airports: List<Airport>) {
-        airportAdapter.submitData(airports)
+    private fun getClickedData(data: Airport) {
+        sharedViewModel.setAirportCity(data)
+        dismiss()
     }
 }

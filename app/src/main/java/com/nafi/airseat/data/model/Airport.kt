@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Airport(
-    var id: Int?,
+    var id: Int,
     var airportName: String,
     var airportCity: String,
     var airportCityCode: String,
