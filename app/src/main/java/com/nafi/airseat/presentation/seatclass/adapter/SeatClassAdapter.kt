@@ -1,13 +1,52 @@
+package com.nafi.airseat.presentation.seatclass.adapter
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.nafi.airseat.R
 import com.nafi.airseat.data.model.SeatClass
 import com.nafi.airseat.databinding.ItemClassBinding
 
-class SeatClassAdapter(private val itemClick: (SeatClass) -> Unit) :
-    ListAdapter<SeatClass, SeatClassAdapter.ItemSeatClassViewHolder>(SeatClassDiffCallback()) {
+class SeatClassAdapter(private val listener: (SeatClass) -> Unit) :
+    RecyclerView.Adapter<SeatClassAdapter.ItemSeatClassViewHolder>() {
+    private val dataDiffer =
+        AsyncListDiffer(
+            this,
+            object : DiffUtil.ItemCallback<SeatClass>() {
+                override fun areItemsTheSame(
+                    oldItem: SeatClass,
+                    newItem: SeatClass,
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
+
+                override fun areContentsTheSame(
+                    oldItem: SeatClass,
+                    newItem: SeatClass,
+                ): Boolean {
+                    return oldItem == newItem
+                }
+            },
+        )
+
+    private var selectedItemPos = 0
+    private var lastItemSelectedPos = -1
+
+    fun submitData(data: List<SeatClass>) {
+        dataDiffer.submitList(data)
+    }
+
+    fun getSelectedSeatClass(): SeatClass? {
+        return if (selectedItemPos != -1) {
+            dataDiffer.currentList[selectedItemPos]
+        } else {
+            null
+        }
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -18,41 +57,53 @@ class SeatClassAdapter(private val itemClick: (SeatClass) -> Unit) :
                 parent,
                 false,
             )
-        return ItemSeatClassViewHolder(binding, itemClick)
+        return ItemSeatClassViewHolder(binding)
     }
 
     override fun onBindViewHolder(
         holder: ItemSeatClassViewHolder,
         position: Int,
     ) {
-        holder.bindView(getItem(position))
+        holder.bindView(dataDiffer.currentList[position], position)
+        holder.updateBackground(position == selectedItemPos)
     }
 
-    class ItemSeatClassViewHolder(
-        private val binding: ItemClassBinding,
-        private val itemClick: (SeatClass) -> Unit,
-    ) : RecyclerView.ViewHolder(binding.root) {
-        fun bindView(item: SeatClass) {
-            with(binding) {
-                optionText.text = item.seatName
-                root.setOnClickListener { itemClick(item) }
+    override fun getItemCount(): Int = dataDiffer.currentList.size
+
+    inner class ItemSeatClassViewHolder(private val binding: ItemClassBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        init {
+            itemView.setOnClickListener {
+                val previousItemPos = selectedItemPos
+                selectedItemPos = adapterPosition
+                notifyItemChanged(previousItemPos)
+                notifyItemChanged(selectedItemPos)
+                listener(dataDiffer.currentList[selectedItemPos])
             }
         }
-    }
 
-    class SeatClassDiffCallback : DiffUtil.ItemCallback<SeatClass>() {
-        override fun areItemsTheSame(
-            oldItem: SeatClass,
-            newItem: SeatClass,
-        ): Boolean {
-            return oldItem.id == newItem.id
+        fun bindView(
+            item: SeatClass,
+            position: Int,
+        ) {
+            binding.optionText.text = item.seatName
+            binding.priceTextEconomy.text = item.seatPrice.toString()
         }
 
-        override fun areContentsTheSame(
-            oldItem: SeatClass,
-            newItem: SeatClass,
-        ): Boolean {
-            return oldItem == newItem
+        fun updateBackground(isSelected: Boolean) {
+            if (isSelected) {
+                selectedBg()
+            } else {
+                defaultBg()
+            }
+        }
+
+        private fun defaultBg() {
+            binding.root.background = ContextCompat.getDrawable(itemView.context, R.drawable.unselected_item_background)
+        }
+
+        private fun selectedBg() {
+            binding.root.background = ContextCompat.getDrawable(itemView.context, R.drawable.selected_item_background)
         }
     }
 }

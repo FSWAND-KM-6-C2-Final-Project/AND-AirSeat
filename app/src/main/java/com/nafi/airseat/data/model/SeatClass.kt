@@ -5,7 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SeatClass(
-    val id: Int, // or any other unique identifier
+    val id: Int?,
     val seatName: String,
     val seatPrice: Int,
+    var isSelected: Boolean = false,
 ) : Parcelable

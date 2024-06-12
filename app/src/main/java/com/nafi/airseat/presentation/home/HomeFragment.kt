@@ -11,6 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
 import com.nafi.airseat.data.model.Airport
 import com.nafi.airseat.data.model.FavoriteDestination
+import com.nafi.airseat.data.model.SeatClass
 import com.nafi.airseat.data.repository.FavoriteDestinationRepositoryImpl
 import com.nafi.airseat.databinding.FragmentHomeBinding
 import com.nafi.airseat.presentation.blank.BlankActivity
@@ -25,7 +26,7 @@ import com.nafi.airseat.presentation.seatclass.SeatClassFragment
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListener, DepartCalendarFragment.OnDateSelectedListener, PassengersFragment.OnPassengerCountUpdatedListener {
+class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListener, DepartCalendarFragment.OnDateSelectedListener, PassengersFragment.OnPassengerCountUpdatedListener, SeatClassFragment.OnSeatClassSelectedListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private var selectedStartDate: LocalDate? = null
@@ -124,7 +125,9 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         }
 
         binding.layoutHome.tvSeatClassChoose.setOnClickListener {
-            showBottomSheet(SeatClassFragment())
+            val seatClassFragment = SeatClassFragment()
+            seatClassFragment.setOnSeatClassSelectedListener(this)
+            showBottomSheet(seatClassFragment)
         }
 
         binding.layoutHome.btnSearchFlight.setOnClickListener {
@@ -195,5 +198,9 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
 
     override fun onPassengerCountUpdated(count: Int) {
         binding.layoutHome.tvPassengersCount.text = count.toString()
+    }
+
+    override fun onSeatClassSelected(seatClass: SeatClass) {
+        binding.layoutHome.tvSeatClassChoose.text = seatClass.seatName
     }
 }

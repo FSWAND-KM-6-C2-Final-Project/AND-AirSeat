@@ -14,6 +14,4 @@ data class Flight(
     var priceBusiness: Int,
     var priceFirstClass: Int,
     var airlineId: Int,
-    var createdAt: String,
-    var updatedAt: String,
 )

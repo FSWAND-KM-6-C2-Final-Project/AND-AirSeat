@@ -10,12 +10,16 @@ import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
+import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSource
+import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSourceImpl
 import com.nafi.airseat.data.repository.AirportRepository
 import com.nafi.airseat.data.repository.AirportRepositoryImpl
 import com.nafi.airseat.data.repository.FavoriteDestinationRepository
 import com.nafi.airseat.data.repository.FavoriteDestinationRepositoryImpl
 import com.nafi.airseat.data.repository.PreferenceRepository
 import com.nafi.airseat.data.repository.PreferenceRepositoryImpl
+import com.nafi.airseat.data.repository.SeatClassRepository
+import com.nafi.airseat.data.repository.SeatClassRepositoryImpl
 import com.nafi.airseat.data.repository.TokenRepository
 import com.nafi.airseat.data.repository.TokenRepositoryImpl
 import com.nafi.airseat.data.datasource.NotificationDataSource
@@ -83,6 +87,7 @@ object AppModules {
             single<UserDataSource> { UserDataSourceImpl(get()) }
             single<AirportDataSource> { AirportApiDataSource(get()) }
             single<FavoriteDestinationDataSource> { FavoriteDestinationDataSourceImpl() }
+            single<SeatClassDummyDataSource> { SeatClassDummyDataSourceImpl() }
         }
 
     private val repository =
@@ -92,6 +97,7 @@ object AppModules {
             single<PreferenceRepository> { PreferenceRepositoryImpl(get()) }
             single<AirportRepository> { AirportRepositoryImpl(get()) }
             single<FavoriteDestinationRepository> { FavoriteDestinationRepositoryImpl(get()) }
+            single<SeatClassRepository> { SeatClassRepositoryImpl(get()) }
             single<UserPrefRepository> { UserPrefRepositoryImpl(get()) }
             single<NotificationRepository> { NotificationRepositoryImpl(get()) }
         }

@@ -1,20 +1,31 @@
 package com.nafi.airseat.presentation.seatclass
 
-import SeatClassAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSourceImpl
 import com.nafi.airseat.data.model.SeatClass
+import com.nafi.airseat.data.repository.SeatClassRepositoryImpl
 import com.nafi.airseat.databinding.FragmentSeatClassBinding
+import com.nafi.airseat.presentation.seatclass.adapter.SeatClassAdapter
 
 class SeatClassFragment : BottomSheetDialogFragment() {
+    private lateinit var viewModel: SeatClassViewModel
     private lateinit var binding: FragmentSeatClassBinding
-    private lateinit var adapter: SeatClassAdapter // Create adapter variable
+    private val seatClassAdapter: SeatClassAdapter by lazy {
+        SeatClassAdapter {
+            // Do nothing on item click, handle on save button click
+        }
+    }
+    private var listener: OnSeatClassSelectedListener? = null
+
+    interface OnSeatClassSelectedListener {
+        fun onSeatClassSelected(seatClass: SeatClass)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,29 +42,41 @@ class SeatClassFragment : BottomSheetDialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize adapter
-        adapter =
-            SeatClassAdapter { seatclass ->
-                Toast.makeText(requireContext(), seatclass.seatName, Toast.LENGTH_SHORT).show()
-            }
+        val seatClassRepository = SeatClassRepositoryImpl(SeatClassDummyDataSourceImpl())
+        viewModel = SeatClassViewModel(seatClassRepository)
 
-        // Set layout manager and adapter to RecyclerView
-        binding.rvDate.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvDate.adapter = adapter
-
-        // Add sample data (replace with your actual data)
-        val seatClassList =
-            listOf(
-                SeatClass(1, "Economy", 2000000),
-                SeatClass(2, "Business", 5000000),
-                SeatClass(3, "First Class", 70000000),
-            )
-        adapter.submitList(seatClassList)
-
-        binding.btnSaveSeatClass.visibility = View.VISIBLE
+        setupSeatClass()
+        proceedSeatClass()
         binding.btnSaveSeatClass.setOnClickListener {
-            // Your save logic here
-            dismiss() // Optionally dismiss the bottom sheet after save
+            seatClassAdapter.getSelectedSeatClass()?.let {
+                listener?.onSeatClassSelected(it)
+            }
+            dismiss()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    private fun setupSeatClass() {
+        binding.rvSeatClass.adapter = seatClassAdapter
+    }
+
+    private fun proceedSeatClass() {
+        viewModel.getSeatClass().observe(viewLifecycleOwner) { data ->
+            data?.let {
+                bindSeatClassList(it)
+            }
+        }
+    }
+
+    private fun bindSeatClassList(data: List<SeatClass>) {
+        seatClassAdapter.submitData(data)
+    }
+
+    fun setOnSeatClassSelectedListener(listener: OnSeatClassSelectedListener) {
+        this.listener = listener
     }
 }
