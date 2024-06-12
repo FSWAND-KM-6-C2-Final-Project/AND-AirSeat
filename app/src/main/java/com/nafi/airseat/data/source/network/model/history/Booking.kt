@@ -31,7 +31,7 @@ data class Booking(
     @SerializedName("payment_method")
     val paymentMethod: String?,
     @SerializedName("returnFlight")
-    val returnFlight: Flight?,
+    val returnFlight: ReturnFlight?,
     @SerializedName("total_amount")
     val totalAmount: String?
 )
