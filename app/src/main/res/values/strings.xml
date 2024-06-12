@@ -161,4 +161,5 @@
     <string name="text_desc_no_internet">Please check you internet connection</string>
     <string name="text_title_no_connection">There is no connection</string>
     <string name="text_have_you_received_otp">Have you received OTP?</string>
+    <string name="text_snackbar_custom">GeeksforGeeks</string>
 </resources>
