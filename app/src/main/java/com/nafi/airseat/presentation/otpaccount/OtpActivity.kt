@@ -55,14 +55,12 @@ class OtpActivity : AppCompatActivity() {
                     binding.textResendOTP.isVisible = false
 
                     binding.textInfoOTP.isVisible = true
-
                 }
             }.start()
         binding.textNewCodeOTP.isVisible = false
         binding.textResendOTP.isVisible = true
 
         binding.textInfoOTP.isVisible = false
-
     }
 
     private fun hidekeyboard() {
