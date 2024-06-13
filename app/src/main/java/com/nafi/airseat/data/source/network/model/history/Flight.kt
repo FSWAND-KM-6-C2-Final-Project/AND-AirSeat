@@ -1,8 +1,7 @@
 package com.nafi.airseat.data.source.network.model.history
 
-
-import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 
 @Keep
 data class Flight(
@@ -21,5 +20,5 @@ data class Flight(
     @SerializedName("flight_number")
     val flightNumber: String?,
     @SerializedName("information")
-    val information: String?
+    val information: String?,
 )

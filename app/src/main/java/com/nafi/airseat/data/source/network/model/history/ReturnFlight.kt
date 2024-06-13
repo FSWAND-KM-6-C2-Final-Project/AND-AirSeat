@@ -20,5 +20,5 @@ data class ReturnFlight(
     @SerializedName("flight_number")
     val flightNumber: String?,
     @SerializedName("information")
-    val information: String?
+    val information: String?,
 )

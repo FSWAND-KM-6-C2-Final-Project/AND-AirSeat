@@ -8,7 +8,7 @@ data class History(
     val duration: String,
     val flight: HistoryFlight,
     val returnFlight: HistoryReturnFlight?,
-    val totalAmount: String
+    val totalAmount: Long,
 )
 
 data class HistoryFlight(
@@ -18,7 +18,7 @@ data class HistoryFlight(
     val departureTerminal: String,
     val departureTime: String,
     val flightNumber: String,
-    val information: String
+    val information: String,
 )
 
 data class HistoryReturnFlight(
@@ -28,7 +28,7 @@ data class HistoryReturnFlight(
     val departureTerminal: String,
     val departureTime: String,
     val flightNumber: String,
-    val information: String
+    val information: String,
 )
 
 data class HistoryArrivalAirport(
@@ -36,7 +36,7 @@ data class HistoryArrivalAirport(
     val airportCityCode: String,
     val airportContinent: String,
     val airportName: String,
-    val airportPicture: String
+    val airportPicture: String,
 )
 
 data class HistoryDepartureAirport(
@@ -44,7 +44,7 @@ data class HistoryDepartureAirport(
     val airportCityCode: String,
     val airportContinent: String,
     val airportName: String,
-    val airportPicture: String
+    val airportPicture: String,
 )
 
 data class HistoryReturnArrivalAirport(
@@ -52,7 +52,7 @@ data class HistoryReturnArrivalAirport(
     val airportCityCode: String,
     val airportContinent: String,
     val airportName: String,
-    val airportPicture: String
+    val airportPicture: String,
 )
 
 data class HistoryReturnDepartureAirport(
@@ -60,5 +60,5 @@ data class HistoryReturnDepartureAirport(
     val airportCityCode: String,
     val airportContinent: String,
     val airportName: String,
-    val airportPicture: String
+    val airportPicture: String,
 )

@@ -7,8 +7,8 @@ import com.nafi.airseat.utils.ResultWrapper
 import com.nafi.airseat.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
 
-interface HistoryRepository{
-    fun getHistoryData() : Flow<ResultWrapper<List<History>>>
+interface HistoryRepository {
+    fun getHistoryData(): Flow<ResultWrapper<List<History>>>
 }
 
 class HistoryRepositoryImpl(private val dataSource: HistoryDataSource) : HistoryRepository {

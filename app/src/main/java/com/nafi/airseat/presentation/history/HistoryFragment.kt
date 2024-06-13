@@ -4,15 +4,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.nafi.airseat.R
 import com.nafi.airseat.databinding.FragmentHistoryBinding
-import com.nafi.airseat.presentation.bottomsheet.ProtectedLoginBottomSheet
+import com.nafi.airseat.presentation.common.views.ContentState
+import com.nafi.airseat.presentation.history.adapter.HistoryDataItem
+import com.nafi.airseat.presentation.history.adapter.MonthHeaderItem
+import com.nafi.airseat.utils.NoInternetException
+import com.nafi.airseat.utils.proceedWhen
+import com.nafi.airseat.utils.toMonthYearFormat
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.viewbinding.BindableItem
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HistoryFragment : Fragment() {
-    private val viewModel: HistoryViewModel by viewModels()
+    private val viewModel: HistoryViewModel by viewModel()
 
     private lateinit var binding: FragmentHistoryBinding
+    private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,11 +41,67 @@ class HistoryFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        setUpAdapter()
+        observeHistoryData()
+        setOnClickListener()
+    }
 
-        binding.ivSearchHistory.setOnClickListener {
-            // showDateRangePicker()
+    private fun setUpAdapter() {
+        binding.rvHistory.adapter = this@HistoryFragment.groupAdapter
+        binding.rvHistory.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun setOnClickListener() {
+        /*binding.ivSearchHistory.setOnClickListener {
             val dialog = ProtectedLoginBottomSheet()
             dialog.show(childFragmentManager, dialog.tag)
+        }*/
+    }
+
+    private fun observeHistoryData() {
+        viewModel.getHistoryData().observe(viewLifecycleOwner) { result ->
+            result.proceedWhen(
+                doOnLoading = {
+                    binding.bgHistoryGradient.isVisible = false
+                    binding.tvTitleHistory.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    binding.csvHistory.setState(ContentState.LOADING)
+                },
+                doOnSuccess = {
+                    binding.bgHistoryGradient.isVisible = true
+                    binding.tvTitleHistory.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    binding.csvHistory.setState(ContentState.SUCCESS)
+                    result.payload?.let { data ->
+                        val items = mutableListOf<BindableItem<*>>()
+
+                        val groupedData = data.groupBy { it.createdAt.toMonthYearFormat() }
+
+                        groupedData.forEach { (monthYear, dataList) ->
+                            items.add(MonthHeaderItem(monthYear))
+                            dataList.forEach { data ->
+                                items.add(HistoryDataItem(data))
+                            }
+                        }
+                        groupAdapter.update(items)
+                    }
+                },
+                doOnEmpty = {
+                    binding.bgHistoryGradient.isVisible = false
+                    binding.tvTitleHistory.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    binding.csvHistory.setState(ContentState.EMPTY)
+                },
+                doOnError = {
+                    binding.bgHistoryGradient.isVisible = false
+                    binding.tvTitleHistory.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    if (it.exception is NoInternetException) {
+                        binding.csvHistory.setState(ContentState.ERROR_NETWORK)
+                    } else {
+                        binding.csvHistory.setState(
+                            ContentState.ERROR_GENERAL,
+                            desc = result.exception?.message.orEmpty(),
+                        )
+                    }
+                },
+            )
         }
     }
 }

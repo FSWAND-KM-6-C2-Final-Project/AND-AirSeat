@@ -1,8 +1,7 @@
 package com.nafi.airseat.data.source.network.model.history
 
-
-import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 
 @Keep
 data class DepartureAirport(
@@ -15,5 +14,5 @@ data class DepartureAirport(
     @SerializedName("airport_name")
     val airportName: String?,
     @SerializedName("airport_picture")
-    val airportPicture: String?
+    val airportPicture: String?,
 )

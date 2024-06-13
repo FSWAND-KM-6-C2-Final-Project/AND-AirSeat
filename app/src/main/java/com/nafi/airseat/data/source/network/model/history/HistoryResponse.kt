@@ -1,8 +1,7 @@
 package com.nafi.airseat.data.source.network.model.history
 
-
-import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 
 @Keep
 data class HistoryResponse(
@@ -15,5 +14,5 @@ data class HistoryResponse(
     @SerializedName("requestAt")
     val requestAt: String?,
     @SerializedName("data")
-    val data: Data
+    val data: Data,
 )

@@ -14,5 +14,5 @@ data class ReturnArrivalAirport(
     @SerializedName("airport_name")
     val airportName: String?,
     @SerializedName("airport_picture")
-    val airportPicture: String?
+    val airportPicture: String?,
 )
