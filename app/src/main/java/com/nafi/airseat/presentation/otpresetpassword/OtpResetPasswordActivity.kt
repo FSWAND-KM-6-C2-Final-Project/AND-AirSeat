@@ -116,7 +116,7 @@ class OtpResetPasswordActivity : AppCompatActivity() {
     @SuppressLint("RestrictedApi")
     private fun showSnackbar(message: String) {
         val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
-        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar, null)
+        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_success, null)
         customView.findViewById<TextView>(R.id.textView1).text = message
         snackbar.view.setBackgroundColor(Color.TRANSPARENT)
 

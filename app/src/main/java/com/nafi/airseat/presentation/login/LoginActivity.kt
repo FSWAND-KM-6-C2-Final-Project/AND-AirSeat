@@ -1,12 +1,16 @@
 package com.nafi.airseat.presentation.login
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.kom.foodapp.utils.highLightWord
 import com.nafi.airseat.R
@@ -84,11 +88,7 @@ class LoginActivity : AppCompatActivity() {
                     binding.layoutFormLogin.pbLoading.isVisible = false
                     binding.layoutFormLogin.btnLogin.isVisible = true
                     Log.d("proceedLogin", getString(R.string.proceed_login, it.exception?.message))
-                    Toast.makeText(
-                        this,
-                        it.exception?.message,
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showSnackbarError(it.exception?.message ?: "An error occurred")
                 },
                 doOnLoading = {
                     binding.layoutFormLogin.pbLoading.isVisible = true
@@ -96,6 +96,19 @@ class LoginActivity : AppCompatActivity() {
                 },
             )
         }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun showSnackbarError(message: String) {
+        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
+        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_error, null)
+        customView.findViewById<TextView>(R.id.textView1).text = message
+        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+
+        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
+        snackbarLayout.setPadding(0, 0, 0, 0)
+        snackbarLayout.addView(customView, 0)
+        snackbar.show()
     }
 
     private fun navigateToMain() {
