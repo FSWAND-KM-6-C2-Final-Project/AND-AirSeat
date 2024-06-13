@@ -24,7 +24,7 @@ fun Booking?.toHistoryModel() =
         duration = this?.duration.orEmpty(),
         flight = this?.flight.toHistoryFlightModel(),
         returnFlight = this?.returnFlight?.toHistoryReturnFlightModel(),
-        totalAmount = this?.totalAmount.orEmpty()
+        totalAmount = this?.totalAmount ?: 0,
     )
 
 fun Flight?.toHistoryFlightModel() =
@@ -35,7 +35,7 @@ fun Flight?.toHistoryFlightModel() =
         departureTerminal = this?.departureTerminal.orEmpty(),
         departureTime = this?.departureTime.orEmpty(),
         flightNumber = this?.flightNumber.orEmpty(),
-        information = this?.information.orEmpty()
+        information = this?.information.orEmpty(),
     )
 
 fun ReturnFlight?.toHistoryReturnFlightModel() =
@@ -46,7 +46,7 @@ fun ReturnFlight?.toHistoryReturnFlightModel() =
         departureTerminal = this?.departureTerminal.orEmpty(),
         departureTime = this?.departureTime.orEmpty(),
         flightNumber = this?.flightNumber.orEmpty(),
-        information = this?.information.orEmpty()
+        information = this?.information.orEmpty(),
     )
 
 fun DepartureAirport?.toHistoryDepartureAirportModel() =
@@ -55,7 +55,7 @@ fun DepartureAirport?.toHistoryDepartureAirportModel() =
         airportCityCode = this?.airportCityCode.orEmpty(),
         airportContinent = this?.airportContinent.orEmpty(),
         airportName = this?.airportName.orEmpty(),
-        airportPicture = this?.airportPicture.orEmpty()
+        airportPicture = this?.airportPicture.orEmpty(),
     )
 
 fun ReturnDepartureAirport?.toHistoryReturnDepartureAirportModel() =
@@ -64,7 +64,7 @@ fun ReturnDepartureAirport?.toHistoryReturnDepartureAirportModel() =
         airportCityCode = this?.airportCityCode.orEmpty(),
         airportContinent = this?.airportContinent.orEmpty(),
         airportName = this?.airportName.orEmpty(),
-        airportPicture = this?.airportPicture.orEmpty()
+        airportPicture = this?.airportPicture.orEmpty(),
     )
 
 fun ArrivalAirport?.toHistoryArrivalAirportModel() =
@@ -73,7 +73,7 @@ fun ArrivalAirport?.toHistoryArrivalAirportModel() =
         airportCityCode = this?.airportCityCode.orEmpty(),
         airportContinent = this?.airportContinent.orEmpty(),
         airportName = this?.airportName.orEmpty(),
-        airportPicture = this?.airportPicture.orEmpty()
+        airportPicture = this?.airportPicture.orEmpty(),
     )
 
 fun ReturnArrivalAirport?.toHistoryReturnArrivalAirportModel() =
@@ -82,10 +82,10 @@ fun ReturnArrivalAirport?.toHistoryReturnArrivalAirportModel() =
         airportCityCode = this?.airportCityCode.orEmpty(),
         airportContinent = this?.airportContinent.orEmpty(),
         airportName = this?.airportName.orEmpty(),
-        airportPicture = this?.airportPicture.orEmpty()
+        airportPicture = this?.airportPicture.orEmpty(),
     )
 
 fun Collection<Booking>?.toHistoryList() =
     this?.map {
         it.toHistoryModel()
-    }?: listOf()
+    } ?: listOf()

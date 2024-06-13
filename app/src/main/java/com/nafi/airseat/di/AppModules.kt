@@ -4,12 +4,16 @@ import android.content.SharedPreferences
 import com.nafi.airseat.core.BaseViewModel
 import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthDataSourceImpl
+import com.nafi.airseat.data.datasource.HistoryDataSource
+import com.nafi.airseat.data.datasource.HistoryDataSourceImpl
 import com.nafi.airseat.data.datasource.NotificationDataSource
 import com.nafi.airseat.data.datasource.NotificationDataSourceImpl
 import com.nafi.airseat.data.datasource.ProfileDataSource
 import com.nafi.airseat.data.datasource.ProfileDataSourceImpl
 import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
+import com.nafi.airseat.data.repository.HistoryRepository
+import com.nafi.airseat.data.repository.HistoryRepositoryImpl
 import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
@@ -45,6 +49,7 @@ import com.nafi.airseat.data.source.network.services.AirSeatApiServiceWithAuthor
 import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
+import com.nafi.airseat.presentation.history.HistoryViewModel
 import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
 import com.nafi.airseat.presentation.home.HomeViewModel
 import com.nafi.airseat.presentation.login.LoginViewModel
@@ -100,6 +105,7 @@ object AppModules {
             single<FlightDetailDataSource> { FlightDetailApiDataSource(get()) }
             single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
             single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
+            single<HistoryDataSource> { HistoryDataSourceImpl(get()) }
         }
 
     private val repository =
@@ -113,6 +119,7 @@ object AppModules {
             single<UserPrefRepository> { UserPrefRepositoryImpl(get()) }
             single<NotificationRepository> { NotificationRepositoryImpl(get()) }
             single<ProfileRepository> { ProfileRepositoryImpl(get()) }
+            single<HistoryRepository> { HistoryRepositoryImpl(get()) }
         }
 
     private val viewModelModule =
@@ -153,6 +160,9 @@ object AppModules {
             }
             viewModel {
                 BaseViewModel(get())
+            }
+            viewModel {
+                HistoryViewModel(get())
             }
             viewModel {
                 ProfileViewModel(get(), get())

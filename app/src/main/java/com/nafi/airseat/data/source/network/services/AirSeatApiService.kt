@@ -2,7 +2,6 @@ package com.nafi.airseat.data.source.network.services
 
 import com.nafi.airseat.BuildConfig
 import com.nafi.airseat.data.repository.UserPrefRepository
-import com.nafi.airseat.data.source.network.model.history.Data
 import com.nafi.airseat.data.source.network.model.history.HistoryResponse
 import com.nafi.airseat.data.source.network.model.airport.AirportResponse
 import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
