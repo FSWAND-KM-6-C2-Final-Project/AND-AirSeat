@@ -7,6 +7,7 @@
 
     <!-- feature login -->
     <string name="confirm_password">Confirm Password</string>
+    <string name="text_otp_verified">OTP verification successful</string>
     <string name="hint_password">Input your password</string>
     <string name="your_name">Your name</string>
     <string name="title_email_phone">Email / Phone Number</string>

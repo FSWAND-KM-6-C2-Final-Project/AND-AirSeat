@@ -1,11 +1,15 @@
 package com.nafi.airseat.presentation.resetpasswordverifyemail
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Patterns
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.google.android.material.snackbar.Snackbar
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityResetPasswordEmailBinding
 import com.nafi.airseat.presentation.login.LoginActivity
@@ -75,20 +79,12 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                     binding.pbLoading.isVisible = false
                     binding.btnVerify.isVisible = true
                     navigateToOtpResetPassword(email)
-                    Toast.makeText(
-                        this,
-                        getString(R.string.text_verify_change_password_success),
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showSnackbarSuccess(getString(R.string.text_verify_change_password_success))
                 },
                 doOnError = {
                     binding.pbLoading.isVisible = false
                     binding.btnVerify.isVisible = true
-                    Toast.makeText(
-                        this,
-                        "Verify Change Password Failed : ${it.exception?.message.orEmpty()}",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showSnackbarError("Verify Change Password Failed : ${it.exception?.message.orEmpty()}")
                     navigateToReqChangePassword()
                 },
                 doOnLoading = {
@@ -97,6 +93,32 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                 },
             )
         }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun showSnackbarSuccess(message: String) {
+        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
+        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_success, null)
+        customView.findViewById<TextView>(R.id.textView1).text = message
+        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+
+        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
+        snackbarLayout.setPadding(0, 0, 0, 0)
+        snackbarLayout.addView(customView, 0)
+        snackbar.show()
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun showSnackbarError(message: String) {
+        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
+        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_error, null)
+        customView.findViewById<TextView>(R.id.textView1).text = message
+        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+
+        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
+        snackbarLayout.setPadding(0, 0, 0, 0)
+        snackbarLayout.addView(customView, 0)
+        snackbar.show()
     }
 
     private fun setupForm() {
