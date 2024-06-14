@@ -2,6 +2,7 @@ package com.nafi.airseat.presentation.biodata
 
 import android.os.Bundle
 import android.util.Patterns
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.nafi.airseat.R
@@ -18,6 +19,10 @@ class OrdererBioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        val flightId = intent.getStringExtra("flightId")
+        if (flightId != null) {
+            Toast.makeText(this, "Received flight ID: $flightId", Toast.LENGTH_SHORT).show()
+        }
         setupForm()
         setClickListener()
         observeInputMode()

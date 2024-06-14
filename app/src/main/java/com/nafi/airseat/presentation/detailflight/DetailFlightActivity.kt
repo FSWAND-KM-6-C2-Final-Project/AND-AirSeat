@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.nafi.airseat.data.model.FlightDetail
 import com.nafi.airseat.databinding.ActivityDetailFlightBinding
+import com.nafi.airseat.presentation.biodata.OrdererBioActivity
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -24,6 +25,9 @@ class DetailFlightActivity : AppCompatActivity() {
         parametersOf(intent.extras)
     }
 
+    // Variabel untuk menyimpan detail penerbangan
+    private var flightDetail: FlightDetail? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -32,7 +36,11 @@ class DetailFlightActivity : AppCompatActivity() {
         binding.layoutHeader.btnBackHome.setOnClickListener {
             finish()
         }
-        // viewModel.idExtras?.let { preceedDetailTicket(it.toString()) }
+        binding.btnSave.setOnClickListener {
+            flightDetail?.let {
+                navigateToOrdererBio(it.id.toString())
+            }
+        }
     }
 
     companion object {
@@ -52,8 +60,9 @@ class DetailFlightActivity : AppCompatActivity() {
         viewModel.getDetailFlight(id).observe(this) {
             it.proceedWhen(
                 doOnSuccess = {
-                    it.payload?.let {
-                        bindView(it)
+                    it.payload?.let { detail ->
+                        flightDetail = detail // Simpan detail penerbangan
+                        bindView(detail)
                         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
                     }
                 },
@@ -136,5 +145,14 @@ class DetailFlightActivity : AppCompatActivity() {
             binding.layoutDetail.tvArrivalPlace.text = it.arrivalAirport.airportName
             binding.tvTotalPrice.text = it.pricePremiumEconomy
         }
+    }
+
+    private fun navigateToOrdererBio(id: String) {
+        startActivity(
+            Intent(this, OrdererBioActivity::class.java).apply {
+                putExtra("id", id)
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 }
