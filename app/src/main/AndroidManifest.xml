@@ -20,6 +20,9 @@
             android:name=".presentation.blank.BlankActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.updateprofile.UpdateProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.resetpassword.ResetPasswordActivity"
             android:exported="false" />
         <activity

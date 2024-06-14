@@ -8,6 +8,7 @@ import com.nafi.airseat.data.source.network.model.flightdetail.FlightDetailRespo
 import com.nafi.airseat.data.source.network.model.login.LoginRequest
 import com.nafi.airseat.data.source.network.model.login.LoginResponse
 import com.nafi.airseat.data.source.network.model.notification.NotificationResponse
+import com.nafi.airseat.data.source.network.model.profile.ProfileResponse
 import com.nafi.airseat.data.source.network.model.register.RegisterRequest
 import com.nafi.airseat.data.source.network.model.register.RegisterResponse
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordRequest
@@ -124,6 +125,9 @@ interface AirSeatApiServiceWithAuthorization {
         @Query("limit") limit: Int = 10,
         @Query("page") page: Int = 1,
     ): NotificationResponse
+
+    @GET("auth/me")
+    suspend fun getUserProfile(): ProfileResponse
 
     companion object {
         @JvmStatic

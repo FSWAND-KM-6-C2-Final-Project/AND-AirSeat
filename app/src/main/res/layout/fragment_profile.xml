@@ -20,7 +20,8 @@
         android:id="@+id/item_change_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp">
+        android:layout_marginTop="28dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/iv_edit"
@@ -54,7 +55,8 @@
         android:id="@+id/item_profile_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/iv_settings"
@@ -98,7 +100,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/to_login"
+            android:id="@+id/tv_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -120,8 +122,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Version 1.0.0"
-        android:textColor="@color/material_dynamic_neutral70"
+        android:text="@string/text_app_version"
         android:layout_marginVertical="12dp"
         android:textAlignment="center"/>
 
