@@ -8,7 +8,7 @@ data class Booking(
     @SerializedName("booking_code")
     val bookingCode: String?,
     @SerializedName("bookingDetail")
-    val bookingDetail: List<BookingDetail?>?,
+    val bookingDetail: List<BookingDetail>?,
     @SerializedName("booking_expired")
     val bookingExpired: String?,
     @SerializedName("booking_status")
