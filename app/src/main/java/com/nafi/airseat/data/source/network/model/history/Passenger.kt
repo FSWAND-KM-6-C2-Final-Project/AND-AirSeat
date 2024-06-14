@@ -1,8 +1,7 @@
 package com.nafi.airseat.data.source.network.model.history
 
-
-import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 
 @Keep
 data class Passenger(
@@ -29,5 +28,5 @@ data class Passenger(
     @SerializedName("title")
     val title: String?,
     @SerializedName("updated_at")
-    val updatedAt: String?
+    val updatedAt: String?,
 )

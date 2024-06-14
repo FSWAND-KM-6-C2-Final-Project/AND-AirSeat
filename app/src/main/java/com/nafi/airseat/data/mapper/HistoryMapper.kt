@@ -31,7 +31,7 @@ fun Booking?.toHistoryModel() =
         flight = this?.flight.toHistoryFlightModel(),
         returnFlight = this?.returnFlight?.toHistoryReturnFlightModel(),
         totalAmount = this?.totalAmount ?: 0,
-        bookingDetail = this?.bookingDetail.toBookingListDetailList()
+        bookingDetail = this?.bookingDetail.toBookingListDetailList(),
     )
 
 fun Flight?.toHistoryFlightModel() =
@@ -92,18 +92,17 @@ fun ReturnArrivalAirport?.toHistoryReturnArrivalAirportModel() =
         airportPicture = this?.airportPicture.orEmpty(),
     )
 
-fun  BookingDetail?.toBookingDetailHistory() =
+fun BookingDetail?.toBookingDetailHistory() =
     BookingDetailHistory(
         price = this?.price ?: 0,
         seat = this?.seat.toSeatHistory(),
-        passenger = this?.passenger.toPassengerHistory()
+        passenger = this?.passenger.toPassengerHistory(),
     )
 
 fun Seat?.toSeatHistory() =
     SeatHistory(
         classes = this?.classX.orEmpty(),
-        seatName = this?.seatName.orEmpty()
-
+        seatName = this?.seatName.orEmpty(),
     )
 
 fun Passenger?.toPassengerHistory() =
@@ -119,7 +118,7 @@ fun Passenger?.toPassengerHistory() =
         lastName = this?.lastName.orEmpty(),
         nationality = this?.nationality.orEmpty(),
         title = this?.title.orEmpty(),
-        updatedAt = this?.createdAt.orEmpty()
+        updatedAt = this?.createdAt.orEmpty(),
     )
 
 fun Collection<BookingDetail>?.toBookingListDetailList() =

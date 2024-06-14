@@ -12,8 +12,6 @@ import com.nafi.airseat.data.datasource.ProfileDataSource
 import com.nafi.airseat.data.datasource.ProfileDataSourceImpl
 import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
-import com.nafi.airseat.data.repository.HistoryRepository
-import com.nafi.airseat.data.repository.HistoryRepositoryImpl
 import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
@@ -32,6 +30,8 @@ import com.nafi.airseat.data.repository.FlightDetailRepository
 import com.nafi.airseat.data.repository.FlightDetailRepositoryImpl
 import com.nafi.airseat.data.repository.FlightRepository
 import com.nafi.airseat.data.repository.FlightRepositoryImpl
+import com.nafi.airseat.data.repository.HistoryRepository
+import com.nafi.airseat.data.repository.HistoryRepositoryImpl
 import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
 import com.nafi.airseat.data.repository.ProfileRepository
@@ -49,8 +49,8 @@ import com.nafi.airseat.data.source.network.services.AirSeatApiServiceWithAuthor
 import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
-import com.nafi.airseat.presentation.history.HistoryViewModel
 import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
+import com.nafi.airseat.presentation.history.HistoryViewModel
 import com.nafi.airseat.presentation.home.HomeViewModel
 import com.nafi.airseat.presentation.login.LoginViewModel
 import com.nafi.airseat.presentation.notification.NotificationViewModel
