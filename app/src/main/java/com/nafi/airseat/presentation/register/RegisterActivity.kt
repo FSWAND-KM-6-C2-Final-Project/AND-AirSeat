@@ -1,11 +1,15 @@
 package com.nafi.airseat.presentation.register
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Patterns
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.kom.foodapp.utils.highLightWord
 import com.nafi.airseat.R
@@ -81,22 +85,14 @@ class RegisterActivity : AppCompatActivity() {
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
                     binding.btnRegister.isVisible = true
-                    sendOtp(email)
-                    Toast.makeText(
-                        this,
-                        getString(R.string.text_register_success),
-                        Toast.LENGTH_SHORT,
-                    ).show()
+//                    sendOtp(email)
+                    showSnackbarSuccess(getString(R.string.text_register_success))
                     navigateToOtp(email)
                 },
                 doOnError = {
                     binding.pbLoading.isVisible = false
                     binding.btnRegister.isVisible = true
-                    Toast.makeText(
-                        this,
-                        "Register Failed : ${it.exception?.message.orEmpty()}",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showSnackbarError("Register Failed : ${it.exception?.message.orEmpty()}")
                 },
                 doOnLoading = {
                     binding.pbLoading.isVisible = true
@@ -104,6 +100,32 @@ class RegisterActivity : AppCompatActivity() {
                 },
             )
         }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun showSnackbarSuccess(message: String) {
+        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
+        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_success, null)
+        customView.findViewById<TextView>(R.id.textView1).text = message
+        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+
+        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
+        snackbarLayout.setPadding(0, 0, 0, 0)
+        snackbarLayout.addView(customView, 0)
+        snackbar.show()
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun showSnackbarError(message: String) {
+        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
+        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_error, null)
+        customView.findViewById<TextView>(R.id.textView1).text = message
+        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+
+        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
+        snackbarLayout.setPadding(0, 0, 0, 0)
+        snackbarLayout.addView(customView, 0)
+        snackbar.show()
     }
 
     private fun setupForm() {
@@ -206,7 +228,7 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendOtp(email: String) {
+    /*private fun sendOtp(email: String) {
         registerViewModel.doVerifResendOtp(email).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
@@ -234,5 +256,5 @@ class RegisterActivity : AppCompatActivity() {
                 },
             )
         }
-    }
+    }*/
 }

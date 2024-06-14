@@ -82,20 +82,24 @@
         android:layout_height="wrap_content"
         android:text="@string/text_resend_otp"
         android:layout_marginTop="26dp"
+        android:visibility="gone"
         android:layout_marginHorizontal="16dp"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/otpview" />
 
     <TextView
-        android:id="@+id/text_resend_timer_OTP"
+        android:id="@+id/text_info_OTP"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_timer_otp"
-        android:layout_marginLeft="2dp"
+        android:text="@string/text_have_you_received_otp"
+        android:textColor="@color/md_theme_error"
+        android:layout_marginTop="26dp"
+        android:visibility="gone"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/text_resend_OTP"
-        app:layout_constraintTop_toTopOf="@+id/text_resend_OTP"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otpview" />
 
     <TextView
         android:id="@+id/text_new_code_OTP"
@@ -106,6 +110,6 @@
         android:text="@string/text_request_a_new_code_via_email"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_resend_OTP"/>
+        app:layout_constraintTop_toBottomOf="@id/text_info_OTP"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,18 @@
 package com.nafi.airseat.presentation.otpaccount
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.google.android.material.snackbar.Snackbar
+import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityOtpBinding
 import com.nafi.airseat.presentation.login.LoginActivity
 import com.nafi.airseat.presentation.register.RegisterActivity
@@ -17,6 +23,8 @@ class OtpActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOtpBinding
 
     private val otpViewModel: OtpViewModel by viewModel()
+    private var countDownTimer: CountDownTimer? = null
+    private val timerDuration = 60000L // 60 seconds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +42,29 @@ class OtpActivity : AppCompatActivity() {
                 verifyOtp(email, otp)
             }
         }
+        startTimer()
+    }
+
+    private fun startTimer() {
+        countDownTimer?.cancel()
+        countDownTimer =
+            object : CountDownTimer(timerDuration, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val secondsRemaining = millisUntilFinished / 1000
+                    binding.textResendOTP.text = getString(R.string.text_resend_otp, secondsRemaining)
+                }
+
+                override fun onFinish() {
+                    binding.textNewCodeOTP.isVisible = true
+                    binding.textResendOTP.isVisible = false
+
+                    binding.textInfoOTP.isVisible = true
+                }
+            }.start()
+        binding.textNewCodeOTP.isVisible = false
+        binding.textResendOTP.isVisible = true
+
+        binding.textInfoOTP.isVisible = false
     }
 
     private fun hidekeyboard() {
@@ -67,19 +98,12 @@ class OtpActivity : AppCompatActivity() {
             result.proceedWhen(
                 doOnSuccess = {
                     binding.textNewCodeOTP.isVisible = true
-                    Toast.makeText(
-                        this,
-                        "OTP sent to $email",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showSnackbarSuccess("OTP sent to $email")
+                    startTimer()
                 },
                 doOnError = {
                     binding.textNewCodeOTP.isVisible = true
-                    Toast.makeText(
-                        this,
-                        "Failed to send OTP: ${it.exception?.message.orEmpty()}",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showSnackbarError("Failed to send OTP: ${it.exception?.message.orEmpty()}")
                 },
                 doOnLoading = {
                     binding.textNewCodeOTP.isVisible = false
@@ -95,25 +119,43 @@ class OtpActivity : AppCompatActivity() {
         otpViewModel.doVerif(email, code).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
-                    Toast.makeText(
-                        this,
-                        "OTP verification successful",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showSnackbarSuccess(getString(R.string.text_otp_verified))
                     navigateToLogin() // Replace with actual navigation
                 },
                 doOnError = {
-                    Toast.makeText(
-                        this,
-                        "OTP verification failed: ${it.exception?.message.orEmpty()}",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showSnackbarError("OTP verification failed: ${it.exception?.message.orEmpty()}")
                 },
                 doOnLoading = {
                     // Show loading indicator if needed
                 },
             )
         }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun showSnackbarSuccess(message: String) {
+        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
+        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_success, null)
+        customView.findViewById<TextView>(R.id.textView1).text = message
+        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+
+        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
+        snackbarLayout.setPadding(0, 0, 0, 0)
+        snackbarLayout.addView(customView, 0)
+        snackbar.show()
+    }
+
+    @SuppressLint("RestrictedApi")
+    private fun showSnackbarError(message: String) {
+        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
+        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_error, null)
+        customView.findViewById<TextView>(R.id.textView1).text = message
+        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+
+        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
+        snackbarLayout.setPadding(0, 0, 0, 0)
+        snackbarLayout.addView(customView, 0)
+        snackbar.show()
     }
 
     private fun navigateToLogin() {
