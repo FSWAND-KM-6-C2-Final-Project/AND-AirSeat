@@ -2,7 +2,6 @@ package com.nafi.airseat.presentation.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.nafi.airseat.R

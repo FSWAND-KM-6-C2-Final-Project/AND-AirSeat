@@ -1,7 +1,6 @@
 package com.nafi.airseat.data.source.network.services
 
 import com.nafi.airseat.BuildConfig
-import com.nafi.airseat.data.source.network.model.airport.AirportsResponse
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.source.network.model.airport.AirportResponse
 import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
@@ -75,8 +74,8 @@ interface AirSeatApiService {
         @Header("Authorization") token: String? = null,
     ): LoginResponse
 
-    @GET("auth/me")
-    fun refreshToken(): Call<RefreshTokenResponse>
+    /*@GET("auth/me")
+    fun refreshToken(): Call<RefreshTokenResponse>*/
 
     @GET("airport")
     suspend fun getAirports(

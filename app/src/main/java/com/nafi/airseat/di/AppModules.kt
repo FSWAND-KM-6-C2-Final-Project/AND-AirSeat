@@ -4,8 +4,10 @@ import android.content.SharedPreferences
 import com.nafi.airseat.core.BaseViewModel
 import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthDataSourceImpl
-import com.nafi.airseat.data.datasource.UserDataSource
-import com.nafi.airseat.data.datasource.UserDataSourceImpl
+import com.nafi.airseat.data.datasource.NotificationDataSource
+import com.nafi.airseat.data.datasource.NotificationDataSourceImpl
+import com.nafi.airseat.data.datasource.UserPrefDataSource
+import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
 import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
@@ -24,18 +26,10 @@ import com.nafi.airseat.data.repository.FlightDetailRepository
 import com.nafi.airseat.data.repository.FlightDetailRepositoryImpl
 import com.nafi.airseat.data.repository.FlightRepository
 import com.nafi.airseat.data.repository.FlightRepositoryImpl
-import com.nafi.airseat.data.repository.PreferenceRepository
-import com.nafi.airseat.data.repository.PreferenceRepositoryImpl
-import com.nafi.airseat.data.repository.SeatClassRepository
-import com.nafi.airseat.data.repository.SeatClassRepositoryImpl
-import com.nafi.airseat.data.repository.TokenRepository
-import com.nafi.airseat.data.repository.TokenRepositoryImpl
-import com.nafi.airseat.data.datasource.NotificationDataSource
-import com.nafi.airseat.data.datasource.NotificationDataSourceImpl
-import com.nafi.airseat.data.datasource.UserPrefDataSource
-import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
 import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
+import com.nafi.airseat.data.repository.SeatClassRepository
+import com.nafi.airseat.data.repository.SeatClassRepositoryImpl
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.repository.UserPrefRepositoryImpl
 import com.nafi.airseat.data.repository.UserRepository
@@ -43,6 +37,7 @@ import com.nafi.airseat.data.repository.UserRepositoryImpl
 import com.nafi.airseat.data.source.local.pref.UserPreference
 import com.nafi.airseat.data.source.local.pref.UserPreferenceImpl
 import com.nafi.airseat.data.source.network.services.AirSeatApiService
+import com.nafi.airseat.data.source.network.services.AirSeatApiServiceWithAuthorization
 import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
@@ -93,7 +88,6 @@ object AppModules {
             single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
             single<NotificationDataSource> { NotificationDataSourceImpl(get()) }
-            single<UserDataSource> { UserDataSourceImpl(get()) }
             single<AirportDataSource> { AirportApiDataSource(get()) }
             single<FavoriteDestinationDataSource> { FavoriteDestinationDataSourceImpl() }
             single<SeatClassDummyDataSource> { SeatClassDummyDataSourceImpl() }
@@ -104,8 +98,6 @@ object AppModules {
     private val repository =
         module {
             single<UserRepository> { UserRepositoryImpl(get()) }
-            single<TokenRepository> { TokenRepositoryImpl(androidContext(), get()) }
-            single<PreferenceRepository> { PreferenceRepositoryImpl(get()) }
             single<AirportRepository> { AirportRepositoryImpl(get()) }
             single<FavoriteDestinationRepository> { FavoriteDestinationRepositoryImpl(get()) }
             single<SeatClassRepository> { SeatClassRepositoryImpl(get()) }
