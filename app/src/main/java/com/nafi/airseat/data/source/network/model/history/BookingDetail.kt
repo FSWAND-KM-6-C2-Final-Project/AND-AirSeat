@@ -6,7 +6,9 @@ import com.google.gson.annotations.SerializedName
 @Keep
 data class BookingDetail(
     @SerializedName("price")
-    val price: String?,
+    val price: Int?,
     @SerializedName("seat")
-    val seat: Seat?,
+    val seat: Seat,
+    @SerializedName("passenger")
+    val passenger: Passenger,
 )

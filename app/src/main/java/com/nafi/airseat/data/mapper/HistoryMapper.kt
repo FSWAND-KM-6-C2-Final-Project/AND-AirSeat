@@ -1,5 +1,6 @@
 package com.nafi.airseat.data.mapper
 
+import com.nafi.airseat.data.model.BookingDetailHistory
 import com.nafi.airseat.data.model.History
 import com.nafi.airseat.data.model.HistoryArrivalAirport
 import com.nafi.airseat.data.model.HistoryDepartureAirport
@@ -7,13 +8,18 @@ import com.nafi.airseat.data.model.HistoryFlight
 import com.nafi.airseat.data.model.HistoryReturnArrivalAirport
 import com.nafi.airseat.data.model.HistoryReturnDepartureAirport
 import com.nafi.airseat.data.model.HistoryReturnFlight
+import com.nafi.airseat.data.model.PassengerHistory
+import com.nafi.airseat.data.model.SeatHistory
 import com.nafi.airseat.data.source.network.model.history.ArrivalAirport
 import com.nafi.airseat.data.source.network.model.history.Booking
+import com.nafi.airseat.data.source.network.model.history.BookingDetail
 import com.nafi.airseat.data.source.network.model.history.DepartureAirport
 import com.nafi.airseat.data.source.network.model.history.Flight
+import com.nafi.airseat.data.source.network.model.history.Passenger
 import com.nafi.airseat.data.source.network.model.history.ReturnArrivalAirport
 import com.nafi.airseat.data.source.network.model.history.ReturnDepartureAirport
 import com.nafi.airseat.data.source.network.model.history.ReturnFlight
+import com.nafi.airseat.data.source.network.model.history.Seat
 
 fun Booking?.toHistoryModel() =
     History(
@@ -25,6 +31,7 @@ fun Booking?.toHistoryModel() =
         flight = this?.flight.toHistoryFlightModel(),
         returnFlight = this?.returnFlight?.toHistoryReturnFlightModel(),
         totalAmount = this?.totalAmount ?: 0,
+        bookingDetail = this?.bookingDetail.toBookingListDetailList()
     )
 
 fun Flight?.toHistoryFlightModel() =
@@ -84,6 +91,41 @@ fun ReturnArrivalAirport?.toHistoryReturnArrivalAirportModel() =
         airportName = this?.airportName.orEmpty(),
         airportPicture = this?.airportPicture.orEmpty(),
     )
+
+fun  BookingDetail?.toBookingDetailHistory() =
+    BookingDetailHistory(
+        price = this?.price ?: 0,
+        seat = this?.seat.toSeatHistory(),
+        passenger = this?.passenger.toPassengerHistory()
+    )
+
+fun Seat?.toSeatHistory() =
+    SeatHistory(
+        classes = this?.classX.orEmpty(),
+        seatName = this?.seatName.orEmpty()
+
+    )
+
+fun Passenger?.toPassengerHistory() =
+    PassengerHistory(
+        createdAt = this?.createdAt.orEmpty(),
+        dob = this?.dob.orEmpty(),
+        firstName = this?.firstName.orEmpty(),
+        id = this?.id ?: 0,
+        identificationCountry = this?.identificationCountry.orEmpty(),
+        identificationExpired = this?.identificationExpired.orEmpty(),
+        identificationNumber = this?.identificationNumber.orEmpty(),
+        identificationType = this?.identificationType.orEmpty(),
+        lastName = this?.lastName.orEmpty(),
+        nationality = this?.nationality.orEmpty(),
+        title = this?.title.orEmpty(),
+        updatedAt = this?.createdAt.orEmpty()
+    )
+
+fun Collection<BookingDetail>?.toBookingListDetailList() =
+    this?.map {
+        it.toBookingDetailHistory()
+    } ?: listOf()
 
 fun Collection<Booking>?.toHistoryList() =
     this?.map {

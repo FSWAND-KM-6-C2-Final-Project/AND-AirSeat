@@ -1,5 +1,7 @@
 package com.nafi.airseat.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class History(
     val bookingCode: String,
     val bookingStatus: String,
@@ -9,6 +11,7 @@ data class History(
     val flight: HistoryFlight,
     val returnFlight: HistoryReturnFlight?,
     val totalAmount: Long,
+    val bookingDetail : List<BookingDetailHistory>
 )
 
 data class HistoryFlight(
@@ -61,4 +64,30 @@ data class HistoryReturnDepartureAirport(
     val airportContinent: String,
     val airportName: String,
     val airportPicture: String,
+)
+
+data class BookingDetailHistory (
+    val price : Int,
+    val seat : SeatHistory,
+    val passenger : PassengerHistory
+)
+
+data class SeatHistory (
+    val classes: String,
+    val seatName : String
+)
+
+data class PassengerHistory (
+    val createdAt: String?,
+    val dob: String?,
+    val firstName: String?,
+    val id: Int?,
+    val identificationCountry: String?,
+    val identificationExpired: String?,
+    val identificationNumber: String?,
+    val identificationType: String?,
+    val lastName: String?,
+    val nationality: String?,
+    val title: String?,
+    val updatedAt: String?
 )
