@@ -6,10 +6,14 @@ import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthDataSourceImpl
 import com.nafi.airseat.data.datasource.NotificationDataSource
 import com.nafi.airseat.data.datasource.NotificationDataSourceImpl
+import com.nafi.airseat.data.datasource.ProfileDataSource
+import com.nafi.airseat.data.datasource.ProfileDataSourceImpl
 import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
 import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
+import com.nafi.airseat.data.repository.ProfileRepository
+import com.nafi.airseat.data.repository.ProfileRepositoryImpl
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.repository.UserPrefRepositoryImpl
 import com.nafi.airseat.data.repository.UserRepository
@@ -65,6 +69,7 @@ object AppModules {
             single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
             single<NotificationDataSource> { NotificationDataSourceImpl(get()) }
+            single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
         }
 
     private val repository =
@@ -72,6 +77,7 @@ object AppModules {
             single<UserRepository> { UserRepositoryImpl(get()) }
             single<UserPrefRepository> { UserPrefRepositoryImpl(get()) }
             single<NotificationRepository> { NotificationRepositoryImpl(get()) }
+            single<ProfileRepository> { ProfileRepositoryImpl(get()) }
         }
 
     private val viewModelModule =
@@ -105,7 +111,7 @@ object AppModules {
                 BaseViewModel(get())
             }
             viewModel {
-                ProfileViewModel(get())
+                ProfileViewModel(get(), get())
             }
         }
 

@@ -162,4 +162,5 @@
     <string name="text_title_no_connection">There is no connection</string>
     <string name="text_title_empty_notification">Opps! you don\'t have any notification</string>
     <string name="text_desc_empy_notification">Stay tune for notification come yet</string>
+    <string name="text_app_version">Version 1.0.0</string>
 </resources>
