@@ -46,7 +46,8 @@
             android:layout_width="24dp"
             android:layout_height="36dp"
             android:src="@drawable/ic_check_green"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:visibility="gone"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

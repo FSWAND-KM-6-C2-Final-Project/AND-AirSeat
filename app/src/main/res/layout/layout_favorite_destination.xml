@@ -19,6 +19,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_favorite_image"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:scaleType="centerCrop"
@@ -39,12 +40,14 @@
         </FrameLayout>
 
         <TextView
+            android:id="@+id/tv_depart_favorite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/text_promo_city"
             android:layout_marginTop="4dp"/>
 
         <TextView
+            android:id="@+id/tv_airlines_favorite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/text_promo_airlines"
@@ -52,6 +55,7 @@
             android:layout_marginTop="2dp"/>
 
         <TextView
+            android:id="@+id/tv_duration_favorite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/text_promo_period"
@@ -59,6 +63,7 @@
             android:layout_marginTop="2dp"/>
 
         <TextView
+            android:id="@+id/tv_price_favorite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/text_start_from"

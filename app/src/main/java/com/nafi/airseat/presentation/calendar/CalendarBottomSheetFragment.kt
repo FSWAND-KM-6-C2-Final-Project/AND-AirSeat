@@ -10,7 +10,6 @@ import androidx.core.view.children
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
@@ -25,7 +24,6 @@ import com.nafi.airseat.utils.calendar.ContinuousSelectionHelper.getSelection
 import com.nafi.airseat.utils.calendar.ContinuousSelectionHelper.isInDateBetweenSelection
 import com.nafi.airseat.utils.calendar.ContinuousSelectionHelper.isOutDateBetweenSelection
 import com.nafi.airseat.utils.calendar.DateSelection
-import com.nafi.airseat.utils.calendar.dateRangeDisplayText
 import com.nafi.airseat.utils.calendar.displayText
 import com.nafi.airseat.utils.calendar.getDrawableCompat
 import com.nafi.airseat.utils.calendar.makeInVisible
@@ -38,8 +36,10 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
-class CalendarBottomSheetFragment : BottomSheetDialogFragment() {
+class CalendarBottomSheetFragment(private val isStartSelection: Boolean) : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentCalendarBottomSheetBinding
+
+    private var listener: OnDateSelectedListener? = null
 
     private var selection = DateSelection()
 
@@ -47,11 +47,18 @@ class CalendarBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val headerDateFormatter = DateTimeFormatter.ofPattern("EEE, d MMM y")
 
+    interface OnDateSelectedListener {
+        fun onDateSelected(
+            startDate: LocalDate?,
+            endDate: LocalDate?,
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentCalendarBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
@@ -63,6 +70,12 @@ class CalendarBottomSheetFragment : BottomSheetDialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         configureBinders()
+        listener?.let { listener ->
+            val (startDate, endDate) = selection
+            if (startDate != null && endDate != null) {
+                listener.onDateSelected(startDate, endDate)
+            }
+        }
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(100) // Adjust as needed
         val endMonth = currentMonth.plusMonths(100) // Adjust as needed
@@ -95,13 +108,10 @@ class CalendarBottomSheetFragment : BottomSheetDialogFragment() {
             }
         }
 
-        binding.btnSaveDate.setOnClickListener click@{
+        binding.btnSaveDate.setOnClickListener {
             val (startDate, endDate) = selection
-            if (startDate != null && endDate != null) {
-                val text = dateRangeDisplayText(startDate, endDate)
-                Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
-            }
-            parentFragmentManager.popBackStack()
+            listener?.onDateSelected(startDate, endDate)
+            dismiss()
         }
 
         binding.ivClose.setOnClickListener {
@@ -114,6 +124,10 @@ class CalendarBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
         (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    fun setOnDateSelectedListener(listener: OnDateSelectedListener) {
+        this.listener = listener
     }
 
     private fun bindSummaryViews() {

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginHorizontal="2dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:background="@color/shimmercolor">
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_plane"/>
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@string/text_from"
+                android:textSize="16sp"
+                android:fontFamily="@font/font_plusjakartasans_regular"
+                android:layout_marginStart="12dp"/>
+
+            <TextView
+                android:id="@+id/tv_depart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:paddingVertical="2dp"
+                android:text="@string/text_depart_place"
+                android:fontFamily="@font/font_plusjakartasans_bold"
+                android:layout_marginStart="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:background="@drawable/border_left_right">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/darker_gray"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_swap"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/circle_button_border"
+                app:icon="@drawable/ic_swap"
+                app:iconTint="@color/md_theme_primary"
+                android:paddingHorizontal="4dp"
+                app:iconSize="18dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/shimmercolor"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp">
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_plane"/>
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:text="@string/text_to"
+                android:textSize="16sp"
+                android:fontFamily="@font/font_plusjakartasans_regular"
+                android:layout_marginStart="12dp"/>
+            <TextView
+                android:id="@+id/tv_destination"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:paddingVertical="2dp"
+                android:text="@string/text_arrival_place"
+                android:fontFamily="@font/font_plusjakartasans_bold"
+                android:layout_marginStart="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginVertical="8dp"
+            android:paddingHorizontal="8dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_depart_return"
+                android:fontFamily="@font/font_plusjakartasans_regular"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/sw_depart_return"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.CompoundButton.MaterialSwitch"
+                android:checked="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:background="@color/shimmercolor">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/text_departure"
+                android:fontFamily="@font/font_plusjakartasans_regular"/>
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tv_return_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/text_return"
+                android:fontFamily="@font/font_plusjakartasans_regular"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:background="@color/shimmercolor">
+
+            <TextView
+                android:id="@+id/tv_depart_choose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/tv_border_radius"
+                android:paddingVertical="8dp"
+                tools:text="1 Maret 2024"
+                android:fontFamily="@font/font_plusjakartasans_bold"/>
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tv_arrival_choose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/tv_border_radius"
+                android:paddingVertical="8dp"
+                tools:text="2 Maret 2024"
+                android:fontFamily="@font/font_plusjakartasans_bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="8dp"
+            android:background="@color/shimmercolor">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/text_passengers"
+                android:fontFamily="@font/font_plusjakartasans_regular"/>
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/text_seat_class"
+                android:fontFamily="@font/font_plusjakartasans_regular"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:background="@color/shimmercolor">
+
+            <TextView
+                android:id="@+id/tv_passengers_count"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/tv_border_radius"
+                android:paddingVertical="8dp"
+                android:text="@string/text_count_passengers"
+                android:fontFamily="@font/font_plusjakartasans_bold"/>
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tv_seat_class_choose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/tv_border_radius"
+                android:paddingVertical="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/text_choosen_class"
+                android:fontFamily="@font/font_plusjakartasans_bold"/>
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_search_flight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_search_flight"
+            app:cornerRadius="12dp"
+            android:layout_marginTop="24dp"
+            android:paddingBottom="8dp"
+            android:fontFamily="@font/font_plusjakartasans_bold"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

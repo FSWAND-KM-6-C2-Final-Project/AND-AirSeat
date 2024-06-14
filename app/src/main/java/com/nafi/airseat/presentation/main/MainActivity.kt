@@ -1,16 +1,19 @@
 package com.nafi.airseat.presentation.main
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.nafi.airseat.R
 import com.nafi.airseat.core.BaseActivity
 import com.nafi.airseat.databinding.ActivityMainBinding
+import com.nafi.airseat.presentation.common.sharedviewmodel.SharedViewModel
 
 class MainActivity : BaseActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+    private val viewModel: SharedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
