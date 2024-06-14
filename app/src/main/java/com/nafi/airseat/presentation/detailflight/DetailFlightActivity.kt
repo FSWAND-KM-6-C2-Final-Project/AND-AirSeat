@@ -29,6 +29,9 @@ class DetailFlightActivity : AppCompatActivity() {
         setContentView(binding.root)
         val id = intent.getStringExtra("id")
         preceedDetailTicket(id.toString())
+        binding.layoutHeader.btnBackHome.setOnClickListener {
+            finish()
+        }
         // viewModel.idExtras?.let { preceedDetailTicket(it.toString()) }
     }
 

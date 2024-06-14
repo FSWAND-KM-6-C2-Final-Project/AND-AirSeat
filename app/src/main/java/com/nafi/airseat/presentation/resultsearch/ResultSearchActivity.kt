@@ -51,6 +51,9 @@ class ResultSearchActivity : AppCompatActivity() {
         searchDateString = intent.getStringExtra("searchDate").toString()
         val departureAirportId = intent.getIntExtra("departAirportId", -1)
         val destinationAirportId = intent.getIntExtra("destinationAirportId", -1)
+        val passengerCount = intent.getStringExtra("passengerCount")
+        val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
+        val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
 
         if (startDateString != null && endDateString != null) {
             startDate = LocalDate.parse(startDateString)
@@ -60,6 +63,11 @@ class ResultSearchActivity : AppCompatActivity() {
             finish() // Close the activity if no dates are provided
             return
         }
+        binding.layoutHeader.btnBackHome.setOnClickListener {
+            finish()
+        }
+        binding.layoutHeader.textName.text = "$airportCityCodeDeparture > $airportCityCodeDestination"
+        binding.layoutHeader.textGreetings.text = "$passengerCount Passengers"
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             val bind = HorizontalDayBinding.bind(view)

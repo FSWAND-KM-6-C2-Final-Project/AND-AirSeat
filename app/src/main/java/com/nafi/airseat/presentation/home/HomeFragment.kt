@@ -69,7 +69,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         binding.layoutHome.tvDepart.setOnClickListener {
             showBottomSheet(
                 SearchTicketFragment {
-                    binding.layoutHome.tvDepart.text = it.airportCity
+                    binding.layoutHome.tvDepart.text = "${it.airportCity} (${it.airportCityCode})"
                     selectedDepartAirport = it
                 },
             )
@@ -78,10 +78,24 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         binding.layoutHome.tvDestination.setOnClickListener {
             showBottomSheet(
                 SearchTicketFragment {
-                    binding.layoutHome.tvDestination.text = it.airportCity
+                    binding.layoutHome.tvDestination.text = "${it.airportCity} (${it.airportCityCode})"
                     selectedDestinationAirport = it
                 },
             )
+        }
+
+        binding.layoutHome.btnSwap.setOnClickListener {
+            val tempAirport = selectedDepartAirport
+            selectedDepartAirport = selectedDestinationAirport
+            selectedDestinationAirport = tempAirport
+
+            selectedDepartAirport?.let {
+                binding.layoutHome.tvDepart.text = "${it.airportCity} (${it.airportCityCode})"
+            }
+
+            selectedDestinationAirport?.let {
+                binding.layoutHome.tvDestination.text = "${it.airportCity} (${it.airportCityCode})"
+            }
         }
 
         binding.layoutHome.tvDepartChoose.setOnClickListener {
@@ -124,11 +138,15 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 }
             }
             selectedDepartAirport?.let { departAirport ->
-                selectedDestinationAirport?.let { destinationAirport ->
-                    intent.putExtra("departAirportId", departAirport.id)
-                    intent.putExtra("destinationAirportId", destinationAirport.id)
-                }
+                intent.putExtra("departAirportId", departAirport.id)
+                intent.putExtra("airportCityCodeDeparture", departAirport.airportCityCode)
             }
+            selectedDestinationAirport?.let { destinationAirport ->
+                intent.putExtra("destinationAirportId", destinationAirport.id)
+                intent.putExtra("airportCityCodeDestination", destinationAirport.airportCityCode)
+            }
+
+            intent.putExtra("passengerCount", binding.layoutHome.tvPassengersCount.text.toString())
 
             Log.d(
                 "HomeFragment",
