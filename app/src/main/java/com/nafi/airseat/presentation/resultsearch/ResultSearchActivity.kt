@@ -20,6 +20,7 @@ import com.nafi.airseat.utils.calendar.getWeekPageTitle
 import com.nafi.airseat.utils.getColorCompat
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -28,7 +29,9 @@ class ResultSearchActivity : AppCompatActivity() {
     private lateinit var startDate: LocalDate
     private lateinit var endDate: LocalDate
     private lateinit var selectedDate: LocalDate
-    private val viewModel: ResultSearchViewModel by viewModel()
+    private val viewModel: ResultSearchViewModel by viewModel {
+        parametersOf(intent.extras)
+    }
     private val resultAdapter: ResultSearchAdapter by lazy {
         ResultSearchAdapter {
             // DetailFlightActivity.startActivity(this, it.id.toString())
@@ -45,6 +48,8 @@ class ResultSearchActivity : AppCompatActivity() {
         // Get selected dates from intent
         val startDateString = intent.getStringExtra("startDate")
         val endDateString = intent.getStringExtra("endDate")
+        val departureAirportId = intent.getIntExtra("departAirportId", -1)
+        val destinationAirportId = intent.getIntExtra("destinationAirportId", -1)
 
         if (startDateString != null && endDateString != null) {
             startDate = LocalDate.parse(startDateString)
@@ -108,16 +113,19 @@ class ResultSearchActivity : AppCompatActivity() {
         )
         binding.exSevenCalendar.scrollToDate(startDate) // Scroll to start date
         setupAdapter()
-        proceedResultTicket()
+        proceedResultTicket(departureAirportId.toString(), destinationAirportId.toString())
     }
 
-    private fun proceedResultTicket() {
-        viewModel.getFlightData().observe(this) { result ->
+    private fun proceedResultTicket(
+        departureAirportId: String,
+        destinationAirportId: String,
+    ) {
+        viewModel.getFlightData(departureAirportId, destinationAirportId).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     result.payload?.let {
                         resultAdapter.submitData(it)
-                        Toast.makeText(this, "${it.size}", Toast.LENGTH_SHORT).show()
+                        // Toast.makeText(this, "${it.size}", Toast.LENGTH_SHORT).show()
                     }
                 },
                 doOnLoading = {

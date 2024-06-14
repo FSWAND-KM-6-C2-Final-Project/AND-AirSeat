@@ -6,5 +6,24 @@ import com.nafi.airseat.data.repository.FlightRepository
 import kotlinx.coroutines.Dispatchers
 
 class ResultSearchViewModel(private val repository: FlightRepository) : ViewModel() {
-    fun getFlightData() = repository.getFlights().asLiveData(Dispatchers.IO)
+    // fun getFlightData() = repository.getFlights().asLiveData(Dispatchers.IO)
+    /*private val departAirportId = MutableLiveData<Int>()
+    private val destinationAirportId = MutableLiveData<Int>()
+
+    fun setFlightQuery(departId: Int, destinationId: Int) {
+        departAirportId.value = departId
+        destinationAirportId.value = destinationId
+    }
+
+    fun getFlightData(): LiveData<Result<List<Flight>>> {
+        return Transformations.switchMap(departAirportId) { departId ->
+            Transformations.switchMap(destinationAirportId) { destinationId ->
+                repository.getFlights(departId, destinationId).asLiveData(Dispatchers.IO)
+            }
+        }
+    }*/
+    fun getFlightData(
+        departureAirportId: String,
+        destinationAirportId: String,
+    ) = repository.getFlights(departureAirportId, destinationAirportId).asLiveData(Dispatchers.IO)
 }

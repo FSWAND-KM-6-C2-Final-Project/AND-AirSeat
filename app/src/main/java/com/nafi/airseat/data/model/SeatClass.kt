@@ -8,5 +8,4 @@ data class SeatClass(
     val id: Int?,
     val seatName: String,
     val seatPrice: Int,
-    var isSelected: Boolean = false,
 ) : Parcelable

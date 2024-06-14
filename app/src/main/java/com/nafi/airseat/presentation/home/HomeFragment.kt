@@ -2,6 +2,7 @@ package com.nafi.airseat.presentation.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,12 +33,13 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
     private var selectedStartDate: LocalDate? = null
     private var selectedEndDate: LocalDate? = null
     private lateinit var sharedViewModel: SharedViewModel
+    private var selectedDepartAirport: Airport? = null
+    private var selectedDestinationAirport: Airport? = null
     private val favoriteDestinationAdapter: FavoriteDestinationAdapter by lazy {
         FavoriteDestinationAdapter {
             BlankActivity.startActivity(requireContext(), it.id.toString())
         }
     }
-    var isDepartSelected = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,43 +63,25 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         setupUI()
         setupFavoriteDestination()
         proceedFavoriteDestination()
-        setTextFLight()
-
-        /*sharedViewModel.departAirport.observe(viewLifecycleOwner) { airport ->
-            binding.layoutHome.tvDepart.text = airport.airportCity
-        }
-
-        sharedViewModel.destinationAirport.observe(viewLifecycleOwner) { airport ->
-            binding.layoutHome.tvDestination.text = airport.airportCity
-        }*/
-    }
-
-    private fun setTextFLight() {
-        sharedViewModel.airportCity.observe(viewLifecycleOwner) { airport ->
-
-            val textDeparture = binding.layoutHome.tvDepart.text.toString()
-            val textArrivals = binding.layoutHome.tvDestination.text.toString()
-
-            if (textDeparture == "Select Flight") {
-                binding.layoutHome.tvDepart.text = airport.airportCity
-            } else if (textArrivals == "Select Flight") {
-                binding.layoutHome.tvDestination.text = airport.airportCity
-            } else if (textDeparture != airport.airportCity) {
-                binding.layoutHome.tvDepart.text = airport.airportCity
-                binding.layoutHome.tvDestination.text = "Select Flight"
-            } else {
-                binding.layoutHome.tvDestination.text = airport.airportCity
-            }
-        }
     }
 
     private fun setupUI() {
         binding.layoutHome.tvDepart.setOnClickListener {
-            showBottomSheet(SearchTicketFragment())
+            showBottomSheet(
+                SearchTicketFragment {
+                    binding.layoutHome.tvDepart.text = it.airportCity
+                    selectedDepartAirport = it
+                },
+            )
         }
 
         binding.layoutHome.tvDestination.setOnClickListener {
-            showBottomSheet(SearchTicketFragment())
+            showBottomSheet(
+                SearchTicketFragment {
+                    binding.layoutHome.tvDestination.text = it.airportCity
+                    selectedDestinationAirport = it
+                },
+            )
         }
 
         binding.layoutHome.tvDepartChoose.setOnClickListener {
@@ -106,8 +90,8 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 bottomSheet.setOnDateSelectedListener(this)
                 bottomSheet.show(parentFragmentManager, bottomSheet.tag)
             } else {
-                val bottomSheet = DepartCalendarFragment()
-                bottomSheet.setOnDateSelectedListenerDepart(this)
+                val bottomSheet = CalendarBottomSheetFragment(isStartSelection = true)
+                bottomSheet.setOnDateSelectedListener(this)
                 bottomSheet.show(parentFragmentManager, bottomSheet.tag)
             }
         }
@@ -136,9 +120,19 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 selectedEndDate?.let { endDate ->
                     intent.putExtra("startDate", startDate.toString())
                     intent.putExtra("endDate", endDate.toString())
-                    startActivity(intent)
                 }
             }
+            selectedDepartAirport?.let { departAirport ->
+                selectedDestinationAirport?.let { destinationAirport ->
+                    intent.putExtra("departAirportId", departAirport.id)
+                    intent.putExtra("destinationAirportId", destinationAirport.id)
+                }
+            }
+            Log.d(
+                "HomeFragment",
+                "Depart Airport ID: ${selectedDepartAirport?.id}, Destination Airport ID: ${selectedDestinationAirport?.id}",
+            )
+            startActivity(intent)
         }
 
         binding.layoutHome.swDepartReturn.setOnCheckedChangeListener { _, isChecked ->
@@ -151,10 +145,6 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
 
     private fun showBottomSheet(bottomSheet: BottomSheetDialogFragment) {
         bottomSheet.show(parentFragmentManager, bottomSheet.tag)
-    }
-
-    fun onAirportSelected(airport: Airport) {
-        binding.layoutHome.tvDepart.text = airport.airportName
     }
 
     private fun setupFavoriteDestination() {

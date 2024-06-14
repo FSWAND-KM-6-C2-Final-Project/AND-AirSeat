@@ -15,7 +15,7 @@
         android:textColor="@android:color/white"
         android:backgroundTint="@color/md_theme_primary"
         app:cornerRadius="12dp"
-        app:icon="@drawable/img"
+        app:icon="@drawable/btn_back"
         app:iconGravity="start"
         app:iconSize="28dp"
         app:iconTint="@android:color/white"

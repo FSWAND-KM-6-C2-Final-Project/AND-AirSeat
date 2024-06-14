@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -16,7 +15,7 @@ import com.nafi.airseat.presentation.searchticket.adapter.AirportsAdapter
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchTicketFragment : BottomSheetDialogFragment() {
+class SearchTicketFragment(private val listener: ((Airport) -> Unit)? = null) : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSearchTicketBinding
     private lateinit var sharedViewModel: SharedViewModel
     private val viewModel: SearchTicketViewModel by viewModel()
@@ -45,7 +44,7 @@ class SearchTicketFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        // sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         setAdapter()
         getAirportsData()
         handelSearchView()
@@ -94,7 +93,8 @@ class SearchTicketFragment : BottomSheetDialogFragment() {
     }
 
     private fun getClickedData(data: Airport) {
-        sharedViewModel.setAirportCity(data)
+        // sharedViewModel.setAirportCity(data)
+        listener?.invoke(data)
         dismiss()
     }
 }

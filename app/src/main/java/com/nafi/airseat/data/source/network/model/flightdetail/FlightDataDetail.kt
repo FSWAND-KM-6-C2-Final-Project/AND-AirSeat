@@ -35,4 +35,10 @@ data class FlightDataDetail(
     val pricePremiumEconomy: String?,
     @SerializedName("updated_at")
     val updatedAt: String?,
+    @SerializedName("airline")
+    val airline: FlightDetailAirlineResponse,
+    @SerializedName("departureAirport")
+    val departureAirport: FlightDetailDepartureResponse,
+    @SerializedName("arrivalAirport")
+    val arrivalAirport: FlightDetailArrivalResponse,
 )

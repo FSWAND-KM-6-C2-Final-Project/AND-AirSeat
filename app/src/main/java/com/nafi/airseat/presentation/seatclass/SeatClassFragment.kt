@@ -15,7 +15,8 @@ import com.nafi.airseat.presentation.seatclass.adapter.SeatClassAdapter
 
 class SeatClassFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: SeatClassViewModel
-    private lateinit var binding: FragmentSeatClassBinding
+    private var _binding: FragmentSeatClassBinding? = null
+    private val binding get() = _binding!!
     private val seatClassAdapter: SeatClassAdapter by lazy {
         SeatClassAdapter {
             // Do nothing on item click, handle on save button click
@@ -32,7 +33,7 @@ class SeatClassFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentSeatClassBinding.inflate(inflater, container, false)
+        _binding = FragmentSeatClassBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -78,5 +79,10 @@ class SeatClassFragment : BottomSheetDialogFragment() {
 
     fun setOnSeatClassSelectedListener(listener: OnSeatClassSelectedListener) {
         this.listener = listener
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -58,7 +58,7 @@ class CalendarBottomSheetFragment(private val isStartSelection: Boolean) : Botto
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentCalendarBottomSheetBinding.inflate(inflater, container, false)
         return binding.root

@@ -32,8 +32,7 @@ class SeatClassAdapter(private val listener: (SeatClass) -> Unit) :
             },
         )
 
-    private var selectedItemPos = 0
-    private var lastItemSelectedPos = -1
+    private var selectedItemPos = -1
 
     fun submitData(data: List<SeatClass>) {
         dataDiffer.submitList(data)
@@ -51,12 +50,7 @@ class SeatClassAdapter(private val listener: (SeatClass) -> Unit) :
         parent: ViewGroup,
         viewType: Int,
     ): ItemSeatClassViewHolder {
-        val binding =
-            ItemClassBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-            )
+        val binding = ItemClassBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemSeatClassViewHolder(binding)
     }
 
@@ -65,13 +59,11 @@ class SeatClassAdapter(private val listener: (SeatClass) -> Unit) :
         position: Int,
     ) {
         holder.bindView(dataDiffer.currentList[position], position)
-        holder.updateBackground(position == selectedItemPos)
     }
 
     override fun getItemCount(): Int = dataDiffer.currentList.size
 
-    inner class ItemSeatClassViewHolder(private val binding: ItemClassBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class ItemSeatClassViewHolder(private val binding: ItemClassBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
                 val previousItemPos = selectedItemPos
@@ -88,22 +80,15 @@ class SeatClassAdapter(private val listener: (SeatClass) -> Unit) :
         ) {
             binding.optionText.text = item.seatName
             binding.priceTextEconomy.text = item.seatPrice.toString()
+            updateBackground(position == selectedItemPos)
         }
 
-        fun updateBackground(isSelected: Boolean) {
+        private fun updateBackground(isSelected: Boolean) {
             if (isSelected) {
-                selectedBg()
+                binding.root.background = ContextCompat.getDrawable(itemView.context, R.drawable.selected_item_background)
             } else {
-                defaultBg()
+                binding.root.background = ContextCompat.getDrawable(itemView.context, R.drawable.unselected_item_background)
             }
-        }
-
-        private fun defaultBg() {
-            binding.root.background = ContextCompat.getDrawable(itemView.context, R.drawable.unselected_item_background)
-        }
-
-        private fun selectedBg() {
-            binding.root.background = ContextCompat.getDrawable(itemView.context, R.drawable.selected_item_background)
         }
     }
 }

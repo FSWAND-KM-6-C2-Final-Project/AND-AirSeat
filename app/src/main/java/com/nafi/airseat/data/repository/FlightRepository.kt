@@ -8,13 +8,19 @@ import com.nafi.airseat.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
 
 interface FlightRepository {
-    fun getFlights(): Flow<ResultWrapper<List<Flight>>>
+    fun getFlights(
+        departAirportId: String,
+        destinationAirportId: String,
+    ): Flow<ResultWrapper<List<Flight>>>
 }
 
 class FlightRepositoryImpl(private val dataSource: FlightDataSource) : FlightRepository {
-    override fun getFlights(): Flow<ResultWrapper<List<Flight>>> {
+    override fun getFlights(
+        departAirportId: String,
+        destinationAirportId: String,
+    ): Flow<ResultWrapper<List<Flight>>> {
         return proceedFlow {
-            dataSource.getFlightList().data.flight.toFlights()
+            dataSource.getFlightList(departAirportId, destinationAirportId).data.flight.toFlights()
         }
     }
 }
