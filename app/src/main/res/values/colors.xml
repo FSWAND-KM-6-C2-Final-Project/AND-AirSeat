@@ -13,6 +13,7 @@
         <attr name="seat_select_limit" format="integer" />
     </declare-styleable>
     <color name="success">#73CA5C</color>
+    <color name="black">#000000</color>
     <color name="md_theme_primary">#006398</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
