@@ -167,5 +167,6 @@
     <string name="text_have_you_received_otp">Have you received OTP?</string>
     <string name="text_title_empty_notification">Opps! you don\'t have any notification</string>
     <string name="text_desc_empy_notification">Stay tune for notification come yet</string>
+    <string name="text_app_version">Version 1.0.0</string>
     <string name="text_snackbar_custom">GeeksforGeeks</string>
 </resources>

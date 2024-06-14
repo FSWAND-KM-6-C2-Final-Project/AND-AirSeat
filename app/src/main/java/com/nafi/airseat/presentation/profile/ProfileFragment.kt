@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.nafi.airseat.core.BaseActivity
 import com.nafi.airseat.databinding.FragmentProfileBinding
 import com.nafi.airseat.presentation.login.LoginActivity
+import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : Fragment() {
@@ -36,6 +38,27 @@ class ProfileFragment : Fragment() {
         setOptionMenu()
     }
 
+    private fun observeDataProfile() {
+        viewModel.getDataProfile().observe(viewLifecycleOwner) { result ->
+            result.proceedWhen(
+                doOnLoading = {
+                    Toast.makeText(requireContext(), "LOADING", Toast.LENGTH_SHORT).show()
+                },
+                doOnSuccess = {
+                    result.payload?.let {
+                        Toast.makeText(requireContext(), it.fullName, Toast.LENGTH_SHORT).show()
+                    }
+                },
+                doOnError = {
+                    Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
+                },
+                doOnEmpty = {
+                    Toast.makeText(requireContext(), "ERROR", Toast.LENGTH_SHORT).show()
+                },
+            )
+        }
+    }
+
     private fun setOptionMenu() {
         (activity as BaseActivity).token.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
@@ -46,6 +69,7 @@ class ProfileFragment : Fragment() {
                 binding.itemChangeProfile.isVisible = true
                 binding.itemProfileSetting.isVisible = true
                 binding.tvLogin.text = "Logout"
+                observeDataProfile()
             }
         }
     }
