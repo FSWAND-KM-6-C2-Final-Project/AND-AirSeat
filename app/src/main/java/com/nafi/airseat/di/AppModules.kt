@@ -99,6 +99,7 @@ object AppModules {
             single<FlightDataSource> { FlightApiDataSource(get()) }
             single<FlightDetailDataSource> { FlightDetailApiDataSource(get()) }
             single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
+            single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
         }
 
     private val repository =
