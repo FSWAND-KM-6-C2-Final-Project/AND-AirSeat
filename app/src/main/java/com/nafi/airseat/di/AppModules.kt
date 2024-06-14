@@ -106,6 +106,7 @@ object AppModules {
             single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
             single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
             single<HistoryDataSource> { HistoryDataSourceImpl(get()) }
+            single<HistoryDataSource> { HistoryDataSourceImpl(get()) }
         }
 
     private val repository =
@@ -118,6 +119,7 @@ object AppModules {
             single<FlightDetailRepository> { FlightDetailRepositoryImpl(get()) }
             single<UserPrefRepository> { UserPrefRepositoryImpl(get()) }
             single<NotificationRepository> { NotificationRepositoryImpl(get()) }
+            single<HistoryRepository> { HistoryRepositoryImpl(get()) }
             single<ProfileRepository> { ProfileRepositoryImpl(get()) }
             single<HistoryRepository> { HistoryRepositoryImpl(get()) }
         }
@@ -160,6 +162,9 @@ object AppModules {
             }
             viewModel {
                 BaseViewModel(get())
+            }
+            viewModel {
+                HistoryViewModel(get())
             }
             viewModel {
                 HistoryViewModel(get())
