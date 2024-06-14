@@ -23,7 +23,8 @@ class ResultSearchViewModel(private val repository: FlightRepository) : ViewMode
         }
     }*/
     fun getFlightData(
+        searchDateInput: String,
         departureAirportId: String,
         destinationAirportId: String,
-    ) = repository.getFlights(departureAirportId, destinationAirportId).asLiveData(Dispatchers.IO)
+    ) = repository.getFlights(searchDateInput, departureAirportId, destinationAirportId).asLiveData(Dispatchers.IO)
 }

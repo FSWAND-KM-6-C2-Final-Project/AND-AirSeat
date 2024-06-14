@@ -5,14 +5,14 @@ import com.nafi.airseat.data.source.network.services.AirSeatApiService
 
 class FlightApiDataSource(private val service: AirSeatApiService) : FlightDataSource {
     override suspend fun getFlightList(
+        searchDateInput: String,
         departureAirportId: String,
         arrivalAirportId: String,
     ): FlightsResponse {
-        val searchDate = ""
         val sortBy = ""
         val order = ""
         return service.getFlights(
-            searchDate = searchDate,
+            searchDate = searchDateInput,
             sortBy = sortBy,
             order = order,
             deptAirport = departureAirportId,

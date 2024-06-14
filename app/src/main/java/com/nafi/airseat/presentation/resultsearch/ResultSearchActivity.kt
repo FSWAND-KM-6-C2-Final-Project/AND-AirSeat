@@ -34,7 +34,6 @@ class ResultSearchActivity : AppCompatActivity() {
     }
     private val resultAdapter: ResultSearchAdapter by lazy {
         ResultSearchAdapter {
-            // DetailFlightActivity.startActivity(this, it.id.toString())
             navigateToDetailTicket(it.id.toString())
         }
     }
@@ -48,6 +47,8 @@ class ResultSearchActivity : AppCompatActivity() {
         // Get selected dates from intent
         val startDateString = intent.getStringExtra("startDate")
         val endDateString = intent.getStringExtra("endDate")
+        var searchDateString: String = null.toString()
+        searchDateString = intent.getStringExtra("searchDate").toString()
         val departureAirportId = intent.getIntExtra("departAirportId", -1)
         val destinationAirportId = intent.getIntExtra("destinationAirportId", -1)
 
@@ -71,6 +72,11 @@ class ResultSearchActivity : AppCompatActivity() {
                         selectedDate = day.date
                         binding.exSevenCalendar.notifyDateChanged(day.date)
                         oldDate.let { binding.exSevenCalendar.notifyDateChanged(it) }
+                        proceedResultTicket(
+                            selectedDate.toFormattedString(),
+                            departureAirportId.toString(),
+                            destinationAirportId.toString(),
+                        )
                     }
                 }
             }
@@ -113,19 +119,23 @@ class ResultSearchActivity : AppCompatActivity() {
         )
         binding.exSevenCalendar.scrollToDate(startDate) // Scroll to start date
         setupAdapter()
-        proceedResultTicket(departureAirportId.toString(), destinationAirportId.toString())
+        proceedResultTicket(searchDateString, departureAirportId.toString(), destinationAirportId.toString())
     }
 
     private fun proceedResultTicket(
+        searchDateInput: String,
         departureAirportId: String,
         destinationAirportId: String,
     ) {
-        viewModel.getFlightData(departureAirportId, destinationAirportId).observe(this) { result ->
+        viewModel.getFlightData(searchDateInput, departureAirportId, destinationAirportId).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     result.payload?.let {
                         resultAdapter.submitData(it)
-                        // Toast.makeText(this, "${it.size}", Toast.LENGTH_SHORT).show()
+                        binding.rvSearchTicket.isVisible = it.isNotEmpty()
+                        if (it.isEmpty()) {
+                            Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 },
                 doOnLoading = {
@@ -135,6 +145,8 @@ class ResultSearchActivity : AppCompatActivity() {
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
                 },
                 doOnEmpty = {
+                    clearAdapterData()
+                    binding.rvSearchTicket.isVisible = false
                     Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show()
                 },
             )
@@ -142,7 +154,7 @@ class ResultSearchActivity : AppCompatActivity() {
     }
 
     private fun setupAdapter() {
-        binding.rvSearchTicket.adapter = this@ResultSearchActivity.resultAdapter
+        binding.rvSearchTicket.adapter = resultAdapter
     }
 
     private fun navigateToDetailTicket(id: String) {
@@ -152,5 +164,14 @@ class ResultSearchActivity : AppCompatActivity() {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
+    }
+
+    private fun clearAdapterData() {
+        resultAdapter.submitData(emptyList())
+    }
+
+    fun LocalDate.toFormattedString(): String {
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        return this.format(formatter)
     }
 }

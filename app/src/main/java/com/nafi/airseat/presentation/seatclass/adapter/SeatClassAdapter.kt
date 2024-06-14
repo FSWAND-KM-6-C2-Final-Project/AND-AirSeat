@@ -63,14 +63,15 @@ class SeatClassAdapter(private val listener: (SeatClass) -> Unit) :
 
     override fun getItemCount(): Int = dataDiffer.currentList.size
 
-    inner class ItemSeatClassViewHolder(private val binding: ItemClassBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ItemSeatClassViewHolder(private val binding: ItemClassBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
-                val previousItemPos = selectedItemPos
-                selectedItemPos = adapterPosition
-                notifyItemChanged(previousItemPos)
-                notifyItemChanged(selectedItemPos)
-                listener(dataDiffer.currentList[selectedItemPos])
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    setSelectedItem(position)
+                    listener(dataDiffer.currentList[position])
+                }
             }
         }
 
@@ -83,12 +84,22 @@ class SeatClassAdapter(private val listener: (SeatClass) -> Unit) :
             updateBackground(position == selectedItemPos)
         }
 
-        private fun updateBackground(isSelected: Boolean) {
-            if (isSelected) {
-                binding.root.background = ContextCompat.getDrawable(itemView.context, R.drawable.selected_item_background)
-            } else {
-                binding.root.background = ContextCompat.getDrawable(itemView.context, R.drawable.unselected_item_background)
+        private fun setSelectedItem(position: Int) {
+            if (selectedItemPos != position) {
+                val previousSelected = selectedItemPos
+                selectedItemPos = position
+                notifyItemChanged(previousSelected)
+                notifyItemChanged(selectedItemPos)
             }
+        }
+
+        private fun updateBackground(isSelected: Boolean) {
+            binding.root.background =
+                if (isSelected) {
+                    ContextCompat.getDrawable(itemView.context, R.drawable.selected_item_background)
+                } else {
+                    ContextCompat.getDrawable(itemView.context, R.drawable.unselected_item_background)
+                }
         }
     }
 }

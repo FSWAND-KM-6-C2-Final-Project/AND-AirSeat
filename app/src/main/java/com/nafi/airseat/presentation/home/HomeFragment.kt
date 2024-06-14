@@ -120,6 +120,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 selectedEndDate?.let { endDate ->
                     intent.putExtra("startDate", startDate.toString())
                     intent.putExtra("endDate", endDate.toString())
+                    intent.putExtra("searchDate", startDate.toFormattedString())
                 }
             }
             selectedDepartAirport?.let { departAirport ->
@@ -128,6 +129,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                     intent.putExtra("destinationAirportId", destinationAirport.id)
                 }
             }
+
             Log.d(
                 "HomeFragment",
                 "Depart Airport ID: ${selectedDepartAirport?.id}, Destination Airport ID: ${selectedDestinationAirport?.id}",
@@ -192,5 +194,10 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
 
     override fun onSeatClassSelected(seatClass: SeatClass) {
         binding.layoutHome.tvSeatClassChoose.text = seatClass.seatName
+    }
+
+    fun LocalDate.toFormattedString(): String {
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        return this.format(formatter)
     }
 }

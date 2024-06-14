@@ -107,10 +107,8 @@ class ResultSearchAdapter(private val listener: (Flight) -> Unit) :
                 val departureDateTime = sdf.parse(departureTime)
                 val arrivalDateTime = sdf.parse(arrivalTime)
 
-                // Menghitung selisih waktu dalam milidetik
                 val diffInMillis = (arrivalDateTime?.time ?: 0) - (departureDateTime?.time ?: 0)
 
-                // Konversi milidetik ke jam dan menit
                 val hours = diffInMillis / (1000 * 60 * 60)
                 val minutes = (diffInMillis % (1000 * 60 * 60)) / (1000 * 60)
 
