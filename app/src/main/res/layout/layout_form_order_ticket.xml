@@ -255,7 +255,6 @@
                     android:nextFocusForward="@id/actv_id_type"
                     android:maxLines="1"
                     android:singleLine="true" />
-                    android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -289,7 +288,9 @@
                     android:hint="@string/hint_select_id_type"
                     android:inputType="none"
                     android:paddingHorizontal="16dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_id_card" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
