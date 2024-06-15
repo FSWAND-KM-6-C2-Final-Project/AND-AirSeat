@@ -46,15 +46,26 @@ class PassengerBioItem(
         viewBinding.etValidId.setOnClickListener {
             showDatePickerDialog { date -> viewBinding.etValidId.setText(date) }
         }
-        viewBinding.swFamilyName.setOnCheckedChangeListener { _, _ ->
-            passengerBioViewModel.changeInputMode()
+        val switchFamilyName = viewBinding.swFamilyName
+        switchFamilyName.isChecked = passengerBioViewModel.isFamilyNameMode.value ?: false
+        switchFamilyName.setOnCheckedChangeListener { _, isChecked ->
+            passengerBioViewModel.setFamilyNameModeForPassenger(position, isChecked)
         }
-        passengerBioViewModel.isFamilyNameMode.observe(lifecycleOwner) { isFamilyNameMode ->
-            binding.tilFamilyName.isVisible = isFamilyNameMode
-            viewBinding.etFamilyName.isVisible = isFamilyNameMode
-            viewBinding.etFamilyName.isEnabled = isFamilyNameMode
-            viewBinding.tvFmName.isVisible = isFamilyNameMode
+
+        // Observe Family Name mode specific to this passenger
+        passengerBioViewModel.getFamilyNameModeForPassenger(position).observe(lifecycleOwner) { isFamilyNameMode ->
+            updateFamilyNameVisibility(isFamilyNameMode)
         }
+
+        // Set initial visibility based on switch state
+        updateFamilyNameVisibility(switchFamilyName.isChecked)
+    }
+
+    private fun updateFamilyNameVisibility(isVisible: Boolean) {
+        binding.tilFamilyName.isVisible = isVisible
+        binding.etFamilyName.isVisible = isVisible
+        binding.etFamilyName.isEnabled = isVisible
+        binding.tvFmName.isVisible = isVisible
     }
 
     @SuppressLint("DefaultLocale")

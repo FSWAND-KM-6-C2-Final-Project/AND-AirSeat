@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import com.nafi.airseat.R
 import com.nafi.airseat.data.model.Passenger
 import com.nafi.airseat.data.model.Seat
+import com.nafi.airseat.data.model.SeatPassenger
 import com.nafi.airseat.databinding.ActivitySeatBookBinding
 import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.flightdetail.FlightDetailActivity
@@ -123,17 +124,39 @@ class SeatBookActivity : AppCompatActivity() {
                     view: View,
                 ) {
                     if (selectedIdList.isNotEmpty()) {
-                        val selectedSeatId = selectedIdList.first()
-                        val seatName = seatNamesList[selectedSeatId - 1] // Adjust index if needed
-                        Log.d("SeatBookActivity", "$seatNamesList")
-                        Log.d("SeatBookActivity", "$selectedIdList")
-                        Log.d("SeatBookActivity", "$selectedSeatId")
-                        Log.d("SeatBookActivity", seatName)
-                        val seat = findSeatBySeatName(seatName)
-                        seat?.let {
-                            val formattedSeatName = it.seatName
-                            Log.d("SeatBookActivity", "Clicked Seat Name: $formattedSeatName")
-                            // Use formattedSeatName as needed
+                        for ((index, selectedSeatId) in selectedIdList.withIndex()) {
+                            var seatIndex = selectedSeatId - 1
+
+                            // Validate the seat name
+                            var seatName = seatNamesList[seatIndex]
+                            while (seatName.isEmpty() || seatName == "/" || seatName.contains("/")) {
+                                seatIndex++
+                                if (seatIndex >= seatNamesList.size) {
+                                    break
+                                }
+                                seatName = seatNamesList[seatIndex]
+                            }
+
+                            if (seatIndex < seatNamesList.size && seatName.isNotEmpty() && seatName != "/" && !seatName.contains("/")) {
+                                val seat = findSeatBySeatName(seatName)
+                                seat?.let {
+                                    val formattedSeatName = it.seatName
+                                    Log.d("SeatBookActivity", "Clicked Seat Name: $formattedSeatName")
+
+                                    val seatColumn = formattedSeatName.filter { char -> char.isDigit() }.toInt()
+                                    val seatRow = formattedSeatName.filter { char -> char.isLetter() }
+
+                                    if (index < passengerList.size) {
+                                        passengerList[index].seatDeparture =
+                                            SeatPassenger(
+                                                seatRow = seatRow,
+                                                seatColumn = seatColumn,
+                                            )
+                                    }
+                                }
+                            } else {
+                                Log.d("SeatBookActivity", "No valid seat name found after index $selectedSeatId")
+                            }
                         }
                     }
                 }
@@ -167,7 +190,6 @@ class SeatBookActivity : AppCompatActivity() {
 
     private fun showSeatBookView(seats: List<Seat>) {
         this.seats = seats
-        // Format seat names and statuses
         seatNames = formatSeatNames(seats)
         seatNamesList = getSeatNames(seats)
         val seatStatuses = extractSeatStatus(seats)
@@ -191,29 +213,25 @@ class SeatBookActivity : AppCompatActivity() {
 
         // Find the maximum row and column numbers
         val maxRow = seats.maxOf { it.seatRow.first() }.toInt() - 'A'.toInt() + 1
-        val maxCol = seats.maxOf { it.seatColumn } // Adjust this value if your seating configuration has more columns
+        val maxCol = seats.maxOf { it.seatColumn }
 
         for (col in 1..maxCol) {
-            seatNames.add("/") // Add the slash at the beginning of each row
+            seatNames.add("/")
 
-            // Track if an empty string is added
             var isEmptyAdded = false
 
             for (row in 0 until maxRow) {
-                val rowChar = ('A' + row).toChar()
+                val rowChar = 'A' + row
 
-                // Find seat by row and column
                 val seatName =
                     seats.find { it.seatRow == rowChar.toString() && it.seatColumn == col }?.seatName
                         ?: "$col$rowChar"
 
-                // Check if it's time to add an empty string
                 if (row % 3 == 0 && row != 0) {
-                    seatNames.add("") // Add empty string for the gap after every 3rd row
+                    seatNames.add("")
                     isEmptyAdded = true
 
-                    // After adding the empty string, add "1D"
-                    val rowChar1D = ('A' + 3).toChar() // Adding "1D" after the gap
+                    val rowChar1D = 'A' + 3
                     val seatName1D =
                         seats.find { it.seatRow == rowChar1D.toString() && it.seatColumn == col }?.seatName
                             ?: "$col$rowChar1D"

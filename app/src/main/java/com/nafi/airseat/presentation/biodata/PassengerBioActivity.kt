@@ -265,6 +265,7 @@ class PassengerBioActivity : AppCompatActivity() {
                                 identificationCountry = item.binding.actvCountry.text.toString().trim(),
                                 identificationExpired = item.binding.etValidId.text.toString().trim(),
                                 seatDeparture = null,
+                                seatReturn = null,
                             )
                         passengerList.add(passengerData)
                     }

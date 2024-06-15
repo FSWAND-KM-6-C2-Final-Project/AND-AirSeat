@@ -54,7 +54,11 @@
                 android:paddingVertical="8dp"
                 android:hint="@string/hint_full_name"
                 android:paddingHorizontal="12dp"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@id/et_family_name"
+                android:maxLines="1"
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -120,7 +124,11 @@
                 android:layout_marginTop="4dp"
                 android:hint="@string/hint_family_name"
                 android:paddingHorizontal="12dp"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@id/et_no_phone"
+                android:maxLines="1"
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -155,7 +163,11 @@
                 android:paddingVertical="8dp"
                 android:inputType="number"
                 android:paddingHorizontal="12dp"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@id/et_email"
+                android:maxLines="1"
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -190,11 +202,13 @@
                 android:hint="@string/hint_email"
                 android:paddingVertical="8dp"
                 android:paddingHorizontal="12dp"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
-
 
 </com.google.android.material.card.MaterialCardView>
