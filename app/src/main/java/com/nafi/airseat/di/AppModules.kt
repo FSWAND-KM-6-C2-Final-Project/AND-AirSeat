@@ -1,15 +1,12 @@
 package com.nafi.airseat.di
 
 import android.content.SharedPreferences
+import com.nafi.airseat.data.repository.BookingRepository
+import com.nafi.airseat.data.repository.BookingRepositoryImpl
+import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceViewModel
+import com.nafi.airseat.presentation.deleteaccount.DeleteAccountViewModel
 import com.nafi.airseat.core.BaseViewModel
 import com.nafi.airseat.data.datasource.AuthDataSource
-import com.nafi.airseat.data.datasource.AuthService
-import com.nafi.airseat.data.datasource.AuthServiceImpl
-import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
-import com.nafi.airseat.data.datasource.seat.SeatDataSource
-import com.nafi.airseat.data.network.services.AirSeatApiService
-import com.nafi.airseat.data.repository.SeatRepository
-import com.nafi.airseat.data.repository.SeatRepositoryImpl
 import com.nafi.airseat.data.datasource.AuthDataSourceImpl
 import com.nafi.airseat.data.datasource.HistoryDataSource
 import com.nafi.airseat.data.datasource.HistoryDataSourceImpl
@@ -21,8 +18,6 @@ import com.nafi.airseat.data.datasource.SearchHistoryDataSource
 import com.nafi.airseat.data.datasource.SearchHistoryDataSourceImpl
 import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
-import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
-import com.nafi.airseat.data.datasource.seat.SeatDataSource
 import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
@@ -33,6 +28,8 @@ import com.nafi.airseat.data.datasource.flightdetail.FlightDetailApiDataSource
 import com.nafi.airseat.data.datasource.flightdetail.FlightDetailDataSource
 import com.nafi.airseat.data.datasource.intro.IntroDataSource
 import com.nafi.airseat.data.datasource.intro.IntroDataSourceImpl
+import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
+import com.nafi.airseat.data.datasource.seat.SeatDataSource
 import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSource
 import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSourceImpl
 import com.nafi.airseat.data.repository.AirportRepository
@@ -49,14 +46,14 @@ import com.nafi.airseat.data.repository.IntroRepository
 import com.nafi.airseat.data.repository.IntroRepositoryImpl
 import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
-import com.nafi.airseat.data.repository.SeatRepository
-import com.nafi.airseat.data.repository.SeatRepositoryImpl
 import com.nafi.airseat.data.repository.ProfileRepository
 import com.nafi.airseat.data.repository.ProfileRepositoryImpl
 import com.nafi.airseat.data.repository.SearchHistoryRepository
 import com.nafi.airseat.data.repository.SearchHistoryRepositoryImpl
 import com.nafi.airseat.data.repository.SeatClassRepository
 import com.nafi.airseat.data.repository.SeatClassRepositoryImpl
+import com.nafi.airseat.data.repository.SeatRepository
+import com.nafi.airseat.data.repository.SeatRepositoryImpl
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.repository.UserPrefRepositoryImpl
 import com.nafi.airseat.data.repository.UserRepository
@@ -71,7 +68,6 @@ import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.appintro.AppIntroViewModel
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
-import com.nafi.airseat.presentation.deleteaccount.DeleteAccountViewModel
 import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
 import com.nafi.airseat.presentation.history.HistoryViewModel
 import com.nafi.airseat.presentation.home.HomeViewModel
@@ -83,11 +79,10 @@ import com.nafi.airseat.presentation.profile.ProfileViewModel
 import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
-import com.nafi.airseat.presentation.seatbook.SeatViewModel
-import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
+import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.presentation.splashscreen.SplashScreenViewModel
 import com.nafi.airseat.presentation.updateprofile.UpdateProfileViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
@@ -129,6 +124,7 @@ object AppModules {
             single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
             single<NotificationDataSource> { NotificationDataSourceImpl(get()) }
+            single<BookingDataSource> { BookingDataSourceImpl(get()) }
             single<AirportDataSource> { AirportApiDataSource(get()) }
             single<FavoriteDestinationDataSource> { FavoriteDestinationDataSourceImpl() }
             single<SeatClassDummyDataSource> { SeatClassDummyDataSourceImpl() }
@@ -159,6 +155,7 @@ object AppModules {
             single<HistoryRepository> { HistoryRepositoryImpl(get()) }
             single<IntroRepository> { IntroRepositoryImpl(get()) }
             single<SearchHistoryRepository> { SearchHistoryRepositoryImpl(get()) }
+            single<BookingRepository> { BookingRepositoryImpl(get()) }
         }
 
     private val viewModelModule =
@@ -167,6 +164,7 @@ object AppModules {
             viewModelOf(::PassengerBioViewModel)
             viewModelOf(::HomeViewModel)
             viewModelOf(::LoginViewModel)
+            viewModelOf(::FlightDetailPriceViewModel)
             viewModel {
                 SeatViewModel(get())
             }

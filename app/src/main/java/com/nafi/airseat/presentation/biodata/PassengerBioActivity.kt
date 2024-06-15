@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.nafi.airseat.data.model.Passenger
 import com.nafi.airseat.databinding.ActivityPassengerBioBinding
 import com.nafi.airseat.presentation.seatbook.SeatBookActivity
 import com.xwray.groupie.GroupAdapter
@@ -241,14 +242,31 @@ class PassengerBioActivity : AppCompatActivity() {
 
     private fun doSaveData() {
         var isValid = true
+        val passengerList = mutableListOf<Passenger>()
         for (i in 0 until groupAdapter.itemCount) {
-            val viewHolder = bindingActivityPassenger.rvFormOrderTicket.findViewHolderForAdapterPosition(i)
+            val viewHolder =
+                bindingActivityPassenger.rvFormOrderTicket.findViewHolderForAdapterPosition(i)
             if (viewHolder is GroupieViewHolder) {
                 val item = groupAdapter.getItem(i)
                 if (item is PassengerBioItem) {
                     if (!item.validateInput(item.binding, this)) {
                         isValid = false
                         break
+                    } else {
+                        val passengerData =
+                            Passenger(
+                                firstName = item.binding.etFullname.text.toString().trim(),
+                                familyName = item.binding.etFamilyName.text.toString().trim(),
+                                title = item.binding.actvTitle.text.toString().trim(),
+                                dob = item.binding.etDateOfBirth.text.toString().trim(),
+                                nationality = item.binding.etCitizenship.text.toString().trim(),
+                                identificationType = item.binding.actvIdType.text.toString().trim(),
+                                identificationNumber = item.binding.etIdCard.text.toString().trim(),
+                                identificationCountry = item.binding.actvCountry.text.toString().trim(),
+                                identificationExpired = item.binding.etValidId.text.toString().trim(),
+                                seatDeparture = null,
+                            )
+                        passengerList.add(passengerData)
                     }
                 }
             }
@@ -260,22 +278,14 @@ class PassengerBioActivity : AppCompatActivity() {
                     putExtra("adult_count", intent.getIntExtra("adult_count", 0))
                     putExtra("child_count", intent.getIntExtra("child_count", 0))
                     putExtra("baby_count", intent.getIntExtra("baby_count", 0))
+                    putExtra("full_name", intent.getStringExtra("full_name"))
+                    putExtra("number_phone", intent.getStringExtra("number_phone"))
+                    putExtra("email", intent.getStringExtra("email"))
+                    putExtra("family_name", intent.getStringExtra("family_name"))
+                    putParcelableArrayListExtra("passenger_list", ArrayList(passengerList))
                 }
             startActivity(intent)
         }
-
-            /*val payload =
-                PassengerRequest(
-                    firstName = fullName,
-                    familyName = familyName,
-                    title = title,
-                    dob = dateOfBirth,
-                    nationality = citizenship,
-                    identificationType = idType,
-                    identificationNumber = idCard,
-                    identificationCountry = country,
-                    identificationExpired = validId,
-                )*/
     }
 
     private fun setupRecyclerView() {
@@ -283,8 +293,6 @@ class PassengerBioActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@PassengerBioActivity)
             adapter = groupAdapter
         }
-
-        // addPassenger(1)
     }
 
     private fun addPassenger(

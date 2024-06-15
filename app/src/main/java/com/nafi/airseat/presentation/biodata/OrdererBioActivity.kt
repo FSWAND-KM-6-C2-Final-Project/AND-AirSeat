@@ -161,40 +161,19 @@ class OrdererBioActivity : AppCompatActivity() {
             val numberPhone = binding.layoutFormTicketBooker.etNoPhone.text.toString().trim()
             val email = binding.layoutFormTicketBooker.etEmail.text.toString().trim()
             val isFamilyNameMode = ordererBioViewModel.isFamilyNameMode.value ?: false
-
-            if (isFamilyNameMode) {
-                val familyName = binding.layoutFormTicketBooker.etFamilyName.text.toString().trim()
-                saveDataWithFamilyName(fullName, numberPhone, email, familyName)
-            } else {
-                saveDataWithoutFamilyName(fullName, numberPhone, email)
-            }
-
-            val adultCount = ordererBioViewModel.adultCount.value ?: 0
-            val childCount = ordererBioViewModel.childCount.value ?: 0
-            val babyCount = ordererBioViewModel.babyCount.value ?: 0
+            val familyName = if (isFamilyNameMode) binding.layoutFormTicketBooker.etFamilyName.text.toString().trim() else ""
 
             val intent =
                 Intent(this, PassengerBioActivity::class.java).apply {
-                    putExtra("adult_count", adultCount)
-                    putExtra("child_count", childCount)
-                    putExtra("baby_count", babyCount)
+                    putExtra("full_name", fullName)
+                    putExtra("number_phone", numberPhone)
+                    putExtra("email", email)
+                    putExtra("family_name", familyName)
+                    putExtra("adult_count", ordererBioViewModel.adultCount.value ?: 0)
+                    putExtra("child_count", ordererBioViewModel.childCount.value ?: 0)
+                    putExtra("baby_count", ordererBioViewModel.babyCount.value ?: 0)
                 }
             startActivity(intent)
         }
-    }
-
-    private fun saveDataWithoutFamilyName(
-        fullName: String,
-        numberPhone: String,
-        email: String,
-    ) {
-    }
-
-    private fun saveDataWithFamilyName(
-        fullName: String,
-        numberPhone: String,
-        email: String,
-        familyName: String,
-    ) {
     }
 }

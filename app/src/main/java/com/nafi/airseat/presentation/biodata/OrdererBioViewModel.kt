@@ -3,10 +3,29 @@ package com.nafi.airseat.presentation.biodata
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.nafi.airseat.data.model.OrdererBio
 
 class OrdererBioViewModel : ViewModel() {
     private val _isFamilyNameMode = MutableLiveData(false)
     val isFamilyNameMode: LiveData<Boolean> get() = _isFamilyNameMode
+
+    private val _ordererBioData = MutableLiveData<OrdererBio>()
+
+    fun saveOrdererBioData(
+        fullName: String,
+        phoneNumber: String,
+        email: String,
+        familyName: String,
+    ) {
+        val newOrdererBio =
+            OrdererBio(
+                fullName = fullName,
+                lastName = familyName,
+                phoneNumber = phoneNumber,
+                email = email,
+            )
+        _ordererBioData.value = newOrdererBio
+    }
 
     fun changeInputMode() {
         val currentValue = _isFamilyNameMode.value ?: false

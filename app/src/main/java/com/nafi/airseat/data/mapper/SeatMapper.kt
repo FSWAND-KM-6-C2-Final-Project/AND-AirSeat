@@ -4,6 +4,7 @@ import com.nafi.airseat.data.model.Seat
 
 fun com.nafi.airseat.data.source.network.model.seat.Seat?.toSeat() =
     Seat(
+        id = this?.id ?: 0,
         seatRow = this?.seatRow.orEmpty(),
         seatName = this?.seatName.orEmpty(),
         flightId = this?.flightId ?: 0,
