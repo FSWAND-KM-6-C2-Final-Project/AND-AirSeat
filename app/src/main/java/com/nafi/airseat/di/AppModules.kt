@@ -21,6 +21,8 @@ import com.nafi.airseat.data.datasource.SearchHistoryDataSource
 import com.nafi.airseat.data.datasource.SearchHistoryDataSourceImpl
 import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
+import com.nafi.airseat.data.datasource.booking.BookingDataSource
+import com.nafi.airseat.data.datasource.booking.BookingDataSourceImpl
 import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
 import com.nafi.airseat.data.datasource.seat.SeatDataSource
 import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
@@ -47,6 +49,8 @@ import com.nafi.airseat.data.repository.HistoryRepository
 import com.nafi.airseat.data.repository.HistoryRepositoryImpl
 import com.nafi.airseat.data.repository.IntroRepository
 import com.nafi.airseat.data.repository.IntroRepositoryImpl
+import com.nafi.airseat.data.repository.BookingRepository
+import com.nafi.airseat.data.repository.BookingRepositoryImpl
 import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
 import com.nafi.airseat.data.repository.SeatRepository
@@ -71,6 +75,7 @@ import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.appintro.AppIntroViewModel
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
+import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceViewModel
 import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
 import com.nafi.airseat.presentation.history.HistoryViewModel
 import com.nafi.airseat.presentation.home.HomeViewModel
@@ -128,6 +133,7 @@ object AppModules {
             single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
             single<NotificationDataSource> { NotificationDataSourceImpl(get()) }
+            single<BookingDataSource> { BookingDataSourceImpl(get()) }
             single<AirportDataSource> { AirportApiDataSource(get()) }
             single<FavoriteDestinationDataSource> { FavoriteDestinationDataSourceImpl() }
             single<SeatClassDummyDataSource> { SeatClassDummyDataSourceImpl() }
@@ -158,6 +164,7 @@ object AppModules {
             single<HistoryRepository> { HistoryRepositoryImpl(get()) }
             single<IntroRepository> { IntroRepositoryImpl(get()) }
             single<SearchHistoryRepository> { SearchHistoryRepositoryImpl(get()) }
+            single<BookingRepository> { BookingRepositoryImpl(get()) }
         }
 
     private val viewModelModule =
@@ -166,6 +173,7 @@ object AppModules {
             viewModelOf(::PassengerBioViewModel)
             viewModelOf(::HomeViewModel)
             viewModelOf(::LoginViewModel)
+            viewModelOf(::FlightDetailPriceViewModel)
             viewModel {
                 SeatViewModel(get())
             }

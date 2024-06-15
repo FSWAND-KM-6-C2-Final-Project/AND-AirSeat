@@ -3,6 +3,8 @@ package com.nafi.airseat.data.source.network.services
 import com.nafi.airseat.BuildConfig
 import com.nafi.airseat.data.model.BaseResponse
 import com.nafi.airseat.data.repository.UserPrefRepository
+import com.nafi.airseat.data.source.network.model.booking.BookingFlightRequest
+import com.nafi.airseat.data.source.network.model.booking.BookingFlightResponse
 import com.nafi.airseat.data.source.network.model.airport.AirportResponse
 import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
 import com.nafi.airseat.data.source.network.model.flightdetail.FlightDetailResponse
@@ -96,6 +98,11 @@ interface AirSeatApiService {
     suspend fun getFlightsDetail(
         @Path("id") id: String,
     ): FlightDetailResponse
+
+    @POST("api/v1/booking")
+    suspend fun bookingFlight(
+        @Body bookingFlightRequest: BookingFlightRequest,
+    ): BookingFlightResponse
 
     companion object {
         @JvmStatic

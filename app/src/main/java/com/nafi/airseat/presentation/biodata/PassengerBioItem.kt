@@ -41,22 +41,16 @@ class PassengerBioItem(
         setupIdTypeDropdown(viewBinding, viewBinding.root.context)
         setupCountryDropdown(viewBinding, viewBinding.root.context)
         viewBinding.etDateOfBirth.setOnClickListener {
-            showDatePickerDialog(
-                { date -> viewBinding.etDateOfBirth.setText(date) },
-                viewBinding.root.context,
-            )
+            showDatePickerDialog { date -> viewBinding.etDateOfBirth.setText(date) }
         }
         viewBinding.etValidId.setOnClickListener {
-            showDatePickerDialog(
-                { date -> viewBinding.etValidId.setText(date) },
-                viewBinding.root.context,
-            )
+            showDatePickerDialog { date -> viewBinding.etValidId.setText(date) }
         }
         viewBinding.swFamilyName.setOnCheckedChangeListener { _, _ ->
             passengerBioViewModel.changeInputMode()
         }
         passengerBioViewModel.isFamilyNameMode.observe(lifecycleOwner) { isFamilyNameMode ->
-            viewBinding.tilFamilyName.isVisible = isFamilyNameMode
+            binding.tilFamilyName.isVisible = isFamilyNameMode
             viewBinding.etFamilyName.isVisible = isFamilyNameMode
             viewBinding.etFamilyName.isEnabled = isFamilyNameMode
             viewBinding.tvFmName.isVisible = isFamilyNameMode
@@ -64,10 +58,8 @@ class PassengerBioItem(
     }
 
     @SuppressLint("DefaultLocale")
-    private fun showDatePickerDialog(
-        onDateSet: (String) -> Unit,
-        context: Context,
-    ) {
+    private fun showDatePickerDialog(onDateSet: (String) -> Unit) {
+        val context = binding.root.context
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
