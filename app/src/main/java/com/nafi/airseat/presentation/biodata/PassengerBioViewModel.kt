@@ -11,8 +11,23 @@ class PassengerBioViewModel : ViewModel() {
 
     val isFamilyNameMode: LiveData<Boolean> get() = _isFamilyNameMode
 
-    fun changeInputMode() {
-        val currentValue = _isFamilyNameMode.value ?: false
-        _isFamilyNameMode.value = !currentValue
+    private val familyNameModes = mutableMapOf<Int, MutableLiveData<Boolean>>()
+
+    fun setFamilyNameModeForPassenger(
+        passengerIndex: Int,
+        isChecked: Boolean,
+    ) {
+        if (!familyNameModes.containsKey(passengerIndex)) {
+            familyNameModes[passengerIndex] = MutableLiveData(isChecked)
+        } else {
+            familyNameModes[passengerIndex]?.value = isChecked
+        }
+    }
+
+    fun getFamilyNameModeForPassenger(passengerIndex: Int): LiveData<Boolean> {
+        if (!familyNameModes.containsKey(passengerIndex)) {
+            familyNameModes[passengerIndex] = MutableLiveData(false)
+        }
+        return familyNameModes[passengerIndex]!!
     }
 }

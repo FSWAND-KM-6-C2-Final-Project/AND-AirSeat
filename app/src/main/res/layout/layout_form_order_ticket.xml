@@ -60,7 +60,9 @@
                     android:hint="@string/text_hint_select_title"
                     android:inputType="none"
                     android:paddingHorizontal="16dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_fullname" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,7 +96,11 @@
                     android:hint="@string/hint_full_name"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/sw_family_name"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -163,7 +169,11 @@
                     android:hint="@string/hint_family_name"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_date_of_birth"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -201,7 +211,11 @@
                     android:inputType="date"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_citizenship"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -236,7 +250,11 @@
                     android:hint="@string/hint_enter_your_citizenship"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/actv_id_type"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -270,7 +288,9 @@
                     android:hint="@string/hint_select_id_type"
                     android:inputType="none"
                     android:paddingHorizontal="16dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_id_card" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -308,7 +328,10 @@
                     android:maxLines="1"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/actv_country"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -343,7 +366,9 @@
                     android:hint="@string/hint_select_country"
                     android:inputType="none"
                     android:paddingHorizontal="16dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_valid_id" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -383,7 +408,9 @@
                     android:focusable="false"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
