@@ -1,7 +1,10 @@
 package com.nafi.airseat.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Passenger(
-    val id: Int,
     val firstName: String,
     val familyName: String,
     val title: String,
@@ -11,4 +14,5 @@ data class Passenger(
     val identificationNumber: String,
     val identificationCountry: String,
     val identificationExpired: String,
-)
+    var seatDeparture: SeatPassenger? = null,
+) : Parcelable

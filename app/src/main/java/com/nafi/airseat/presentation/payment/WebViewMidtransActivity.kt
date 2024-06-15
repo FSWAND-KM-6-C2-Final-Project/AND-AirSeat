@@ -12,7 +12,6 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityWebViewMidtransBinding
-import com.nafi.airseat.presentation.flightdetail.FlightDetailActivity
 
 class WebViewMidtransActivity : AppCompatActivity() {
     private val binding: ActivityWebViewMidtransBinding by lazy {
@@ -24,8 +23,7 @@ class WebViewMidtransActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnBackWebview.setOnClickListener {
-            val intent = Intent(this, FlightDetailActivity::class.java)
-            startActivity(intent)
+            onBackPressed()
         }
 
         val url = intent.getStringExtra("URL")
@@ -47,10 +45,8 @@ class WebViewMidtransActivity : AppCompatActivity() {
                 ): Boolean {
                     val requestUrl = request.url.toString()
                     return when {
-                        requestUrl.contains("gojek://") ||
-                            requestUrl.contains("shopeeid://") ||
-                            requestUrl.contains("//wsa.wallet.airpay.co.id/") ||
-                            requestUrl.contains("/gopay/partner/") ||
+                        requestUrl.contains("shopeeid://") ||
+                            requestUrl.contains("gopay") ||
                             requestUrl.contains("/shopeepay/") -> {
                             val intent = Intent(Intent.ACTION_VIEW, request.url)
                             startActivity(intent)
