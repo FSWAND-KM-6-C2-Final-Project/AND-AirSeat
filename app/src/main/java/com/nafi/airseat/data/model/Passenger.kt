@@ -15,4 +15,5 @@ data class Passenger(
     val identificationCountry: String,
     val identificationExpired: String,
     var seatDeparture: SeatPassenger? = null,
+    var seatReturn: SeatPassenger? = null,
 ) : Parcelable
