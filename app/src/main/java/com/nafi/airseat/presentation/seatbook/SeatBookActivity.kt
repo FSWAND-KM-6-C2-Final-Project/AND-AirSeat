@@ -32,6 +32,7 @@ class SeatBookActivity : AppCompatActivity() {
     private lateinit var passengerList: MutableList<Passenger>
     private lateinit var seats: List<Seat>
     private lateinit var seatNames: List<String>
+    private lateinit var seatNamesList: List<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,8 +124,11 @@ class SeatBookActivity : AppCompatActivity() {
                 ) {
                     if (selectedIdList.isNotEmpty()) {
                         val selectedSeatId = selectedIdList.first()
-                        val seatName = seatNames[selectedSeatId - 1] // Adjust index if needed
-
+                        val seatName = seatNamesList[selectedSeatId - 1] // Adjust index if needed
+                        Log.d("SeatBookActivity", "$seatNamesList")
+                        Log.d("SeatBookActivity", "$selectedIdList")
+                        Log.d("SeatBookActivity", "$selectedSeatId")
+                        Log.d("SeatBookActivity", seatName)
                         val seat = findSeatBySeatName(seatName)
                         seat?.let {
                             val formattedSeatName = it.seatName
@@ -165,6 +169,7 @@ class SeatBookActivity : AppCompatActivity() {
         this.seats = seats
         // Format seat names and statuses
         seatNames = formatSeatNames(seats)
+        seatNamesList = getSeatNames(seats)
         val seatStatuses = extractSeatStatus(seats)
         val seatStatusesFormatted = formatSeatStatus(seatStatuses)
 
@@ -246,5 +251,10 @@ class SeatBookActivity : AppCompatActivity() {
             formattedBuilder.append(seatStatus[i])
         }
         return formattedBuilder.toString()
+    }
+
+    private fun getSeatNames(seats: List<Seat>): List<String> {
+        return seats.sortedWith(compareBy({ it.seatColumn }, { it.seatRow }))
+            .map { it.seatName }
     }
 }
