@@ -4,11 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Seat(
-    var id: Int,
+data class SeatPassenger(
     var seatRow: String,
     var seatColumn: Int,
-    var seatName: String,
-    var flightId: Int? = null,
-    var seatStatusAndroid: String,
 ) : Parcelable

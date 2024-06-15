@@ -1,19 +1,44 @@
 package com.nafi.airseat.presentation.flightdetail
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.nafi.airseat.R
 import com.nafi.airseat.data.model.FlightDetail
 import com.nafi.airseat.data.model.FlightDetailPrice
+import com.nafi.airseat.data.model.Passenger
+import com.nafi.airseat.data.source.network.model.booking.OrderedBy
 import com.nafi.airseat.databinding.ActivityFlightDetailBinding
 import com.nafi.airseat.presentation.payment.WebViewMidtransActivity
 import com.nafi.airseat.utils.toIndonesianFormat
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FlightDetailActivity : AppCompatActivity() {
+    companion object {
+        const val EXTRAS_PASSENGER_LIST = "EXTRAS_PASSENGER_LIST"
+
+        fun startActivity(
+            context: Context,
+            passenger: ArrayList<Passenger>,
+        ) {
+            val intent = Intent(context, FlightDetailActivity::class.java)
+            intent.putExtra(EXTRAS_PASSENGER_LIST, passenger)
+            context.startActivity(intent)
+        }
+    }
+
     private val binding: ActivityFlightDetailBinding by lazy {
         ActivityFlightDetailBinding.inflate(layoutInflater)
     }
+
+    private val flightDetailPriceViewModel: FlightDetailPriceViewModel by viewModel()
+
+    private val flightId = 1
+    private val paymentMethod = "snap"
+    private val discountId = 1
+    private lateinit var passengerList: MutableList<Passenger>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +52,19 @@ class FlightDetailActivity : AppCompatActivity() {
         val babyPrice = intent.getDoubleExtra("babyPrice", 0.0)
         val tax = intent.getDoubleExtra("tax", 0.0)
         val promo = intent.getDoubleExtra("promo", 0.0)
+        val fullName = intent.getStringExtra("full_name")
+        val phoneNumber = intent.getStringExtra("number_phone")
+        val email = intent.getStringExtra("email")
+        val familyName = intent.getStringExtra("family_name")
+        passengerList = intent.getParcelableArrayListExtra("passenger_list") ?: mutableListOf()
 
+        passengerList.forEach { passenger ->
+            Log.d("FlightDetailPriceActivity", "Passenger: $passenger")
+        }
+
+        Log.d("OrderedBy", "Ordered Bio: $fullName, $familyName, $phoneNumber, $email")
+
+        passengerList = intent.getParcelableArrayListExtra(EXTRAS_PASSENGER_LIST) ?: arrayListOf()
         val flightDetailPrice =
             getDummyFlightDetail(
                 adults,
@@ -42,7 +79,8 @@ class FlightDetailActivity : AppCompatActivity() {
         populateFlightDetails(flightDetailPrice)
 
         binding.cvSectionCheckout.btnPayment.setOnClickListener {
-            openUrlFromWebView()
+            Log.d("FlightDetailActivity", "Button Payment clicked")
+            openUrl()
         }
         binding.ibBtnBack.setOnClickListener {
             onBackPressed()
@@ -121,15 +159,74 @@ class FlightDetailActivity : AppCompatActivity() {
         binding.tvBabyPrice.text = flightDetailPrice.babyPrice.toIndonesianFormat()
         binding.tvTaxAmount.text = flightDetailPrice.tax.toIndonesianFormat()
         binding.tvPromoAmount.text = flightDetailPrice.promo.toIndonesianFormat()
-        binding.cvSectionCheckout.totalPrice.text = flightDetailPrice.totalPrice.toIndonesianFormat()
+        binding.cvSectionCheckout.totalPrice.text =
+            flightDetailPrice.totalPrice.toIndonesianFormat()
     }
 
-    private fun openUrlFromWebView() {
+    private fun openUrl() {
         val intent = Intent(this, WebViewMidtransActivity::class.java)
         intent.putExtra(
             "URL",
             "https://sample-demo-dot-midtrans-support-tools.et.r.appspot.com/snap-redirect/",
         )
         startActivity(intent)
+    }
+
+    private suspend fun proceedBooking() {
+        val fullName = intent.getStringExtra("full_name")
+        val phoneNumber = intent.getStringExtra("number_phone")
+        val email = intent.getStringExtra("email")
+        val familyName = intent.getStringExtra("family_name")
+
+        val orderedBy =
+            OrderedBy(
+                firstName = fullName ?: "",
+                lastName = familyName ?: "",
+                phoneNumber = phoneNumber ?: "",
+                email = email ?: "",
+            )
+
+        Log.d("OrderedBy", "Ordered Bio: $fullName, $familyName, $phoneNumber, $email")
+
+        val passengers =
+            passengerList.map {
+                Passenger(
+                    firstName = it.firstName,
+                    familyName = it.familyName,
+                    title = it.title,
+                    dob = it.dob,
+                    nationality = it.nationality,
+                    identificationType = it.identificationType,
+                    identificationNumber = it.identificationNumber,
+                    identificationCountry = it.identificationCountry,
+                    identificationExpired = it.identificationExpired,
+                    seatDeparture = it.seatDeparture,
+                )
+            }
+
+        try {
+            val response =
+                flightDetailPriceViewModel.doBooking(
+                    flightId = flightId,
+                    paymentMethod = paymentMethod,
+                    discountId = discountId,
+                    orderedBy = orderedBy,
+                    passenger = passengers,
+                )
+
+            if (response.status == "success") {
+                // Booking berhasil
+                Log.d("FlightDetailActivity", "Booking successful: ${response.message}")
+                // Tampilkan pesan atau lakukan tindakan setelah booking berhasil
+            } else {
+                // Booking gagal
+                Log.d("FlightDetailActivity", "Booking failed: ${response.message}")
+                // Tampilkan pesan atau lakukan tindakan setelah booking gagal
+            }
+        } catch (e: Exception) {
+            // Error saat melakukan booking
+            Log.e("FlightDetailActivity", "Error during booking: ${e.message}")
+            // Tampilkan pesan atau lakukan tindakan pemulihan jika diperlukan
+        }
     }
 }

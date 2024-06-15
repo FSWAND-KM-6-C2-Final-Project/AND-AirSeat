@@ -8,8 +8,12 @@ import com.nafi.airseat.data.datasource.NotificationDataSource
 import com.nafi.airseat.data.datasource.NotificationDataSourceImpl
 import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
+import com.nafi.airseat.data.datasource.booking.BookingDataSource
+import com.nafi.airseat.data.datasource.booking.BookingDataSourceImpl
 import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
 import com.nafi.airseat.data.datasource.seat.SeatDataSource
+import com.nafi.airseat.data.repository.BookingRepository
+import com.nafi.airseat.data.repository.BookingRepositoryImpl
 import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
 import com.nafi.airseat.data.repository.SeatRepository
@@ -25,6 +29,7 @@ import com.nafi.airseat.data.source.network.services.AirSeatApiServiceWithAuthor
 import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
+import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceViewModel
 import com.nafi.airseat.presentation.home.HomeViewModel
 import com.nafi.airseat.presentation.login.LoginViewModel
 import com.nafi.airseat.presentation.notification.NotificationViewModel
@@ -70,6 +75,7 @@ object AppModules {
             single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
             single<NotificationDataSource> { NotificationDataSourceImpl(get()) }
+            single<BookingDataSource> { BookingDataSourceImpl(get()) }
         }
 
     private val repository =
@@ -78,6 +84,7 @@ object AppModules {
             single<SeatRepository> { SeatRepositoryImpl(get()) }
             single<UserPrefRepository> { UserPrefRepositoryImpl(get()) }
             single<NotificationRepository> { NotificationRepositoryImpl(get()) }
+            single<BookingRepository> { BookingRepositoryImpl(get()) }
         }
 
     private val viewModelModule =
@@ -86,6 +93,7 @@ object AppModules {
             viewModelOf(::PassengerBioViewModel)
             viewModelOf(::HomeViewModel)
             viewModelOf(::LoginViewModel)
+            viewModelOf(::FlightDetailPriceViewModel)
             viewModel {
                 SeatViewModel(get())
             }
