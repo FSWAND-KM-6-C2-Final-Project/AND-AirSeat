@@ -1,6 +1,7 @@
 package com.nafi.airseat.presentation.notification
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,13 +18,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NotificationFragment : Fragment() {
     private val notificationViewModel: NotificationViewModel by viewModel()
-
     private lateinit var binding: FragmentNotificationBinding
     private val adapter: NotificationAdapter by lazy {
-        NotificationAdapter { data ->
+        NotificationAdapter(typeNotification = typeNotification) { data ->
             navigateToDetailNotification(data)
         }
     }
+    private var typeNotification: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +58,10 @@ class NotificationFragment : Fragment() {
                     binding.csvNotification.setState(ContentState.SUCCESS)
                     result.payload?.let {
                         adapter.insertData(it)
+                        it.listIterator().forEach { type ->
+                            typeNotification = type.notificationType
+                            Log.d("Type", type.notificationType)
+                        }
                     }
                 },
                 doOnError = {
