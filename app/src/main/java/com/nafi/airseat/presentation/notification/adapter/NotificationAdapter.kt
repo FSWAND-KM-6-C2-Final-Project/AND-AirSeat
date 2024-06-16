@@ -1,5 +1,6 @@
 package com.nafi.airseat.presentation.notification.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -65,7 +66,7 @@ class NotificationAdapter(private val typeNotification: String?, private val ite
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: NotificationModel) {
             if (typeNotification == "Notifikasi") {
-                binding.tvNotificationFooter.isVisible = true
+                binding.tvNotificationFooter.isVisible = false
             }
             binding.tvNotificationType.text = data.notificationType
             binding.tvNotificationTitle.text = data.notificationTitle

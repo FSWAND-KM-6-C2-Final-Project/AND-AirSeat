@@ -19,12 +19,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class NotificationFragment : Fragment() {
     private val notificationViewModel: NotificationViewModel by viewModel()
     private lateinit var binding: FragmentNotificationBinding
-    private val adapter: NotificationAdapter by lazy {
-        NotificationAdapter(typeNotification = typeNotification) { data ->
-            navigateToDetailNotification(data)
-        }
-    }
     private var typeNotification: String? = null
+    private lateinit var adapter: NotificationAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,12 +36,15 @@ class NotificationFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setAdapter()
         setData()
     }
 
     private fun setAdapter() {
-        binding.rvNotification.adapter = this@NotificationFragment.adapter
+        adapter =
+            NotificationAdapter(typeNotification.orEmpty()) { data ->
+                navigateToDetailNotification(data)
+            }
+        binding.rvNotification.adapter = adapter
     }
 
     private fun setData() {
@@ -57,11 +56,12 @@ class NotificationFragment : Fragment() {
                 doOnSuccess = {
                     binding.csvNotification.setState(ContentState.SUCCESS)
                     result.payload?.let {
-                        adapter.insertData(it)
-                        it.listIterator().forEach { type ->
-                            typeNotification = type.notificationType
-                            Log.d("Type", type.notificationType)
+                        it.firstOrNull()?.let { notification ->
+                            typeNotification = notification.notificationType
+                            Log.d("Type", typeNotification.toString())
+                            setAdapter()
                         }
+                        adapter.insertData(it)
                     }
                 },
                 doOnError = {
