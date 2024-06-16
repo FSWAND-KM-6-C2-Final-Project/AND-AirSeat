@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.nafi.airseat.core.BaseActivity
 import com.nafi.airseat.databinding.FragmentProfileBinding
@@ -34,7 +35,6 @@ class ProfileFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         setOnclickListener()
-        observeDataProfile()
     }
 
     override fun onResume() {
@@ -46,20 +46,25 @@ class ProfileFragment : Fragment() {
         viewModel.getDataProfile().observe(viewLifecycleOwner) { result ->
             result.proceedWhen(
                 doOnLoading = {
+                    binding.layoutProfile.isVisible = false
                     binding.csvProfile.setState(ContentState.LOADING)
                 },
                 doOnSuccess = {
                     result.payload?.let {
+                        binding.layoutProfile.isVisible = true
                         binding.tvUserFullname.text = it.fullName
                         binding.tvUserEmail.text = it.email
                         binding.tvUserPhoneNumber.text = it.phoneNumber
                         btnToUpdateProfile(it.fullName)
+                        binding.csvProfile.setState(ContentState.SUCCESS)
                     }
                 },
                 doOnError = {
                     navigateToLogin()
                 },
                 doOnEmpty = {
+                    binding.layoutProfile.isVisible = false
+                    binding.csvProfile.setState(ContentState.EMPTY)
                 },
             )
         }

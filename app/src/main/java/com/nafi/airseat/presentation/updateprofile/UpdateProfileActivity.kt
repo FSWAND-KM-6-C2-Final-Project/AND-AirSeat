@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import com.google.android.material.snackbar.Snackbar
 import com.nafi.airseat.R
 import com.nafi.airseat.data.source.network.model.profile.UpdateProfileRequest
@@ -24,7 +26,14 @@ class UpdateProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setEditText()
+        setButtonEnable()
         setClickListener()
+    }
+
+    private fun setButtonEnable() {
+        binding.etProfileFullName.doAfterTextChanged {
+            binding.btnUpdate.isEnabled = true
+        }
     }
 
     private fun setEditText() {
@@ -36,17 +45,23 @@ class UpdateProfileActivity : AppCompatActivity() {
             val fullName: String = binding.etProfileFullName.text.toString()
             updateProfileData(fullName)
         }
+
+        binding.ivArrowBack.setOnClickListener {
+            finish()
+        }
     }
 
     private fun updateProfileData(fullName: String) {
         viewModel.getUpdateProfile(setRequestData(fullName)).observe(this) { result ->
             result.proceedWhen(
                 doOnLoading = {
-                    binding.btnUpdate.isActivated = false
+                    binding.btnUpdate.isEnabled = false
+                    binding.pbUpdateProfile.isVisible = true
                     binding.btnUpdate.text = ""
                 },
                 doOnSuccess = {
-                    binding.btnUpdate.isActivated = true
+                    binding.btnUpdate.isEnabled = true
+                    binding.pbUpdateProfile.isVisible = true
                     binding.btnUpdate.text = getString(R.string.text_button_update_profile)
                     result.payload?.let {
                         showSnackbarSuccess(it.message)
@@ -54,14 +69,16 @@ class UpdateProfileActivity : AppCompatActivity() {
                     finish()
                 },
                 doOnEmpty = {
-                    binding.btnUpdate.isActivated = true
+                    binding.btnUpdate.isEnabled = true
+                    binding.pbUpdateProfile.isVisible = true
                     binding.btnUpdate.text = getString(R.string.text_button_update_profile)
                 },
                 doOnError = {
                     result.payload?.let {
                         showSnackbarError(it.message)
                     }
-                    binding.btnUpdate.isActivated = true
+                    binding.btnUpdate.isEnabled = true
+                    binding.pbUpdateProfile.isVisible = true
                     binding.btnUpdate.text = getString(R.string.text_button_update_profile)
                 },
             )
