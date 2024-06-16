@@ -6,13 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
 import com.nafi.airseat.data.model.Airport
 import com.nafi.airseat.data.model.FavoriteDestination
-import com.nafi.airseat.data.model.SeatClass
 import com.nafi.airseat.data.repository.FavoriteDestinationRepositoryImpl
 import com.nafi.airseat.databinding.FragmentHomeBinding
 import com.nafi.airseat.presentation.blank.BlankActivity
@@ -27,11 +27,13 @@ import com.nafi.airseat.presentation.seatclass.SeatClassFragment
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListener, DepartCalendarFragment.OnDateSelectedListener, PassengersFragment.OnPassengerCountUpdatedListener, SeatClassFragment.OnSeatClassSelectedListener {
+class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListener, DepartCalendarFragment.OnDateDepartSelectedListener, PassengersFragment.OnPassengerCountUpdatedListener, SeatClassFragment.OnSeatClassSelectedListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private var selectedStartDate: LocalDate? = null
     private var selectedEndDate: LocalDate? = null
+    private var selectedDeparts: LocalDate? = null
+    private var selectedSeatClass: String? = null
     private lateinit var sharedViewModel: SharedViewModel
     private var selectedDepartAirport: Airport? = null
     private var selectedDestinationAirport: Airport? = null
@@ -104,8 +106,8 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 bottomSheet.setOnDateSelectedListener(this)
                 bottomSheet.show(parentFragmentManager, bottomSheet.tag)
             } else {
-                val bottomSheet = CalendarBottomSheetFragment(isStartSelection = true)
-                bottomSheet.setOnDateSelectedListener(this)
+                val bottomSheet = DepartCalendarFragment(isStartSelection = true)
+                bottomSheet.setOnDateDepartSelectedListener(this)
                 bottomSheet.show(parentFragmentManager, bottomSheet.tag)
             }
         }
@@ -126,39 +128,52 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
             val seatClassFragment = SeatClassFragment()
             seatClassFragment.setOnSeatClassSelectedListener(this)
             showBottomSheet(seatClassFragment)
+            // showBottomSheet(SeatClassFragment())
         }
 
         binding.layoutHome.btnSearchFlight.setOnClickListener {
-            val intent = Intent(requireContext(), ResultSearchActivity::class.java)
-            selectedStartDate?.let { startDate ->
-                selectedEndDate?.let { endDate ->
-                    intent.putExtra("startDate", startDate.toString())
-                    intent.putExtra("endDate", endDate.toString())
-                    intent.putExtra("searchDate", startDate.toFormattedString())
+            if (selectedStartDate != null) {
+                val intent = Intent(requireContext(), ResultSearchActivity::class.java)
+                selectedStartDate?.let { startDate ->
+                    selectedEndDate?.let { endDate ->
+                        intent.putExtra("startDate", startDate.toString())
+                        intent.putExtra("endDate", endDate.toString())
+                        intent.putExtra("searchDate", startDate.toFormattedString())
+                    }
                 }
-            }
-            selectedDepartAirport?.let { departAirport ->
-                intent.putExtra("departAirportId", departAirport.id)
-                intent.putExtra("airportCityCodeDeparture", departAirport.airportCityCode)
-            }
-            selectedDestinationAirport?.let { destinationAirport ->
-                intent.putExtra("destinationAirportId", destinationAirport.id)
-                intent.putExtra("airportCityCodeDestination", destinationAirport.airportCityCode)
-            }
+                selectedStartDate?.let { selectedDepart ->
+                    intent.putExtra("selectedDepart", selectedDepart.toString())
+                    intent.putExtra("searchDateDepart", selectedDepart.toFormattedString())
+                }
+                selectedDepartAirport?.let { departAirport ->
+                    intent.putExtra("departAirportId", departAirport.id)
+                    intent.putExtra("airportCityCodeDeparture", departAirport.airportCityCode)
+                }
+                selectedDestinationAirport?.let { destinationAirport ->
+                    intent.putExtra("destinationAirportId", destinationAirport.id)
+                    intent.putExtra("airportCityCodeDestination", destinationAirport.airportCityCode)
+                }
 
-            intent.putExtra("passengerCount", binding.layoutHome.tvPassengersCount.text.toString())
+                intent.putExtra("passengerCount", binding.layoutHome.tvPassengersCount.text.toString())
 
-            Log.d(
-                "HomeFragment",
-                "Depart Airport ID: ${selectedDepartAirport?.id}, Destination Airport ID: ${selectedDestinationAirport?.id}",
-            )
-            startActivity(intent)
+                Log.d(
+                    "HomeFragment",
+                    "Depart Airport ID: ${selectedDepartAirport?.id}, Destination Airport ID: ${selectedDestinationAirport?.id}",
+                )
+                startActivity(intent)
+            } else {
+                // Handle case where selectedStartDate is null
+                Toast.makeText(requireContext(), "Please select a start date", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.layoutHome.swDepartReturn.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.layoutHome.tvReturnTitle.visibility = View.VISIBLE
                 binding.layoutHome.tvArrivalChoose.visibility = View.VISIBLE
+            } else {
+                binding.layoutHome.tvReturnTitle.visibility = View.INVISIBLE
+                binding.layoutHome.tvArrivalChoose.visibility = View.INVISIBLE
             }
         }
     }
@@ -198,11 +213,11 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         }
     }
 
-    override fun onDateSelectedDepart(startDate: LocalDate?) {
-        selectedStartDate = startDate
+    override fun onDateDepartSelected(selectedDepart: LocalDate?) {
+        selectedStartDate = selectedDepart
 
-        if (startDate != null) {
-            binding.layoutHome.tvDepartChoose.text = startDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
+        selectedDepart?.let {
+            binding.layoutHome.tvDepartChoose.text = it.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
         }
     }
 
@@ -210,8 +225,8 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         binding.layoutHome.tvPassengersCount.text = count.toString()
     }
 
-    override fun onSeatClassSelected(seatClass: SeatClass) {
-        binding.layoutHome.tvSeatClassChoose.text = seatClass.seatName
+    override fun onSeatClassSelected(seatClass: String) {
+        binding.layoutHome.tvSeatClassChoose.text = seatClass
     }
 
     fun LocalDate.toFormattedString(): String {

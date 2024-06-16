@@ -22,12 +22,14 @@ import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 class ResultSearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultSearchBinding
     private lateinit var startDate: LocalDate
-    private lateinit var endDate: LocalDate
+    private var endDate: LocalDate? = null
+    private lateinit var selectedDepart: LocalDate
     private lateinit var selectedDate: LocalDate
     private val viewModel: ResultSearchViewModel by viewModel {
         parametersOf(intent.extras)
@@ -47,25 +49,33 @@ class ResultSearchActivity : AppCompatActivity() {
         // Get selected dates from intent
         val startDateString = intent.getStringExtra("startDate")
         val endDateString = intent.getStringExtra("endDate")
-        var searchDateString: String = null.toString()
-        searchDateString = intent.getStringExtra("searchDate").toString()
+        val selectedDepartString = intent.getStringExtra("selectedDepart")
+        val searchDateString = intent.getStringExtra("searchDate")
+        val searchDateDepartString = intent.getStringExtra("searchDateDepart")
         val departureAirportId = intent.getIntExtra("departAirportId", -1)
         val destinationAirportId = intent.getIntExtra("destinationAirportId", -1)
         val passengerCount = intent.getStringExtra("passengerCount")
         val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
         val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
 
+        // Check if necessary data is present
         if (startDateString != null && endDateString != null) {
             startDate = LocalDate.parse(startDateString)
             endDate = LocalDate.parse(endDateString)
-            selectedDate = startDate
-        } else {
-            finish() // Close the activity if no dates are provided
+            selectedDate = startDate // Assuming selectedDate represents either startDate or selectedDepart
+        } /*else if (selectedDepartString != null) {
+            selectedDepart = LocalDate.parse(selectedDepartString)
+            selectedDate = selectedDepart
+        } */else {
+            // Close the activity if no dates are provided
+            finish()
             return
         }
+
         binding.layoutHeader.btnBackHome.setOnClickListener {
             finish()
         }
+
         binding.layoutHeader.textName.text = "$airportCityCodeDeparture > $airportCityCodeDestination"
         binding.layoutHeader.textGreetings.text = "$passengerCount Passengers"
 
@@ -120,14 +130,24 @@ class ResultSearchActivity : AppCompatActivity() {
         }
 
         // Setup calendar only with selected dates range
-        binding.exSevenCalendar.setup(
-            startDate,
-            endDate,
-            firstDayOfWeekFromLocale(),
-        )
+        if (endDate == null) {
+            val currentMonth = YearMonth.now()
+            binding.exSevenCalendar.setup(
+                startDate,
+                currentMonth.plusMonths(5).atEndOfMonth(),
+                firstDayOfWeekFromLocale(),
+            )
+        } else {
+            binding.exSevenCalendar.setup(
+                startDate,
+                endDate!!,
+                firstDayOfWeekFromLocale(),
+            )
+        }
+
         binding.exSevenCalendar.scrollToDate(startDate) // Scroll to start date
         setupAdapter()
-        proceedResultTicket(searchDateString, departureAirportId.toString(), destinationAirportId.toString())
+        proceedResultTicket(searchDateString ?: "", departureAirportId.toString(), destinationAirportId.toString())
     }
 
     private fun proceedResultTicket(
@@ -142,20 +162,20 @@ class ResultSearchActivity : AppCompatActivity() {
                         resultAdapter.submitData(it)
                         binding.rvSearchTicket.isVisible = it.isNotEmpty()
                         if (it.isEmpty()) {
-                            Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "No flights found", Toast.LENGTH_SHORT).show()
                         }
                     }
                 },
                 doOnLoading = {
-                    Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show()
                 },
                 doOnError = {
-                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Error loading flights", Toast.LENGTH_SHORT).show()
                 },
                 doOnEmpty = {
                     clearAdapterData()
                     binding.rvSearchTicket.isVisible = false
-                    Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "No flights found", Toast.LENGTH_SHORT).show()
                 },
             )
         }
@@ -178,7 +198,7 @@ class ResultSearchActivity : AppCompatActivity() {
         resultAdapter.submitData(emptyList())
     }
 
-    fun LocalDate.toFormattedString(): String {
+    private fun LocalDate.toFormattedString(): String {
         val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         return this.format(formatter)
     }
