@@ -21,7 +21,7 @@
         android:layout_height="320dp"
         android:orientation="vertical"
         android:padding="16dp"
-        android:background="@android:color/white"
+        android:background="@color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dhv_pass"
         app:layout_constraintEnd_toEndOf="parent">
@@ -45,7 +45,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/minus_adult"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:textSize="24sp"
@@ -59,12 +59,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="1"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/plus_adult"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+"
                 android:textSize="24sp"
@@ -100,7 +100,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/minus_child"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:textSize="24sp"
@@ -114,12 +114,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="1"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/plus_child"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+"
                 android:textSize="24sp"
@@ -155,7 +155,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/minus_baby"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:textSize="24sp"
@@ -169,12 +169,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="1"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/plus_baby"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="+"
                 android:textSize="24sp"

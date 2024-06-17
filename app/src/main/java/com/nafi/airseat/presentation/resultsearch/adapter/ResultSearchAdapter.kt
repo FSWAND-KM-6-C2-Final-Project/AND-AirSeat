@@ -2,6 +2,7 @@ package com.nafi.airseat.presentation.resultsearch.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
-class ResultSearchAdapter(private val listener: (Flight) -> Unit) :
+class ResultSearchAdapter(private val typeSeatClass: String?, private val listener: (Flight) -> Unit) :
     RecyclerView.Adapter<ResultSearchAdapter.ItemFlightViewHolder>() {
     private val dataDiffer =
         AsyncListDiffer(
@@ -43,7 +44,7 @@ class ResultSearchAdapter(private val listener: (Flight) -> Unit) :
         viewType: Int,
     ): ItemFlightViewHolder {
         val binding = ItemResultSearchTicketBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemFlightViewHolder(binding, listener)
+        return ItemFlightViewHolder(binding, listener, typeSeatClass)
     }
 
     override fun onBindViewHolder(
@@ -58,6 +59,7 @@ class ResultSearchAdapter(private val listener: (Flight) -> Unit) :
     class ItemFlightViewHolder(
         private val binding: ItemResultSearchTicketBinding,
         val itemClick: (Flight) -> Unit,
+        val typeSeatClass: String?,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindView(item: Flight) {
             with(item) {
@@ -71,8 +73,20 @@ class ResultSearchAdapter(private val listener: (Flight) -> Unit) :
                 binding.imgAirlineLogo.load(item.airline.airlinePicture) {
                     crossfade(true)
                 }
-                binding.tvAirlineInfo.text = item.airline.airlineName
-                binding.tvTicketPrice.text = item.pricePremiumEconomy.toString()
+                binding.tvAirlineInfo.text = "${item.airline.airlineName} - $typeSeatClass"
+                // binding.tvTicketPrice.text = item.pricePremiumEconomy.toString()
+                if (typeSeatClass == "Economy") {
+                    binding.tvTicketPrice.text = item.pricePremiumEconomy.toString()
+                } else if (typeSeatClass == "Premium Economy") {
+                    binding.tvTicketPrice.text = item.pricePremiumEconomy.toString()
+                } else if (typeSeatClass == "Business") {
+                    binding.tvTicketPrice.text = item.priceBusiness.toString()
+                } else if (typeSeatClass == "First Class") {
+                    binding.tvTicketPrice.text = item.priceFirstClass.toString()
+                } else {
+                    binding.tvTicketPrice.text = null
+                }
+                Toast.makeText(itemView.context, "Selected seat class: $typeSeatClass", Toast.LENGTH_SHORT).show()
                 itemView.setOnClickListener { itemClick(this) }
             }
         }
