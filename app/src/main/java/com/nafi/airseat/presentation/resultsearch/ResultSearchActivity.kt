@@ -31,11 +31,12 @@ class ResultSearchActivity : AppCompatActivity() {
     private var endDate: LocalDate? = null
     private lateinit var selectedDepart: LocalDate
     private lateinit var selectedDate: LocalDate
+    private var typeSeatClass: String? = null
     private val viewModel: ResultSearchViewModel by viewModel {
         parametersOf(intent.extras)
     }
     private val resultAdapter: ResultSearchAdapter by lazy {
-        ResultSearchAdapter {
+        ResultSearchAdapter(typeSeatClass = typeSeatClass) {
             navigateToDetailTicket(it.id.toString())
         }
     }
@@ -54,19 +55,22 @@ class ResultSearchActivity : AppCompatActivity() {
         val searchDateDepartString = intent.getStringExtra("searchDateDepart")
         val departureAirportId = intent.getIntExtra("departAirportId", -1)
         val destinationAirportId = intent.getIntExtra("destinationAirportId", -1)
+        val sortByClass = intent.getStringExtra("sortByClass")
+        val orderBy = intent.getStringExtra("orderDesc")
         val passengerCount = intent.getStringExtra("passengerCount")
+        val seatClassChoose = intent.getStringExtra("seatClassChoose")
         val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
         val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
-
+        typeSeatClass = seatClassChoose
         // Check if necessary data is present
         if (startDateString != null && endDateString != null) {
             startDate = LocalDate.parse(startDateString)
             endDate = LocalDate.parse(endDateString)
             selectedDate = startDate // Assuming selectedDate represents either startDate or selectedDepart
-        } /*else if (selectedDepartString != null) {
-            selectedDepart = LocalDate.parse(selectedDepartString)
-            selectedDate = selectedDepart
-        } */else {
+        } else if (startDateString != null) {
+            startDate = LocalDate.parse(selectedDepartString)
+            selectedDate = startDate
+        } else {
             // Close the activity if no dates are provided
             finish()
             return
@@ -78,6 +82,8 @@ class ResultSearchActivity : AppCompatActivity() {
 
         binding.layoutHeader.textName.text = "$airportCityCodeDeparture > $airportCityCodeDestination"
         binding.layoutHeader.textGreetings.text = "$passengerCount Passengers"
+        binding.layoutHeader.tvClass.text = seatClassChoose
+        Toast.makeText(this, "Selected seat class: $seatClassChoose", Toast.LENGTH_SHORT).show()
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             val bind = HorizontalDayBinding.bind(view)
@@ -92,6 +98,8 @@ class ResultSearchActivity : AppCompatActivity() {
                         oldDate.let { binding.exSevenCalendar.notifyDateChanged(it) }
                         proceedResultTicket(
                             selectedDate.toFormattedString(),
+                            sortByClass.toString(),
+                            orderBy.toString(),
                             departureAirportId.toString(),
                             destinationAirportId.toString(),
                         )
@@ -147,15 +155,23 @@ class ResultSearchActivity : AppCompatActivity() {
 
         binding.exSevenCalendar.scrollToDate(startDate) // Scroll to start date
         setupAdapter()
-        proceedResultTicket(searchDateString ?: "", departureAirportId.toString(), destinationAirportId.toString())
+        proceedResultTicket(
+            searchDateString ?: "",
+            sortByClass.toString(),
+            orderBy.toString(),
+            departureAirportId.toString(),
+            destinationAirportId.toString(),
+        )
     }
 
     private fun proceedResultTicket(
         searchDateInput: String,
+        sortByClass: String,
+        orderBy: String,
         departureAirportId: String,
         destinationAirportId: String,
     ) {
-        viewModel.getFlightData(searchDateInput, departureAirportId, destinationAirportId).observe(this) { result ->
+        viewModel.getFlightData(searchDateInput, sortByClass, orderBy, departureAirportId, destinationAirportId).observe(this) { result ->
             result.proceedWhen(
                 doOnSuccess = {
                     result.payload?.let {

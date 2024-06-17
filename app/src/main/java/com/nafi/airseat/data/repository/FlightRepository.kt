@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 interface FlightRepository {
     fun getFlights(
         searchDateInput: String,
+        sortByClass: String,
+        orderBy: String,
         departAirportId: String,
         destinationAirportId: String,
     ): Flow<ResultWrapper<List<Flight>>>
@@ -18,11 +20,13 @@ interface FlightRepository {
 class FlightRepositoryImpl(private val dataSource: FlightDataSource) : FlightRepository {
     override fun getFlights(
         searchDateInput: String,
+        sortByClass: String,
+        orderBy: String,
         departAirportId: String,
         destinationAirportId: String,
     ): Flow<ResultWrapper<List<Flight>>> {
         return proceedFlow {
-            dataSource.getFlightList(searchDateInput, departAirportId, destinationAirportId).data.flight.toFlights()
+            dataSource.getFlightList(searchDateInput, sortByClass, orderBy, departAirportId, destinationAirportId).data.flight.toFlights()
         }
     }
 }

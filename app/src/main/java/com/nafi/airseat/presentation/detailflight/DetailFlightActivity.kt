@@ -25,14 +25,13 @@ class DetailFlightActivity : AppCompatActivity() {
         parametersOf(intent.extras)
     }
 
-    // Variabel untuk menyimpan detail penerbangan
     private var flightDetail: FlightDetail? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val id = intent.getStringExtra("id")
-        preceedDetailTicket(id.toString())
+        proceedDetailTicket(id.toString())
         binding.layoutHeader.btnBackHome.setOnClickListener {
             finish()
         }
@@ -56,12 +55,12 @@ class DetailFlightActivity : AppCompatActivity() {
         }
     }
 
-    private fun preceedDetailTicket(id: String) {
+    private fun proceedDetailTicket(id: String) {
         viewModel.getDetailFlight(id).observe(this) {
             it.proceedWhen(
                 doOnSuccess = {
                     it.payload?.let { detail ->
-                        flightDetail = detail // Simpan detail penerbangan
+                        flightDetail = detail
                         bindView(detail)
                         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
                     }
@@ -109,10 +108,8 @@ class DetailFlightActivity : AppCompatActivity() {
             val departureDateTime = sdf.parse(departureTime)
             val arrivalDateTime = sdf.parse(arrivalTime)
 
-            // Menghitung selisih waktu dalam milidetik
             val diffInMillis = (arrivalDateTime?.time ?: 0) - (departureDateTime?.time ?: 0)
 
-            // Konversi milidetik ke jam dan menit
             val hours = diffInMillis / (1000 * 60 * 60)
             val minutes = (diffInMillis % (1000 * 60 * 60)) / (1000 * 60)
 

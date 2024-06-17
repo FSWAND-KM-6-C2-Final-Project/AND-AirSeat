@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -132,14 +131,15 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         }
 
         binding.layoutHome.btnSearchFlight.setOnClickListener {
-            if (selectedStartDate != null) {
+            if (selectedStartDate != null && selectedEndDate != null) {
                 val intent = Intent(requireContext(), ResultSearchActivity::class.java)
+
                 selectedStartDate?.let { startDate ->
-                    selectedEndDate?.let { endDate ->
-                        intent.putExtra("startDate", startDate.toString())
-                        intent.putExtra("endDate", endDate.toString())
-                        intent.putExtra("searchDate", startDate.toFormattedString())
-                    }
+                    intent.putExtra("startDate", startDate.toString())
+                    intent.putExtra("searchDate", startDate.toFormattedString())
+                }
+                selectedEndDate?.let { endDate ->
+                    intent.putExtra("endDate", endDate.toString())
                 }
                 selectedStartDate?.let { selectedDepart ->
                     intent.putExtra("selectedDepart", selectedDepart.toString())
@@ -155,6 +155,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 }
 
                 intent.putExtra("passengerCount", binding.layoutHome.tvPassengersCount.text.toString())
+                intent.putExtra("seatClassChoose", binding.layoutHome.tvSeatClassChoose.text)
 
                 Log.d(
                     "HomeFragment",
@@ -162,8 +163,37 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 )
                 startActivity(intent)
             } else {
-                // Handle case where selectedStartDate is null
-                Toast.makeText(requireContext(), "Please select a start date", Toast.LENGTH_SHORT).show()
+                // Handle case where selectedStartDate or selectedEndDate is null
+                val intent = Intent(requireContext(), ResultSearchActivity::class.java)
+
+                selectedStartDate?.let { startDate ->
+                    intent.putExtra("startDate", startDate.toString())
+                    intent.putExtra("searchDate", startDate.toFormattedString())
+                }
+                selectedEndDate?.let { endDate ->
+                    intent.putExtra("endDate", endDate.toString())
+                }
+                selectedStartDate?.let { selectedDepart ->
+                    intent.putExtra("selectedDepart", selectedDepart.toString())
+                    intent.putExtra("searchDateDepart", selectedDepart.toFormattedString())
+                }
+                selectedDepartAirport?.let { departAirport ->
+                    intent.putExtra("departAirportId", departAirport.id)
+                    intent.putExtra("airportCityCodeDeparture", departAirport.airportCityCode)
+                }
+                selectedDestinationAirport?.let { destinationAirport ->
+                    intent.putExtra("destinationAirportId", destinationAirport.id)
+                    intent.putExtra("airportCityCodeDestination", destinationAirport.airportCityCode)
+                }
+
+                intent.putExtra("passengerCount", binding.layoutHome.tvPassengersCount.text.toString())
+                intent.putExtra("seatClassChoose", binding.layoutHome.tvSeatClassChoose.text)
+
+                Log.d(
+                    "HomeFragment",
+                    "Depart Airport ID: ${selectedDepartAirport?.id}, Destination Airport ID: ${selectedDestinationAirport?.id}",
+                )
+                startActivity(intent)
             }
         }
 
@@ -171,9 +201,13 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
             if (isChecked) {
                 binding.layoutHome.tvReturnTitle.visibility = View.VISIBLE
                 binding.layoutHome.tvArrivalChoose.visibility = View.VISIBLE
+                binding.layoutHome.tvSpace1.visibility = View.VISIBLE
+                binding.layoutHome.tvSpace2.visibility = View.VISIBLE
             } else {
-                binding.layoutHome.tvReturnTitle.visibility = View.INVISIBLE
-                binding.layoutHome.tvArrivalChoose.visibility = View.INVISIBLE
+                binding.layoutHome.tvSpace1.visibility = View.GONE
+                binding.layoutHome.tvSpace2.visibility = View.GONE
+                binding.layoutHome.tvReturnTitle.visibility = View.GONE
+                binding.layoutHome.tvArrivalChoose.visibility = View.GONE
             }
         }
     }

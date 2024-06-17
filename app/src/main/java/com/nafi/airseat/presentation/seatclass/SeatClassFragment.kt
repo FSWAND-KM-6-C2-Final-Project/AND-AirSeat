@@ -17,7 +17,7 @@ class SeatClassFragment : BottomSheetDialogFragment() {
 
     private lateinit var adapter: SeatClassAdapter
 
-    val seatClassItems = listOf("Economy", "Premium Economy", "Business", "First Class") // List jenis-jenis kelas
+    val seatClassItems = listOf("Economy", "Premium Economy", "Business", "First Class")
     private var selectedSeatClass: String? = null
     private var listener: OnSeatClassSelectedListener? = null
 

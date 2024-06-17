@@ -157,24 +157,6 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="2dp"/>
 
-                <TextView
-                    android:id="@+id/tv_cabin_baggage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="Cabin Baggage 7 kg"
-                    android:textSize="18sp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="2dp"/>
-
-                <TextView
-                    android:id="@+id/tv_entertainment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="In Flight Entertainment"
-                    android:textSize="18sp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginVertical="2dp"/>
-
             </LinearLayout>
 
         </LinearLayout>
