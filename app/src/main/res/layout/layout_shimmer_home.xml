@@ -121,9 +121,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_depart_return"
-                android:fontFamily="@font/font_plusjakartasans_regular"/>
+                android:fontFamily="@font/font_plusjakartasans_regular"
+                android:background="@color/shimmercolor"/>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/sw_depart_return"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

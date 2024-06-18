@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
-class ResultSearchAdapter(private val typeSeatClass: String?, private val listener: (Flight) -> Unit) :
+class ResultSearchAdapter(private val typeSeatClass: String?, private val listener: (Flight, Int) -> Unit) :
     RecyclerView.Adapter<ResultSearchAdapter.ItemFlightViewHolder>() {
     private val dataDiffer =
         AsyncListDiffer(
@@ -58,7 +58,7 @@ class ResultSearchAdapter(private val typeSeatClass: String?, private val listen
 
     class ItemFlightViewHolder(
         private val binding: ItemResultSearchTicketBinding,
-        val itemClick: (Flight) -> Unit,
+        val itemClick: (Flight, Int) -> Unit,
         val typeSeatClass: String?,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bindView(item: Flight) {
@@ -75,8 +75,8 @@ class ResultSearchAdapter(private val typeSeatClass: String?, private val listen
                 }
                 binding.tvAirlineInfo.text = "${item.airline.airlineName} - $typeSeatClass"
                 // binding.tvTicketPrice.text = item.pricePremiumEconomy.toString()
-                if (typeSeatClass == "Economy") {
-                    binding.tvTicketPrice.text = item.pricePremiumEconomy.toString()
+                /*if (typeSeatClass == "Economy") {
+                    binding.tvTicketPrice.text = item.priceEconomy.toString()
                 } else if (typeSeatClass == "Premium Economy") {
                     binding.tvTicketPrice.text = item.pricePremiumEconomy.toString()
                 } else if (typeSeatClass == "Business") {
@@ -85,9 +85,24 @@ class ResultSearchAdapter(private val typeSeatClass: String?, private val listen
                     binding.tvTicketPrice.text = item.priceFirstClass.toString()
                 } else {
                     binding.tvTicketPrice.text = null
-                }
+                }*/
+                val price =
+                    when (typeSeatClass) {
+                        "Economy" -> item.priceEconomy
+                        "Premium Economy" -> item.pricePremiumEconomy
+                        "Business" -> item.priceBusiness
+                        "First Class" -> item.priceFirstClass
+                        else -> null
+                    }
+
+                binding.tvTicketPrice.text = price?.toString() ?: "N/A"
                 Toast.makeText(itemView.context, "Selected seat class: $typeSeatClass", Toast.LENGTH_SHORT).show()
-                itemView.setOnClickListener { itemClick(this) }
+                // itemView.setOnClickListener { itemClick(this) }
+                itemView.setOnClickListener {
+                    if (price != null) {
+                        itemClick(this, price)
+                    }
+                }
             }
         }
 
