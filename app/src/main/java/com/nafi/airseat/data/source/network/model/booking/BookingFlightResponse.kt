@@ -9,4 +9,6 @@ data class BookingFlightResponse(
     var message: String,
     @SerializedName("data")
     var booking: BookingFlightRequest,
+    @SerializedName("payment_data")
+    var payment: PaymentData
 )
