@@ -71,6 +71,7 @@ class FlightDetailActivity : AppCompatActivity() {
 
         binding.cvSectionCheckout.btnPayment.setOnClickListener {
             openUrl()
+
         }
         binding.ibBtnBack.setOnClickListener {
             onBackPressed()
@@ -241,7 +242,7 @@ class FlightDetailActivity : AppCompatActivity() {
                     firstName = it.firstName,
                     familyName = it.familyName,
                     title = it.title,
-                    dob = it.dob,
+                    dob = it.dob ,
                     nationality = it.nationality,
                     identificationType = it.identificationType,
                     identificationNumber = it.identificationNumber,
