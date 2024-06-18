@@ -2,49 +2,15 @@ package com.nafi.airseat.presentation.seatclass.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.nafi.airseat.R
-import com.nafi.airseat.data.model.SeatClass
 import com.nafi.airseat.databinding.ItemClassBinding
 
-class SeatClassAdapter(private val listener: (SeatClass) -> Unit) :
-    RecyclerView.Adapter<SeatClassAdapter.ItemSeatClassViewHolder>() {
-    private val dataDiffer =
-        AsyncListDiffer(
-            this,
-            object : DiffUtil.ItemCallback<SeatClass>() {
-                override fun areItemsTheSame(
-                    oldItem: SeatClass,
-                    newItem: SeatClass,
-                ): Boolean {
-                    return oldItem.id == newItem.id
-                }
-
-                override fun areContentsTheSame(
-                    oldItem: SeatClass,
-                    newItem: SeatClass,
-                ): Boolean {
-                    return oldItem == newItem
-                }
-            },
-        )
-
-    private var selectedItemPos = -1
-
-    fun submitData(data: List<SeatClass>) {
-        dataDiffer.submitList(data)
-    }
-
-    fun getSelectedSeatClass(): SeatClass? {
-        return if (selectedItemPos != -1) {
-            dataDiffer.currentList[selectedItemPos]
-        } else {
-            null
-        }
-    }
+class SeatClassAdapter(
+    private val items: List<String>,
+    private val listener: (String) -> Unit,
+) : RecyclerView.Adapter<SeatClassAdapter.ItemSeatClassViewHolder>() {
+    private var selectedPosition = RecyclerView.NO_POSITION
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -58,48 +24,39 @@ class SeatClassAdapter(private val listener: (SeatClass) -> Unit) :
         holder: ItemSeatClassViewHolder,
         position: Int,
     ) {
-        holder.bindView(dataDiffer.currentList[position], position)
+        holder.bind(items[position], position == selectedPosition)
+        holder.itemView.setOnClickListener {
+            val previousPosition = selectedPosition
+            selectedPosition = holder.adapterPosition
+            notifyItemChanged(previousPosition)
+            notifyItemChanged(selectedPosition)
+            listener(items[selectedPosition])
+        }
     }
 
-    override fun getItemCount(): Int = dataDiffer.currentList.size
+    override fun getItemCount(): Int = items.size
 
-    inner class ItemSeatClassViewHolder(private val binding: ItemClassBinding) :
+    class ItemSeatClassViewHolder(private val binding: ItemClassBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        init {
-            itemView.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    setSelectedItem(position)
-                    listener(dataDiffer.currentList[position])
-                }
-            }
-        }
-
-        fun bindView(
-            item: SeatClass,
-            position: Int,
+        fun bind(
+            item: String,
+            isSelected: Boolean,
         ) {
-            binding.optionText.text = item.seatName
-            binding.priceTextEconomy.text = item.seatPrice.toString()
-            updateBackground(position == selectedItemPos)
-        }
-
-        private fun setSelectedItem(position: Int) {
-            if (selectedItemPos != position) {
-                val previousSelected = selectedItemPos
-                selectedItemPos = position
-                notifyItemChanged(previousSelected)
-                notifyItemChanged(selectedItemPos)
-            }
-        }
-
-        private fun updateBackground(isSelected: Boolean) {
-            binding.root.background =
+            binding.textView.text = item
+            binding.textView.setTextColor(
                 if (isSelected) {
-                    ContextCompat.getDrawable(itemView.context, R.drawable.selected_item_background)
+                    binding.root.context.getColor(R.color.md_theme_onError)
                 } else {
-                    ContextCompat.getDrawable(itemView.context, R.drawable.unselected_item_background)
-                }
+                    binding.root.context.getColor(R.color.md_theme_scrim)
+                },
+            )
+            binding.llExample.setBackgroundResource(
+                if (isSelected) {
+                    R.color.md_theme_primary
+                } else {
+                    android.R.color.transparent
+                },
+            )
         }
     }
 }

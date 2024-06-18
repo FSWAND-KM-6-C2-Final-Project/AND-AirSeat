@@ -1,7 +1,6 @@
 package com.nafi.airseat.presentation.seatclass
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,25 +8,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSourceImpl
-import com.nafi.airseat.data.model.SeatClass
-import com.nafi.airseat.data.repository.SeatClassRepositoryImpl
 import com.nafi.airseat.databinding.FragmentSeatClassBinding
 import com.nafi.airseat.presentation.seatclass.adapter.SeatClassAdapter
 
 class SeatClassFragment : BottomSheetDialogFragment() {
-    private lateinit var viewModel: SeatClassViewModel
     private var _binding: FragmentSeatClassBinding? = null
     private val binding get() = _binding!!
-    private val seatClassAdapter: SeatClassAdapter by lazy {
-        SeatClassAdapter {
-            // Do nothing on item click, handle on save button click
-        }
-    }
+
+    private lateinit var adapter: SeatClassAdapter
+
+    val seatClassItems = listOf("Economy", "Premium Economy", "Business", "First Class")
+    private var selectedSeatClass: String? = null
     private var listener: OnSeatClassSelectedListener? = null
 
     interface OnSeatClassSelectedListener {
-        fun onSeatClassSelected(seatClass: SeatClass)
+        fun onSeatClassSelected(seatClass: String)
     }
 
     override fun onCreateView(
@@ -45,15 +40,18 @@ class SeatClassFragment : BottomSheetDialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        val seatClassRepository = SeatClassRepositoryImpl(SeatClassDummyDataSourceImpl())
-        viewModel = SeatClassViewModel(seatClassRepository)
+        setupSeatClassAdapter()
 
-        setupSeatClass()
-        proceedSeatClass()
+        /*binding.btnSaveSeatClass.setOnClickListener {
+            adapter.getSelectedSeatClass()?.let { selectedSeatClass ->
+                Log.d("SeatClassFragment", "Selected seat class: $selectedSeatClass")
+                listener?.onSeatClassSelected(selectedSeatClass)
+            }
+            dismiss()
+        }*/
         binding.btnSaveSeatClass.setOnClickListener {
-            seatClassAdapter.getSelectedSeatClass()?.let {
-                Log.d("SeatClassFragment", "Selected seat class: ${it.seatName}")
-                listener?.onSeatClassSelected(it)
+            selectedSeatClass?.let { seatClass ->
+                listener?.onSeatClassSelected(seatClass) // Mengirimkan kelas kursi yang dipilih ke HomeFragment
             }
             dismiss()
         }
@@ -64,22 +62,15 @@ class SeatClassFragment : BottomSheetDialogFragment() {
         (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-    private fun setupSeatClass() {
-        binding.rvSeatClass.adapter = seatClassAdapter
-        binding.rvSeatClass.layoutManager = LinearLayoutManager(context)
-    }
-
-    private fun proceedSeatClass() {
-        viewModel.getSeatClass().observe(viewLifecycleOwner) { data ->
-            data?.let {
-                Log.d("SeatClassFragment", "Seat class data received: ${it.size} items")
-                bindSeatClassList(it)
+    private fun setupSeatClassAdapter() {
+        adapter =
+            SeatClassAdapter(seatClassItems) { selectedSeatClass ->
+                // listener?.onSeatClassSelected(selectedSeatClass)
+                this.selectedSeatClass = selectedSeatClass
             }
-        }
-    }
 
-    private fun bindSeatClassList(data: List<SeatClass>) {
-        seatClassAdapter.submitData(data)
+        binding.rvSeatClass.layoutManager = LinearLayoutManager(context)
+        binding.rvSeatClass.adapter = adapter
     }
 
     fun setOnSeatClassSelectedListener(listener: OnSeatClassSelectedListener) {

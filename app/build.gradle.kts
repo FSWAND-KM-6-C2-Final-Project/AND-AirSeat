@@ -40,6 +40,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        dataBinding = true
     }
     flavorDimensions += "env"
     productFlavors {
@@ -123,9 +124,7 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.core.testing)
     implementation(libs.paging.runtime)
-
-    // Dependensi desugaring
-
-    // Dependensi Kizitonwose Calendar
+    implementation(libs.shimmer)
     implementation(libs.view)
+    implementation("com.github.AppIntro:AppIntro:6.3.1")
 }

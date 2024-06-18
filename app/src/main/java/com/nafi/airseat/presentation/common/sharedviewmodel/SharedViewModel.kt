@@ -1,28 +1,33 @@
 package com.nafi.airseat.presentation.common.sharedviewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.nafi.airseat.data.model.Airport
+import com.nafi.airseat.data.model.FlightDetail
 
 class SharedViewModel : ViewModel() {
-    private val _departAirport = MutableLiveData<Airport>()
-    private val _destinationAirport = MutableLiveData<Airport>()
-    private val _airportCity = MutableLiveData<Airport>()
+    private val _selectedFlightDetail = MutableLiveData<FlightDetail?>()
+    val selectedFlightDetail: MutableLiveData<FlightDetail?> = _selectedFlightDetail
 
-    val departAirport: LiveData<Airport> get() = _departAirport
-    val destinationAirport: LiveData<Airport> get() = _destinationAirport
-    val airportCity: LiveData<Airport> get() = _airportCity
+    private val _returnFlightDetail = MutableLiveData<FlightDetail?>()
+    val returnFlightDetail: MutableLiveData<FlightDetail?> = _returnFlightDetail
 
-    fun setDepartAirport(airport: Airport) {
-        _departAirport.value = airport
+    fun setSelectedFlightDetail(flightDetail: FlightDetail) {
+        _selectedFlightDetail.value = flightDetail
     }
 
-    fun setDestinationAirport(airport: Airport) {
-        _destinationAirport.value = airport
+    fun setReturnFlightDetail(flightDetail: FlightDetail) {
+        _returnFlightDetail.value = flightDetail
     }
 
-    fun setAirportCity(airport: Airport) {
-        _airportCity.value = airport
+    fun clearSelectedFlightDetail() {
+        _selectedFlightDetail.value = null
+    }
+
+    fun clearReturnFlightDetail() {
+        _returnFlightDetail.value = null
+    }
+
+    fun isReturnTicketSelected(): Boolean {
+        return _selectedFlightDetail.value != null
     }
 }
