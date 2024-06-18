@@ -3,12 +3,14 @@ package com.nafi.airseat.presentation.detailflight
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.nafi.airseat.data.model.FlightDetail
 import com.nafi.airseat.databinding.ActivityDetailFlightBinding
 import com.nafi.airseat.presentation.biodata.OrdererBioActivity
+import com.nafi.airseat.presentation.common.views.ContentState
+import com.nafi.airseat.utils.NoInternetException
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -31,6 +33,8 @@ class DetailFlightActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val id = intent.getStringExtra("id")
+        val price = intent.getIntExtra("price", 0)
+        binding.tvTotalPrice.text = price.toString()
         proceedDetailTicket(id.toString())
         binding.layoutHeader.btnBackHome.setOnClickListener {
             finish()
@@ -59,20 +63,32 @@ class DetailFlightActivity : AppCompatActivity() {
         viewModel.getDetailFlight(id).observe(this) {
             it.proceedWhen(
                 doOnSuccess = {
+                    binding.csvDetailFlight.setState(ContentState.SUCCESS)
+                    binding.layoutDetail.root.visibility = View.VISIBLE
                     it.payload?.let { detail ->
                         flightDetail = detail
                         bindView(detail)
-                        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                        // Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
                     }
                 },
                 doOnLoading = {
-                    Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+                    binding.csvDetailFlight.setState(ContentState.LOADING)
+                    binding.layoutDetail.root.visibility = View.GONE
+                    // Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
                 },
                 doOnError = {
-                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                    if (it.exception is NoInternetException) {
+                        binding.csvDetailFlight.setState(ContentState.ERROR_NETWORK)
+                    } else {
+                        binding.csvDetailFlight.setState(
+                            ContentState.ERROR_GENERAL,
+                        )
+                    }
                 },
                 doOnEmpty = {
-                    Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show()
+                    binding.csvDetailFlight.setState(ContentState.EMPTY, desc = "Data not found")
+                    // Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show()
                 },
             )
         }
@@ -140,7 +156,7 @@ class DetailFlightActivity : AppCompatActivity() {
             binding.layoutDetail.tvArrivalTime.text = arrivalTimes
             binding.layoutDetail.tvArrivalDate.text = formatDate(arrivalDate)
             binding.layoutDetail.tvArrivalPlace.text = it.arrivalAirport.airportName
-            binding.tvTotalPrice.text = it.pricePremiumEconomy
+            // binding.tvTotalPrice.text = it.pricePremiumEconomy
         }
     }
 

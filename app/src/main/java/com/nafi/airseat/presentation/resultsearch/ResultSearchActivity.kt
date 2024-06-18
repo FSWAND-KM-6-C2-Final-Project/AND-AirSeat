@@ -13,8 +13,10 @@ import com.kizitonwose.calendar.view.WeekDayBinder
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityResultSearchBinding
 import com.nafi.airseat.databinding.HorizontalDayBinding
+import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.detailflight.DetailFlightActivity
 import com.nafi.airseat.presentation.resultsearch.adapter.ResultSearchAdapter
+import com.nafi.airseat.utils.NoInternetException
 import com.nafi.airseat.utils.calendar.displayText
 import com.nafi.airseat.utils.calendar.getWeekPageTitle
 import com.nafi.airseat.utils.getColorCompat
@@ -36,8 +38,11 @@ class ResultSearchActivity : AppCompatActivity() {
         parametersOf(intent.extras)
     }
     private val resultAdapter: ResultSearchAdapter by lazy {
-        ResultSearchAdapter(typeSeatClass = typeSeatClass) {
+        /*ResultSearchAdapter(typeSeatClass = typeSeatClass) {
             navigateToDetailTicket(it.id.toString())
+        }*/
+        ResultSearchAdapter(typeSeatClass = typeSeatClass) { flight, price ->
+            navigateToDetailTicket(flight.id.toString(), price)
         }
     }
     private val dateFormatter = DateTimeFormatter.ofPattern("dd")
@@ -175,6 +180,7 @@ class ResultSearchActivity : AppCompatActivity() {
             result.proceedWhen(
                 doOnSuccess = {
                     result.payload?.let {
+                        binding.csvResultSearch.setState(ContentState.SUCCESS)
                         resultAdapter.submitData(it)
                         binding.rvSearchTicket.isVisible = it.isNotEmpty()
                         if (it.isEmpty()) {
@@ -183,15 +189,28 @@ class ResultSearchActivity : AppCompatActivity() {
                     }
                 },
                 doOnLoading = {
-                    Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show()
+                    binding.csvResultSearch.setState(ContentState.LOADING)
+                    // Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show()
                 },
                 doOnError = {
-                    Toast.makeText(this, "Error loading flights", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(this, "Error loading flights", Toast.LENGTH_SHORT).show()
+                    if (it.exception is NoInternetException) {
+                        binding.csvResultSearch.setState(ContentState.ERROR_NETWORK)
+                    } else {
+                        binding.csvResultSearch.setState(
+                            ContentState.ERROR_GENERAL,
+                            desc = result.exception?.message.orEmpty(),
+                        )
+                    }
                 },
                 doOnEmpty = {
-                    clearAdapterData()
+                    /*clearAdapterData()
                     binding.rvSearchTicket.isVisible = false
-                    Toast.makeText(this, "No flights found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "No flights found", Toast.LENGTH_SHORT).show()*/
+                    binding.csvResultSearch.setState(
+                        ContentState.EMPTY,
+                        desc = "No Flights Found",
+                    )
                 },
             )
         }
@@ -201,10 +220,22 @@ class ResultSearchActivity : AppCompatActivity() {
         binding.rvSearchTicket.adapter = resultAdapter
     }
 
-    private fun navigateToDetailTicket(id: String) {
+    /*private fun navigateToDetailTicket(id: String) {
         startActivity(
             Intent(this, DetailFlightActivity::class.java).apply {
                 putExtra("id", id)
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
+    }*/
+    private fun navigateToDetailTicket(
+        id: String,
+        price: Int,
+    ) {
+        startActivity(
+            Intent(this, DetailFlightActivity::class.java).apply {
+                putExtra("id", id)
+                putExtra("price", price)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
