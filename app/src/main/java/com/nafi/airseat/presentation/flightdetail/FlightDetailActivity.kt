@@ -81,6 +81,7 @@ class FlightDetailActivity : AppCompatActivity() {
         binding.cvSectionCheckout.btnPayment.setOnClickListener {
             Log.d("FlightDetailActivity", "Button Payment clicked")
             openUrl()
+
         }
         binding.ibBtnBack.setOnClickListener {
             onBackPressed()
@@ -167,7 +168,7 @@ class FlightDetailActivity : AppCompatActivity() {
         val intent = Intent(this, WebViewMidtransActivity::class.java)
         intent.putExtra(
             "URL",
-            "https://sample-demo-dot-midtrans-support-tools.et.r.appspot.com/snap-redirect/",
+            "https://app.sandbox.midtrans.com/snap/v4/redirection/",
         )
         startActivity(intent)
     }
@@ -194,7 +195,7 @@ class FlightDetailActivity : AppCompatActivity() {
                     firstName = it.firstName,
                     familyName = it.familyName,
                     title = it.title,
-                    dob = it.dob,
+                    dob = it.dob ,
                     nationality = it.nationality,
                     identificationType = it.identificationType,
                     identificationNumber = it.identificationNumber,
