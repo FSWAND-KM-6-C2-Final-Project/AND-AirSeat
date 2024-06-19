@@ -17,6 +17,7 @@
     <color name="md_theme_primary">#006398</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
+    <color name="red">#E40000</color>
     <color name="md_theme_primaryContainer">#4EB4FF</color>
     <color name="md_theme_onPrimaryContainer">#00243B</color>
     <color name="md_theme_secondary">#2F647C</color>
