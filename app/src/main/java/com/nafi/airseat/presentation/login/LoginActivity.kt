@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.widget.TextView
@@ -87,8 +86,9 @@ class LoginActivity : AppCompatActivity() {
                 doOnError = {
                     binding.layoutFormLogin.pbLoading.isVisible = false
                     binding.layoutFormLogin.btnLogin.isVisible = true
-                    Log.d("proceedLogin", getString(R.string.proceed_login, it.exception?.message))
-                    showSnackbarError(it.exception?.message ?: "An error occurred")
+                    showSnackbarError(
+                        getString(R.string.text_login_failed),
+                    )
                 },
                 doOnLoading = {
                     binding.layoutFormLogin.pbLoading.isVisible = true

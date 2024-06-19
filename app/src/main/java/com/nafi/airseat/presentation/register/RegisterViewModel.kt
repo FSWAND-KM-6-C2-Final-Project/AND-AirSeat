@@ -21,9 +21,4 @@ class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
             password = password,
         )
         .asLiveData(Dispatchers.IO)
-
-    fun doVerifResendOtp(email: String) =
-        repository
-            .doVerifResendOtp(email)
-            .asLiveData(Dispatchers.IO) // send otp to email
 }

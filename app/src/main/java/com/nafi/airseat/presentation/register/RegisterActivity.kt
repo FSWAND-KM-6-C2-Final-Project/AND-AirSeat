@@ -85,7 +85,6 @@ class RegisterActivity : AppCompatActivity() {
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
                     binding.btnRegister.isVisible = true
-//                    sendOtp(email)
                     showSnackbarSuccess(getString(R.string.text_register_success))
                     navigateToOtp(email)
                 },
@@ -227,34 +226,4 @@ class RegisterActivity : AppCompatActivity() {
             true
         }
     }
-
-    /*private fun sendOtp(email: String) {
-        registerViewModel.doVerifResendOtp(email).observe(this) { result ->
-            result.proceedWhen(
-                doOnSuccess = {
-                    binding.pbLoading.isVisible = false
-                    binding.btnRegister.isVisible = true
-                    Toast.makeText(
-                        this,
-                        "OTP sent to $email",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    // ini navigate to otp
-                },
-                doOnError = {
-                    binding.pbLoading.isVisible = false
-                    binding.btnRegister.isVisible = true
-                    Toast.makeText(
-                        this,
-                        "Failed to send OTP: ${it.exception?.message.orEmpty()}",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                },
-                doOnLoading = {
-                    binding.pbLoading.isVisible = true
-                    binding.btnRegister.isVisible = false
-                },
-            )
-        }
-    }*/
 }

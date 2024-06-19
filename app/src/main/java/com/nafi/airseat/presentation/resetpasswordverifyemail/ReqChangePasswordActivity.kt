@@ -147,34 +147,4 @@ class ReqChangePasswordActivity : AppCompatActivity() {
             true
         }
     }
-
-    /*private fun sendOtp(email: String) {
-        reqChangePasswordViewModel.reqChangePasswordByEmail(email).observe(this) { result ->
-            result.proceedWhen(
-                doOnSuccess = {
-                    binding.pbLoading.isVisible = false
-                    binding.btnVerify.isVisible = true
-                    Toast.makeText(
-                        this,
-                        "OTP sent to $email",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                },
-                doOnError = {
-                    binding.pbLoading.isVisible = false
-                    binding.btnVerify.isVisible = true
-                    Toast.makeText(
-                        this,
-                        "Failed to send OTP: ${it.exception?.message.orEmpty()}",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    navigateToReqChangePassword()
-                },
-                doOnLoading = {
-                    binding.pbLoading.isVisible = true
-                    binding.btnVerify.isVisible = false
-                },
-            )
-        }
-    }*/
 }

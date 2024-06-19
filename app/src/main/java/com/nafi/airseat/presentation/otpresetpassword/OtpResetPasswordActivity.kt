@@ -138,28 +138,4 @@ class OtpResetPasswordActivity : AppCompatActivity() {
             },
         )
     }
-    /*private fun verifyOtpChangePassword(email: String) {
-        otpResetPasswordViewModel.reqChangePasswordByEmailResendOtp(email).observe(this) { result ->
-            result.proceedWhen(
-                doOnSuccess = { code ->
-                    Toast.makeText(
-                        this,
-                        "OTP verification successful",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    navigateToResetPassword(email, code.toString()) // Replace with actual navigation
-                },
-                doOnError = {
-                    Toast.makeText(
-                        this,
-                        "OTP verification failed: ${it.exception?.message.orEmpty()}",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                },
-                doOnLoading = {
-                    // Show loading indicator if needed
-                },
-            )
-        }
-    }*/
 }
