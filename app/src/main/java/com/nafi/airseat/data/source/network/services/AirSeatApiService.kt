@@ -1,11 +1,12 @@
 package com.nafi.airseat.data.source.network.services
 
 import com.nafi.airseat.BuildConfig
+import com.nafi.airseat.data.model.BaseResponse
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.source.network.model.airport.AirportResponse
 import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
 import com.nafi.airseat.data.source.network.model.flightdetail.FlightDetailResponse
-import com.nafi.airseat.data.source.network.model.history.HistoryResponse
+import com.nafi.airseat.data.source.network.model.history.HistoryData
 import com.nafi.airseat.data.source.network.model.login.LoginRequest
 import com.nafi.airseat.data.source.network.model.login.LoginResponse
 import com.nafi.airseat.data.source.network.model.notification.NotificationResponse
@@ -132,7 +133,7 @@ interface AirSeatApiServiceWithAuthorization {
         @Query("limit") limit: Int = 10,
         @Query("page") page: Int = 1,
         @Query("bookingCode") bookingCode: String? = null,
-    ): HistoryResponse
+    ): BaseResponse<HistoryData>
 
     @GET("auth/me")
     suspend fun getUserProfile(): ProfileResponse

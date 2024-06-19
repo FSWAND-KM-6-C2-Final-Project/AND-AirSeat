@@ -1,14 +1,14 @@
 package com.nafi.airseat.data.model
 
 import com.google.gson.annotations.SerializedName
-import com.nafi.airseat.data.source.network.model.history.Data
+import com.nafi.airseat.data.source.network.model.history.HistoryData
 import com.nafi.airseat.data.source.network.model.history.Pagination
 
 /**
 Written with love by Muhammad Hermas Yuda Pamungkas
 Github : https://github.com/hermasyp
  **/
-data class Response<T>(
+data class BaseResponse<T>(
     @SerializedName("status")
     val status: ApiStatus?,
     @SerializedName("message")
@@ -18,7 +18,7 @@ data class Response<T>(
     @SerializedName("requestAt")
     val requestAt: String?,
     @SerializedName("data")
-    val data: Data,
+    val data: HistoryData,
 )
 
 enum class ApiStatus {

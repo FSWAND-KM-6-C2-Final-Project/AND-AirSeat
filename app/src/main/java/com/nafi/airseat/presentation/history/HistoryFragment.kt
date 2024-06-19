@@ -14,6 +14,7 @@ import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.history.adapter.HistoryDataItem
 import com.nafi.airseat.presentation.history.adapter.MonthHeaderItem
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryFragment
+import com.nafi.airseat.utils.ApiErrorException
 import com.nafi.airseat.utils.NoInternetException
 import com.nafi.airseat.utils.proceedWhen
 import com.nafi.airseat.utils.toMonthYearFormat
@@ -78,6 +79,8 @@ class HistoryFragment : Fragment() {
         viewModel.getHistoryData(bookingCode = null).observe(viewLifecycleOwner) { result ->
             result.proceedWhen(
                 doOnLoading = {
+                    binding.layoutLoginProtectionHistory.root.isVisible = false
+                    binding.layoutHistory.isVisible = true
                     binding.bgHistoryGradient.isVisible = false
                     binding.rvHistory.isVisible = false
                     binding.tvTitleHistory.setTextColor(
@@ -90,8 +93,11 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = false
                     binding.ivClearHistory.isVisible = false
                     binding.ivClearWhiteHistory.isVisible = false
+                    binding.layoutLoginProtectionHistory.root.isVisible = false
                 },
                 doOnSuccess = {
+                    binding.layoutLoginProtectionHistory.root.isVisible = false
+                    binding.layoutHistory.isVisible = true
                     binding.bgHistoryGradient.isVisible = true
                     binding.rvHistory.isVisible = true
                     binding.tvTitleHistory.setTextColor(
@@ -104,6 +110,7 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = true
                     binding.ivClearHistory.isVisible = false
                     binding.ivClearWhiteHistory.isVisible = false
+                    binding.layoutLoginProtectionHistory.root.isVisible = false
                     result.payload?.let { data ->
                         val items = mutableListOf<BindableItem<*>>()
 
@@ -119,6 +126,8 @@ class HistoryFragment : Fragment() {
                     }
                 },
                 doOnEmpty = {
+                    binding.layoutLoginProtectionHistory.root.isVisible = false
+                    binding.layoutHistory.isVisible = true
                     binding.bgHistoryGradient.isVisible = false
                     binding.rvHistory.isVisible = false
                     binding.tvTitleHistory.setTextColor(
@@ -131,6 +140,7 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = false
                     binding.ivClearHistory.isVisible = false
                     binding.ivClearWhiteHistory.isVisible = false
+                    binding.layoutLoginProtectionHistory.root.isVisible = false
                 },
                 doOnError = {
                     binding.bgHistoryGradient.isVisible = false
@@ -144,13 +154,16 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = false
                     binding.ivClearHistory.isVisible = false
                     binding.ivClearWhiteHistory.isVisible = false
-                    if (it.exception is NoInternetException) {
+                    binding.layoutHistory.isVisible = false
+                    if (it.exception is ApiErrorException) {
+                        val errorBody = it.exception.errorResponse.message
+                        if (errorBody == "jwt malformed" || errorBody == "Token not found!") {
+                            binding.layoutLoginProtectionHistory.root.isVisible = true
+                        } else {
+                            binding.csvHistory.setState(ContentState.ERROR_GENERAL)
+                        }
+                    } else if (it.exception is NoInternetException) {
                         binding.csvHistory.setState(ContentState.ERROR_NETWORK)
-                    } else {
-                        binding.csvHistory.setState(
-                            ContentState.ERROR_GENERAL,
-                            desc = result.exception?.message.orEmpty(),
-                        )
                     }
                 },
             )
