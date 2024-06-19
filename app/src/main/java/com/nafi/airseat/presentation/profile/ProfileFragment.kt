@@ -34,6 +34,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+        binding.root.isVisible = false
         setOnclickListener()
     }
 
@@ -46,10 +47,12 @@ class ProfileFragment : Fragment() {
         viewModel.getDataProfile().observe(viewLifecycleOwner) { result ->
             result.proceedWhen(
                 doOnLoading = {
+                    binding.root.isVisible = true
                     binding.layoutProfile.isVisible = false
                     binding.csvProfile.setState(ContentState.LOADING)
                 },
                 doOnSuccess = {
+                    binding.root.isVisible = true
                     result.payload?.let {
                         binding.layoutProfile.isVisible = true
                         binding.tvUserFullname.text = it.fullName
@@ -63,6 +66,7 @@ class ProfileFragment : Fragment() {
                     navigateToLogin()
                 },
                 doOnEmpty = {
+                    binding.root.isVisible = true
                     binding.layoutProfile.isVisible = false
                     binding.csvProfile.setState(ContentState.EMPTY)
                 },
@@ -86,7 +90,7 @@ class ProfileFragment : Fragment() {
     private fun navigateToLogin() {
         startActivity(
             Intent(requireContext(), LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             },
         )
     }

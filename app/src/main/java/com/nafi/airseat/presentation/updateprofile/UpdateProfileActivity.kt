@@ -115,5 +115,3 @@ class UpdateProfileActivity : AppCompatActivity() {
         snackbar.show()
     }
 }
-
-}
