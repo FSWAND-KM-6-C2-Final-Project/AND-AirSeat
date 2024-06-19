@@ -6,5 +6,5 @@ import com.nafi.airseat.data.repository.HistoryRepository
 import kotlinx.coroutines.Dispatchers
 
 class HistoryViewModel(private val repository: HistoryRepository) : ViewModel() {
-    fun getHistoryData() = repository.getHistoryData().asLiveData(Dispatchers.IO)
+    fun getHistoryData(bookingCode: String?) = repository.getHistoryData(bookingCode = bookingCode).asLiveData(Dispatchers.IO)
 }
