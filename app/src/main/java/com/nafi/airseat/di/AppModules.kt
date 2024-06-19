@@ -69,6 +69,7 @@ import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordV
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
+import com.nafi.airseat.presentation.updateprofile.UpdateProfileViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -185,6 +186,9 @@ object AppModules {
             }
             viewModel {
                 SearchHistoryViewModel(get())
+            }
+            viewModel {
+                UpdateProfileViewModel(get())
             }
         }
 

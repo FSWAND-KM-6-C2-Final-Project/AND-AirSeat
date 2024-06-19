@@ -169,5 +169,11 @@
     <string name="text_desc_empy_notification">Stay tune for notification come yet</string>
     <string name="text_app_version">Version 1.0.0</string>
     <string name="text_snackbar_custom">GeeksforGeeks</string>
+    <string name="text_version_app">Version 1.0.0</string>
+    <string name="text_change_profile">Change Profile</string>
+    <string name="text_profile_settings">Profile Setting</string>
+    <string name="text_profile_logout">Logout</string>
+    <string name="text_button_update_profile">Update Profile</string>
+    <string name="text_update_profile_success">Success Update Profile</string>
     <string name="text_term_and_condition_notification">Syarat dan ketentuan berlaku</string>
 </resources>
