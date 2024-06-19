@@ -2,6 +2,7 @@ package com.nafi.airseat.presentation.notification.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +10,7 @@ import com.nafi.airseat.data.model.NotificationModel
 import com.nafi.airseat.databinding.ItemNotificationBinding
 import com.nafi.airseat.utils.toFormattedDateNotification
 
-class NotificationAdapter(private val itemClick: (NotificationModel) -> Unit) :
+class NotificationAdapter(private val typeNotification: String?, private val itemClick: (NotificationModel) -> Unit) :
     RecyclerView.Adapter<NotificationAdapter.ItemNotificationViewHolder>() {
     private val dataDiffer =
         AsyncListDiffer(
@@ -45,7 +46,7 @@ class NotificationAdapter(private val itemClick: (NotificationModel) -> Unit) :
                 parent,
                 false,
             )
-        return ItemNotificationViewHolder(binding, itemClick)
+        return ItemNotificationViewHolder(binding, itemClick, typeNotification)
     }
 
     override fun getItemCount(): Int = dataDiffer.currentList.size
@@ -60,8 +61,12 @@ class NotificationAdapter(private val itemClick: (NotificationModel) -> Unit) :
     class ItemNotificationViewHolder(
         private val binding: ItemNotificationBinding,
         private val itemClick: (NotificationModel) -> Unit,
+        private val typeNotification: String?,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: NotificationModel) {
+            if (typeNotification == "Notifikasi") {
+                binding.tvNotificationFooter.isVisible = false
+            }
             binding.tvNotificationType.text = data.notificationType
             binding.tvNotificationTitle.text = data.notificationTitle
             binding.tvNotificationDate.text = data.updatedAt.toFormattedDateNotification()

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.nafi.airseat.data.model.NotificationModel
 import com.nafi.airseat.databinding.ActivityDetailNotificationBinding
 import com.nafi.airseat.utils.toFormattedDateNotification
@@ -41,6 +42,9 @@ class DetailNotificationActivity : AppCompatActivity() {
 
     private fun getIntentData() {
         intent.extras?.getParcelable<NotificationModel>(EXTRAS_DETAIL_DATA)?.let {
+            if (it.notificationType == "Notifikasi") {
+                binding.tvTermAndService.isVisible = false
+            }
             binding.tvTypeNotification.text = it.notificationType
             binding.tvDateNotification.text = it.updatedAt.toFormattedDateNotification()
             binding.tvContentNotification.text = it.notificationDescription

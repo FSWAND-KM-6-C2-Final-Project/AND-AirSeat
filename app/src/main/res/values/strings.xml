@@ -169,4 +169,5 @@
     <string name="text_desc_empy_notification">Stay tune for notification come yet</string>
     <string name="text_app_version">Version 1.0.0</string>
     <string name="text_snackbar_custom">GeeksforGeeks</string>
+    <string name="text_term_and_condition_notification">Syarat dan ketentuan berlaku</string>
 </resources>
