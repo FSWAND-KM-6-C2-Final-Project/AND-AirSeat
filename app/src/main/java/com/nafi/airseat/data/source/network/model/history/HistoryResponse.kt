@@ -14,5 +14,5 @@ data class HistoryResponse(
     @SerializedName("requestAt")
     val requestAt: String?,
     @SerializedName("data")
-    val data: Data,
+    val data: HistoryData,
 )

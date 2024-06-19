@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 @Keep
-data class Data(
+data class HistoryData(
     @SerializedName("booking")
     val booking: List<Booking>?,
 )

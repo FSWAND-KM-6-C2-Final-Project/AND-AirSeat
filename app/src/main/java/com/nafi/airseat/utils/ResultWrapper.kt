@@ -1,9 +1,13 @@
 package com.nafi.airseat.utils
 
+import com.google.gson.Gson
+import com.nafi.airseat.data.model.BaseResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
+import retrofit2.HttpException
+import java.io.IOException
 import java.lang.Exception
 
 /**
@@ -95,10 +99,31 @@ fun <T> proceedFlow(block: suspend () -> T): Flow<ResultWrapper<T>> {
             },
         )
     }.catch { e ->
-        emit(ResultWrapper.Error(exception = Exception(e)))
+        emit(ResultWrapper.Error(exception = e.parseException()))
     }.onStart {
         emit(ResultWrapper.Loading())
     }
 }
+
+fun Throwable?.parseException(): Exception {
+    when (this) {
+        is IOException -> {
+            return NoInternetException()
+        }
+        is HttpException -> {
+            try {
+                val gson = Gson()
+                val errorResponseBody = this.response()?.errorBody()?.string()
+                val errorBody = gson.fromJson(errorResponseBody, BaseResponse::class.java)
+                return ApiErrorException(errorBody)
+            } catch (e: Exception) {
+                return Exception(e)
+            }
+        }
+        else -> return Exception(this)
+    }
+}
+
+class ApiErrorException(val errorResponse: BaseResponse<*>) : Exception()
 
 class NoInternetException() : Exception()
