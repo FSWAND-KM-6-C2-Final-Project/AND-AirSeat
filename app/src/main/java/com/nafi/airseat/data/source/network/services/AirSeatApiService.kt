@@ -131,6 +131,7 @@ interface AirSeatApiServiceWithAuthorization {
     suspend fun getHistoryData(
         @Query("limit") limit: Int = 10,
         @Query("page") page: Int = 1,
+        @Query("bookingCode") bookingCode: String? = null,
     ): HistoryResponse
 
     @GET("auth/me")

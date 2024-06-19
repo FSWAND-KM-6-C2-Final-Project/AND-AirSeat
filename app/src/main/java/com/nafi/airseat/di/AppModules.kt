@@ -10,6 +10,8 @@ import com.nafi.airseat.data.datasource.NotificationDataSource
 import com.nafi.airseat.data.datasource.NotificationDataSourceImpl
 import com.nafi.airseat.data.datasource.ProfileDataSource
 import com.nafi.airseat.data.datasource.ProfileDataSourceImpl
+import com.nafi.airseat.data.datasource.SearchHistoryDataSource
+import com.nafi.airseat.data.datasource.SearchHistoryDataSourceImpl
 import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
 import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
@@ -36,12 +38,16 @@ import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
 import com.nafi.airseat.data.repository.ProfileRepository
 import com.nafi.airseat.data.repository.ProfileRepositoryImpl
+import com.nafi.airseat.data.repository.SearchHistoryRepository
+import com.nafi.airseat.data.repository.SearchHistoryRepositoryImpl
 import com.nafi.airseat.data.repository.SeatClassRepository
 import com.nafi.airseat.data.repository.SeatClassRepositoryImpl
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.repository.UserPrefRepositoryImpl
 import com.nafi.airseat.data.repository.UserRepository
 import com.nafi.airseat.data.repository.UserRepositoryImpl
+import com.nafi.airseat.data.source.local.database.AppDatabase
+import com.nafi.airseat.data.source.local.database.dao.SearchHistoryDao
 import com.nafi.airseat.data.source.local.pref.UserPreference
 import com.nafi.airseat.data.source.local.pref.UserPreferenceImpl
 import com.nafi.airseat.data.source.network.services.AirSeatApiService
@@ -62,6 +68,7 @@ import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
+import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -84,6 +91,7 @@ object AppModules {
 
     private val localModule =
         module {
+            single<AppDatabase> { AppDatabase.getInstance(androidContext()) }
             single<SharedPreferences> {
                 SharedPreferenceUtils.createPreference(
                     androidContext(),
@@ -91,6 +99,7 @@ object AppModules {
                 )
             }
             single<UserPreference> { UserPreferenceImpl(get()) }
+            single<SearchHistoryDao> { get<AppDatabase>().searchHistoryDao() }
         }
 
     private val datasource =
@@ -107,6 +116,7 @@ object AppModules {
             single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
             single<HistoryDataSource> { HistoryDataSourceImpl(get()) }
             single<HistoryDataSource> { HistoryDataSourceImpl(get()) }
+            single<SearchHistoryDataSource> { SearchHistoryDataSourceImpl(get()) }
         }
 
     private val repository =
@@ -122,6 +132,7 @@ object AppModules {
             single<HistoryRepository> { HistoryRepositoryImpl(get()) }
             single<ProfileRepository> { ProfileRepositoryImpl(get()) }
             single<HistoryRepository> { HistoryRepositoryImpl(get()) }
+            single<SearchHistoryRepository> { SearchHistoryRepositoryImpl(get()) }
         }
 
     private val viewModelModule =
@@ -171,6 +182,9 @@ object AppModules {
             }
             viewModel {
                 ProfileViewModel(get(), get())
+            }
+            viewModel {
+                SearchHistoryViewModel(get())
             }
         }
 
