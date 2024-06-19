@@ -169,6 +169,8 @@
     <string name="text_desc_empy_notification">Stay tune for notification come yet</string>
     <string name="text_app_version">Version 1.0.0</string>
     <string name="text_snackbar_custom">GeeksforGeeks</string>
+    <string name="title_intro_started">Enjoy the trip with friendly price</string>
+    <string name="desc_intro_started">Always prioritize safety while traveling</string>
     <string name="text_login_failed">"Login Failed, please check your credentials and try again "</string>
     <string name="text_version_app">Version 1.0.0</string>
     <string name="text_change_profile">Change Profile</string>

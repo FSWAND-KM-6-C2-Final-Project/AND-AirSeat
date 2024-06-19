@@ -17,7 +17,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.appintro.AppIntroActivity"
+            android:name=".presentation.splashscreen.SplashScreenActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.blank.BlankActivity"
@@ -72,9 +72,10 @@
             android:exported="false" />
         <activity
             android:name=".presentation.main.MainActivity"
-            android:exported="false"></activity>
+            android:exported="false">
+        </activity>
         <activity
-            android:name=".presentation.splashscreen.SplashScreenActivity"
+            android:name=".presentation.appintro.AppIntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

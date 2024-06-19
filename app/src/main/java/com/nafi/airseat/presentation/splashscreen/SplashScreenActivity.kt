@@ -7,16 +7,19 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.nafi.airseat.databinding.ActivitySplashScreenBinding
 import com.nafi.airseat.presentation.main.MainActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashScreenActivity : AppCompatActivity() {
     private val binding: ActivitySplashScreenBinding by lazy {
         ActivitySplashScreenBinding.inflate(layoutInflater)
     }
 
+    private val splashViewModel: SplashScreenViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        splashViewModel.setAppIntroShown(true)
         Handler(Looper.getMainLooper()).postDelayed({
             navigateToMain()
         }, 2000)
