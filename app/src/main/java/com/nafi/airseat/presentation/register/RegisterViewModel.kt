@@ -7,17 +7,17 @@ import kotlinx.coroutines.Dispatchers
 
 class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
     fun doRegister(
-        fullname: String,
+        fullName: String,
         email: String,
-        phonenumber: String,
-        confirmpassword: String,
+        phoneNumber: String,
+        confirmPassword: String,
         password: String,
     ) = repository
         .doRegister(
-            fullName = fullname,
+            fullName = fullName,
             email = email,
-            phoneNumber = phonenumber,
-            confirmPassword = confirmpassword,
+            phoneNumber = phoneNumber,
+            confirmPassword = confirmPassword,
             password = password,
         )
         .asLiveData(Dispatchers.IO)

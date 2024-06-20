@@ -6,13 +6,13 @@ import com.nafi.airseat.data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 
 class ResetPasswordViewModel(private val repository: UserRepository) : ViewModel() {
-    fun verifChangePasswordOtp(
+    fun verifyChangePasswordOtp(
         code: String,
         email: String,
         password: String,
         confirmPassword: String,
     ) = repository
-        .verifChangePasswordOtp(
+        .verifyChangePasswordOtp(
             code = code,
             email = email,
             password = password,

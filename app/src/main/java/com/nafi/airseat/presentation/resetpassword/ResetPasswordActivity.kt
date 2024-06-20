@@ -1,20 +1,20 @@
 package com.nafi.airseat.presentation.resetpassword
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityResetPasswordBinding
 import com.nafi.airseat.presentation.login.LoginActivity
-import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordActivity
+import com.nafi.airseat.presentation.otpresetpassword.OtpResetPasswordActivity
+import com.nafi.airseat.utils.ApiErrorException
+import com.nafi.airseat.utils.NoInternetException
+import com.nafi.airseat.utils.hideKeyboard
 import com.nafi.airseat.utils.proceedWhen
+import com.nafi.airseat.utils.showSnackBarError
+import com.nafi.airseat.utils.showSnackBarSuccess
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ResetPasswordActivity : AppCompatActivity() {
@@ -23,7 +23,6 @@ class ResetPasswordActivity : AppCompatActivity() {
     }
 
     private val resetPasswordViewModel: ResetPasswordViewModel by viewModel()
-
     private lateinit var code: String
     private lateinit var email: String
 
@@ -40,19 +39,9 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private fun setClickListeners() {
         binding.btnSave.setOnClickListener {
+            hideKeyboard()
             reqChangePassword()
         }
-        binding.icDetailBackButton.setOnClickListener {
-            navigateToReqChangePasswordByEmail()
-        }
-    }
-
-    private fun navigateToReqChangePasswordByEmail() {
-        startActivity(
-            Intent(this, ReqChangePasswordActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            },
-        )
     }
 
     private fun navigateToLogin() {
@@ -77,18 +66,23 @@ class ResetPasswordActivity : AppCompatActivity() {
         password: String,
         confirmPassword: String,
     ) {
-        resetPasswordViewModel.verifChangePasswordOtp(code, email, password, confirmPassword).observe(this) {
-            it.proceedWhen(
+        resetPasswordViewModel.verifyChangePasswordOtp(code, email, password, confirmPassword).observe(this) { result ->
+            result.proceedWhen(
                 doOnSuccess = {
                     binding.pbLoading.isVisible = false
                     binding.btnSave.isVisible = true
-                    showSnackbarSuccess(getString(R.string.text_change_password_success))
+                    showSnackBarSuccess(getString(R.string.text_change_password_success))
                     navigateToLogin()
                 },
                 doOnError = {
                     binding.pbLoading.isVisible = false
                     binding.btnSave.isVisible = true
-                    showSnackbarError(it.exception?.message.orEmpty())
+                    if (it.exception is ApiErrorException) {
+                        showSnackBarError("${it.exception.errorResponse.message}")
+                    } else if (it.exception is NoInternetException) {
+                        showSnackBarError("No Internet, Please Check Your Connection")
+                    }
+                    navigateToOtpResetPassword(email)
                 },
                 doOnLoading = {
                     binding.pbLoading.isVisible = true
@@ -96,32 +90,6 @@ class ResetPasswordActivity : AppCompatActivity() {
                 },
             )
         }
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun showSnackbarSuccess(message: String) {
-        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
-        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_success, null)
-        customView.findViewById<TextView>(R.id.textView1).text = message
-        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
-
-        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
-        snackbarLayout.setPadding(0, 0, 0, 0)
-        snackbarLayout.addView(customView, 0)
-        snackbar.show()
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun showSnackbarError(message: String) {
-        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
-        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_error, null)
-        customView.findViewById<TextView>(R.id.textView1).text = message
-        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
-
-        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
-        snackbarLayout.setPadding(0, 0, 0, 0)
-        snackbarLayout.addView(customView, 0)
-        snackbar.show()
     }
 
     private fun setupForm() {
@@ -177,5 +145,14 @@ class ResetPasswordActivity : AppCompatActivity() {
             binding.layoutFormResetPassword.tilConfirmPassword.isErrorEnabled = false
             true
         }
+    }
+
+    private fun navigateToOtpResetPassword(email: String) {
+        startActivity(
+            Intent(this, OtpResetPasswordActivity::class.java).apply {
+                putExtra("email", email)
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 }

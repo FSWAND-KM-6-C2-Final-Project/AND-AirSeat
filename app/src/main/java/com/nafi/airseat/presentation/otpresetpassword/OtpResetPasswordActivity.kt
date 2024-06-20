@@ -1,22 +1,20 @@
 package com.nafi.airseat.presentation.otpresetpassword
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.google.android.material.snackbar.Snackbar
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityOtpResetPasswordBinding
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordActivity
-import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordActivity
+import com.nafi.airseat.utils.ApiErrorException
+import com.nafi.airseat.utils.NoInternetException
 import com.nafi.airseat.utils.proceedWhen
+import com.nafi.airseat.utils.showSnackBarError
+import com.nafi.airseat.utils.showSnackBarSuccess
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OtpResetPasswordActivity : AppCompatActivity() {
@@ -24,7 +22,7 @@ class OtpResetPasswordActivity : AppCompatActivity() {
 
     private val otpResetPasswordViewModel: OtpResetPasswordViewModel by viewModel()
     private var countDownTimer: CountDownTimer? = null
-    private val timerDuration = 60000L // 60 seconds
+    private val timerDuration = 60000L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +35,7 @@ class OtpResetPasswordActivity : AppCompatActivity() {
 
         binding.otpview.setText("")
         binding.otpview.setOtpCompletionListener { code ->
-            hidekeyboard()
+            hideKeyboard()
 
             if (email != null) {
                 navigateToResetPassword(code, email)
@@ -68,7 +66,7 @@ class OtpResetPasswordActivity : AppCompatActivity() {
         binding.textInfoOTP.isVisible = false
     }
 
-    private fun hidekeyboard() {
+    private fun hideKeyboard() {
         val imm = getSystemService(Activity.INPUT_METHOD_SERVICE)as InputMethodManager
 
         currentFocus?.let {
@@ -77,21 +75,10 @@ class OtpResetPasswordActivity : AppCompatActivity() {
     }
 
     private fun setClickListeners() {
-        binding.icDetailBackButton.setOnClickListener {
-            navigateToResetPasswordEmail()
-        }
         binding.textNewCodeOTP.setOnClickListener {
             val email = binding.textEmail.text.toString()
             resendOtpChangePassword(email)
         }
-    }
-
-    private fun navigateToResetPasswordEmail() {
-        startActivity(
-            Intent(this, ReqChangePasswordActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            },
-        )
     }
 
     private fun resendOtpChangePassword(email: String) {
@@ -99,31 +86,22 @@ class OtpResetPasswordActivity : AppCompatActivity() {
             result.proceedWhen(
                 doOnSuccess = {
                     binding.textNewCodeOTP.isVisible = true
-                    showSnackbar("OTP sent to $email")
+                    showSnackBarSuccess("$it")
                     startTimer()
                 },
                 doOnError = {
                     binding.textNewCodeOTP.isVisible = true
-                    showSnackbar("Failed to send OTP: ${it.exception?.message.orEmpty()}")
+                    if (it.exception is ApiErrorException) {
+                        showSnackBarError("$it")
+                    } else if (it.exception is NoInternetException) {
+                        showSnackBarError("No Internet, Please Check Your Connection")
+                    }
                 },
                 doOnLoading = {
                     binding.textNewCodeOTP.isVisible = false
                 },
             )
         }
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun showSnackbar(message: String) {
-        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
-        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_success, null)
-        customView.findViewById<TextView>(R.id.textView1).text = message
-        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
-
-        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
-        snackbarLayout.setPadding(0, 0, 0, 0)
-        snackbarLayout.addView(customView, 0)
-        snackbar.show()
     }
 
     private fun navigateToResetPassword(

@@ -1,22 +1,20 @@
 package com.nafi.airseat.presentation.register
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Patterns
-import android.view.LayoutInflater
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import com.kom.foodapp.utils.highLightWord
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityRegisterBinding
 import com.nafi.airseat.presentation.login.LoginActivity
 import com.nafi.airseat.presentation.otpaccount.OtpActivity
+import com.nafi.airseat.utils.ApiErrorException
+import com.nafi.airseat.utils.NoInternetException
 import com.nafi.airseat.utils.proceedWhen
+import com.nafi.airseat.utils.showSnackBarError
+import com.nafi.airseat.utils.showSnackBarSuccess
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterActivity : AppCompatActivity() {
@@ -37,10 +35,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.btnRegister.setOnClickListener {
             doRegister()
         }
-        binding.tvNavToLogin.highLightWord(getString(R.string.text_login_here)) {
-            navigateToLogin()
-        }
-        binding.icDetailBackButton.setOnClickListener {
+        binding.tvNavToLogin.setOnClickListener {
             navigateToLogin()
         }
     }
@@ -66,65 +61,45 @@ class RegisterActivity : AppCompatActivity() {
         if (isFormValid()) {
             val email = binding.layoutForm.etEmail.text.toString().trim()
             val password = binding.layoutForm.etPassword.text.toString().trim()
-            val phonenumber = binding.layoutForm.etPhone.text.toString().trim()
-            val confirmpassword = binding.layoutForm.etConfirmPassword.text.toString().trim()
+            val phoneNumber = binding.layoutForm.etPhone.text.toString().trim()
+            val confirmPassword = binding.layoutForm.etConfirmPassword.text.toString().trim()
             val fullName = binding.layoutForm.etName.text.toString().trim()
-            proceedRegister(fullName, email, phonenumber, confirmpassword, password)
+            proceedRegister(fullName, email, phoneNumber, confirmPassword, password)
         }
     }
 
     private fun proceedRegister(
         fullName: String,
         email: String,
-        phonenumber: String,
-        confirmpassword: String,
+        phoneNumber: String,
+        confirmPassword: String,
         password: String,
     ) {
-        registerViewModel.doRegister(fullName, email, phonenumber, confirmpassword, password).observe(this) {
-            it.proceedWhen(
-                doOnSuccess = {
-                    binding.pbLoading.isVisible = false
-                    binding.btnRegister.isVisible = true
-                    showSnackbarSuccess(getString(R.string.text_register_success))
-                    navigateToOtp(email)
-                },
-                doOnError = {
-                    binding.pbLoading.isVisible = false
-                    binding.btnRegister.isVisible = true
-                    showSnackbarError("Register Failed : ${it.exception?.message.orEmpty()}")
-                },
-                doOnLoading = {
-                    binding.pbLoading.isVisible = true
-                    binding.btnRegister.isVisible = false
-                },
-            )
-        }
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun showSnackbarSuccess(message: String) {
-        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
-        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_success, null)
-        customView.findViewById<TextView>(R.id.textView1).text = message
-        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
-
-        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
-        snackbarLayout.setPadding(0, 0, 0, 0)
-        snackbarLayout.addView(customView, 0)
-        snackbar.show()
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun showSnackbarError(message: String) {
-        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
-        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_error, null)
-        customView.findViewById<TextView>(R.id.textView1).text = message
-        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
-
-        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
-        snackbarLayout.setPadding(0, 0, 0, 0)
-        snackbarLayout.addView(customView, 0)
-        snackbar.show()
+        registerViewModel.doRegister(fullName, email, phoneNumber, confirmPassword, password)
+            .observe(this) { result ->
+                result.proceedWhen(
+                    doOnSuccess = {
+                        binding.pbLoading.isVisible = false
+                        binding.btnRegister.isVisible = true
+                        showSnackBarSuccess(getString(R.string.text_register_success))
+                        navigateToOtp(email)
+                    },
+                    doOnError = {
+                        binding.pbLoading.isVisible = false
+                        binding.btnRegister.isVisible = true
+                        if (it.exception is ApiErrorException) {
+                            val errorBody = it.exception.errorResponse.message.orEmpty()
+                            showSnackBarError(errorBody)
+                        } else if (it.exception is NoInternetException) {
+                            showSnackBarError("No Internet, Please Check Your Connection")
+                        }
+                    },
+                    doOnLoading = {
+                        binding.pbLoading.isVisible = true
+                        binding.btnRegister.isVisible = false
+                    },
+                )
+            }
     }
 
     private fun setupForm() {
@@ -142,13 +117,13 @@ class RegisterActivity : AppCompatActivity() {
         val confirmPassword = binding.layoutForm.etConfirmPassword.text.toString().trim()
         val fullName = binding.layoutForm.etName.text.toString().trim()
         val email = binding.layoutForm.etEmail.text.toString().trim()
-        val phonenumber = binding.layoutForm.etPhone.text.toString().trim()
+        val phoneNumber = binding.layoutForm.etPhone.text.toString().trim()
 
         return checkNameValidation(fullName) && checkEmailValidation(email) &&
             checkPasswordValidation(password, binding.layoutForm.tilPassword) &&
             checkPasswordValidation(confirmPassword, binding.layoutForm.tilConfirmPassword) &&
             checkPwdAndConfirmPwd(password, confirmPassword) &&
-            checkphoneValidation(phonenumber)
+            checkPhoneValidation(phoneNumber)
     }
 
     private fun checkNameValidation(fullName: String): Boolean {
@@ -162,8 +137,8 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkphoneValidation(phonenumber: String): Boolean {
-        return if (phonenumber.isEmpty()) {
+    private fun checkPhoneValidation(phoneNumber: String): Boolean {
+        return if (phoneNumber.isEmpty()) {
             binding.layoutForm.tilPhone.isErrorEnabled = true
             binding.layoutForm.tilPhone.error = getString(R.string.text_error_phone_cannot_empty)
             false

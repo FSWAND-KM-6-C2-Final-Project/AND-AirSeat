@@ -6,18 +6,18 @@ import com.nafi.airseat.data.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 
 class OtpViewModel(private val repository: UserRepository) : ViewModel() {
-    fun doVerif(
+    fun doVerify(
         email: String,
         code: String,
     ) = repository
-        .doVerif(
+        .doVerify(
             email = email,
             code = code,
         )
         .asLiveData(Dispatchers.IO)
 
-    fun doVerifResendOtp(email: String) =
+    fun doVerifyResendOtp(email: String) =
         repository
-            .doVerifResendOtp(email)
+            .doVerifyResendOtp(email)
             .asLiveData(Dispatchers.IO)
 }
