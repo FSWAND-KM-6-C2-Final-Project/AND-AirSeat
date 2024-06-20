@@ -1,7 +1,6 @@
 package com.nafi.airseat.data.model
 
 import com.google.gson.annotations.SerializedName
-import com.nafi.airseat.data.source.network.model.history.HistoryData
 import com.nafi.airseat.data.source.network.model.history.Pagination
 
 /**
@@ -13,12 +12,14 @@ data class BaseResponse<T>(
     val status: ApiStatus?,
     @SerializedName("message")
     val message: String?,
+    @SerializedName("token")
+    val token: String?,
     @SerializedName("pagination")
     val pagination: Pagination?,
     @SerializedName("requestAt")
     val requestAt: String?,
     @SerializedName("data")
-    val data: HistoryData,
+    val data: T?,
 )
 
 enum class ApiStatus {

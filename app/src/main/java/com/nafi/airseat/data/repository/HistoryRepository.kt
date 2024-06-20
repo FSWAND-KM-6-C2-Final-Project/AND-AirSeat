@@ -13,6 +13,6 @@ interface HistoryRepository {
 
 class HistoryRepositoryImpl(private val dataSource: HistoryDataSource) : HistoryRepository {
     override fun getHistoryData(bookingCode: String?): Flow<ResultWrapper<List<History>>> {
-        return proceedFlow { dataSource.getHistoryData(bookingCode = bookingCode).data.booking.toHistoryList() }
+        return proceedFlow { dataSource.getHistoryData(bookingCode = bookingCode).data?.booking.toHistoryList() }
     }
 }

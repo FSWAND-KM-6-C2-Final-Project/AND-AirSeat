@@ -8,30 +8,25 @@ import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
 import com.nafi.airseat.data.source.network.model.flightdetail.FlightDetailResponse
 import com.nafi.airseat.data.source.network.model.history.HistoryData
 import com.nafi.airseat.data.source.network.model.login.LoginRequest
-import com.nafi.airseat.data.source.network.model.login.LoginResponse
 import com.nafi.airseat.data.source.network.model.notification.NotificationResponse
 import com.nafi.airseat.data.source.network.model.profile.ProfileResponse
 import com.nafi.airseat.data.source.network.model.profile.UpdateProfileRequest
 import com.nafi.airseat.data.source.network.model.profile.UpdateProfileResponse
+import com.nafi.airseat.data.source.network.model.register.RegisterData
 import com.nafi.airseat.data.source.network.model.register.RegisterRequest
-import com.nafi.airseat.data.source.network.model.register.RegisterResponse
+import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordData
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordRequest
+import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpData
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpRequest
-import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpResponse
-import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResponse
 import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpRequest
-import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpResponse
-import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpRequest
-import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendRequest
-import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendResponse
-import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResponse
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpRequest
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpResendData
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpResendRequest
 import okhttp3.OkHttpClient
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -42,46 +37,37 @@ interface AirSeatApiService {
     @POST("auth/login")
     suspend fun login(
         @Body loginRequest: LoginRequest,
-    ): LoginResponse
+    ): BaseResponse<Any>
 
     @POST("auth/register")
     suspend fun register(
         @Body registerRequest: RegisterRequest,
-    ): Response<RegisterResponse>
+    ): BaseResponse<RegisterData>
 
     @POST("auth/activation/verify")
-    suspend fun verifAccountOtp(
-        @Body verifAccountOtpRequest: VerifAccountOtpRequest,
-    ): Response<VerifAccountOtpResponse>
+    suspend fun verifyAccountOtp(
+        @Body verifyAccountOtpRequest: VerifyAccountOtpRequest,
+    ): BaseResponse<Any>
 
     @POST("auth/activation/resend")
-    suspend fun verifAccountOtpResend(
-        @Body verifAccountOtpRequest: VerifAccountOtpResendRequest,
-    ): Response<VerifAccountOtpResendResponse>
+    suspend fun verifyAccountOtpResend(
+        @Body verifyAccountOtpRequest: VerifyAccountOtpResendRequest,
+    ): BaseResponse<VerifyAccountOtpResendData>
 
-    // reset password
     @POST("auth/password-reset/resend")
     suspend fun resetPasswordResendOtp(
         @Body resetPasswordResendOtpRequest: ResetPasswordResendOtpRequest,
-    ): Response<ResetPasswordResendOtpResponse>
+    ): BaseResponse<ResetPasswordResendOtpData>
 
     @POST("auth/password-reset")
     suspend fun resetPassword(
         @Body resetPasswordRequest: ResetPasswordRequest,
-    ): Response<ResetPasswordResponse>
+    ): BaseResponse<ResetPasswordData>
 
     @POST("auth/password-reset/verify")
     suspend fun verifyPasswordChangeOtp(
         @Body verifyPasswordChangeOtpRequest: VerifyPasswordChangeOtpRequest,
-    ): Response<VerifyPasswordChangeOtpResponse>
-
-    @GET("auth/me")
-    suspend fun checkUserInformation(
-        @Header("Authorization") token: String? = null,
-    ): LoginResponse
-
-    /*@GET("auth/me")
-    fun refreshToken(): Call<RefreshTokenResponse>*/
+    ): BaseResponse<Any>
 
     @GET("airport")
     suspend fun getAirports(

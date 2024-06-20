@@ -9,5 +9,5 @@ class ReqChangePasswordViewModel(private val repository: UserRepository) : ViewM
     fun reqChangePasswordByEmail(email: String) =
         repository
             .reqChangePasswordByEmail(email)
-            .asLiveData(Dispatchers.IO) // send otp to email
+            .asLiveData(Dispatchers.IO)
 }

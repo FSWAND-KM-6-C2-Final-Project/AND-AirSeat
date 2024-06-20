@@ -1,31 +1,25 @@
 package com.nafi.airseat.presentation.login
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
-import android.view.LayoutInflater
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
-import com.kom.foodapp.utils.highLightWord
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityLoginBinding
 import com.nafi.airseat.presentation.main.MainActivity
 import com.nafi.airseat.presentation.register.RegisterActivity
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordActivity
+import com.nafi.airseat.utils.ApiErrorException
+import com.nafi.airseat.utils.NoInternetException
 import com.nafi.airseat.utils.proceedWhen
+import com.nafi.airseat.utils.showSnackBarError
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
-
     private val loginViewModel: LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
         binding.layoutFormLogin.btnLogin.setOnClickListener {
             doLogin()
         }
-        binding.layoutFormLogin.tvNavToRegister.highLightWord(getString(R.string.text_sign_up_here)) {
+        binding.layoutFormLogin.tvNavToRegister.setOnClickListener {
             navigateToRegister()
         }
         binding.layoutFormLogin.tvForgetPassword.setOnClickListener {
@@ -80,15 +74,18 @@ class LoginActivity : AppCompatActivity() {
                 doOnSuccess = {
                     binding.layoutFormLogin.pbLoading.isVisible = false
                     binding.layoutFormLogin.btnLogin.isVisible = true
-                    val token = it.payload.toString()
+                    val token = it.payload.orEmpty()
                     loginViewModel.saveToken(token)
                     navigateToMain()
                 },
                 doOnError = {
                     binding.layoutFormLogin.pbLoading.isVisible = false
                     binding.layoutFormLogin.btnLogin.isVisible = true
-                    Log.d("proceedLogin", getString(R.string.proceed_login, it.exception?.message))
-                    showSnackbarError(it.exception?.message ?: "An error occurred")
+                    if (it.exception is ApiErrorException) {
+                        showSnackBarError(getString(R.string.text_invalid_email_and_password))
+                    } else if (it.exception is NoInternetException) {
+                        showSnackBarError(getString(R.string.text_no_internet))
+                    }
                 },
                 doOnLoading = {
                     binding.layoutFormLogin.pbLoading.isVisible = true
@@ -96,19 +93,6 @@ class LoginActivity : AppCompatActivity() {
                 },
             )
         }
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun showSnackbarError(message: String) {
-        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
-        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_error, null)
-        customView.findViewById<TextView>(R.id.textView1).text = message
-        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
-
-        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
-        snackbarLayout.setPadding(0, 0, 0, 0)
-        snackbarLayout.addView(customView, 0)
-        snackbar.show()
     }
 
     private fun navigateToMain() {
@@ -122,14 +106,10 @@ class LoginActivity : AppCompatActivity() {
     private fun isFormValid(): Boolean {
         val email = binding.layoutFormLogin.etEmail.text.toString().trim()
         val password = binding.layoutFormLogin.etPassword.text.toString().trim()
-
-        return checkEmailValidation(email) && checkPasswordValidation(password, binding.layoutFormLogin.tilPassword)
+        return checkEmailValidation(email) && checkPasswordValidation(password)
     }
 
-    private fun checkPasswordValidation(
-        confirmPassword: String,
-        textInputLayout: TextInputLayout,
-    ): Boolean {
+    private fun checkPasswordValidation(confirmPassword: String): Boolean {
         return if (confirmPassword.isEmpty()) {
             binding.layoutFormLogin.tilPassword.isErrorEnabled = true
             binding.layoutFormLogin.tilPassword.error = getString(R.string.error_password_empty)

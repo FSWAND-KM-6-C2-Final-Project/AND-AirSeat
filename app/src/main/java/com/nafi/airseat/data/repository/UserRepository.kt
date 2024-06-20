@@ -1,55 +1,49 @@
 package com.nafi.airseat.data.repository
 
 import com.nafi.airseat.data.datasource.AuthDataSource
-import com.nafi.airseat.data.model.User
+import com.nafi.airseat.data.source.network.model.login.LoginRequest
+import com.nafi.airseat.data.source.network.model.register.RegisterRequest
+import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordRequest
+import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpRequest
+import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpRequest
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpRequest
+import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpResendRequest
 import com.nafi.airseat.utils.ResultWrapper
 import com.nafi.airseat.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    @Throws(exceptionClasses = [Exception::class])
     fun doLogin(
         email: String,
         password: String,
     ): Flow<ResultWrapper<String>>
 
-    @Throws(exceptionClasses = [java.lang.Exception::class])
     fun doRegister(
         fullName: String,
         email: String,
         phoneNumber: String,
         password: String,
         confirmPassword: String,
-    ): Flow<ResultWrapper<Boolean>>
+    ): Flow<ResultWrapper<String>>
 
-    @Throws(exceptionClasses = [java.lang.Exception::class])
-    fun doVerif(
+    fun doVerify(
         email: String,
         code: String,
-    ): Flow<ResultWrapper<Boolean>>
+    ): Flow<ResultWrapper<String>>
 
-    fun doVerifResendOtp(email: String): Flow<ResultWrapper<Boolean>>
+    fun doVerifyResendOtp(email: String): Flow<ResultWrapper<String>>
 
     // reset password
-    fun reqChangePasswordByEmail(email: String): Flow<ResultWrapper<Boolean>>
+    fun reqChangePasswordByEmail(email: String): Flow<ResultWrapper<String>>
 
-    fun reqChangePasswordByEmailResendOtp(email: String): Flow<ResultWrapper<Boolean>>
+    fun reqChangePasswordByEmailResendOtp(email: String): Flow<ResultWrapper<String>>
 
-    @Throws(exceptionClasses = [java.lang.Exception::class])
-    fun verifChangePasswordOtp(
+    fun verifyChangePasswordOtp(
         code: String,
         email: String,
         password: String,
         confirmPassword: String,
-    ): Flow<ResultWrapper<Boolean>>
-
-    fun getCurrentUser(): User?
-
-    fun isLoggedIn(): Boolean
-
-    fun doLogout(): Boolean
-
-//    fun getToken(categorynName: String? = null): Flow<ResultWrapper<List<UserApi>>>
+    ): Flow<ResultWrapper<String>>
 }
 
 class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepository {
@@ -57,7 +51,7 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
         email: String,
         password: String,
     ): Flow<ResultWrapper<String>> {
-        return proceedFlow { dataSource.doLogin(email, password).token.orEmpty() }
+        return proceedFlow { dataSource.doLogin(LoginRequest(email, password)).token.orEmpty() }
     }
 
     override fun doRegister(
@@ -66,48 +60,65 @@ class UserRepositoryImpl(private val dataSource: AuthDataSource) : UserRepositor
         phoneNumber: String,
         password: String,
         confirmPassword: String,
-    ): Flow<ResultWrapper<Boolean>> {
-        return proceedFlow { dataSource.doRegister(fullName, email, phoneNumber, password, confirmPassword) }
+    ): Flow<ResultWrapper<String>> {
+        return proceedFlow {
+            dataSource.doRegister(
+                RegisterRequest(
+                    fullName,
+                    email,
+                    phoneNumber,
+                    password,
+                    confirmPassword,
+                ),
+            ).message.orEmpty()
+        }
     }
 
-    override fun doVerif(
+    override fun doVerify(
         email: String,
         code: String,
-    ): Flow<ResultWrapper<Boolean>> {
-        return proceedFlow { dataSource.doVerif(email, code) }
+    ): Flow<ResultWrapper<String>> {
+        return proceedFlow {
+            dataSource.doVerify(
+                VerifyAccountOtpRequest(
+                    email,
+                    code,
+                ),
+            ).message.orEmpty()
+        }
     }
 
-    override fun doVerifResendOtp(email: String): Flow<ResultWrapper<Boolean>> {
-        return proceedFlow { dataSource.doVerifResendOtp(email) }
+    override fun doVerifyResendOtp(email: String): Flow<ResultWrapper<String>> {
+        return proceedFlow { dataSource.doVerifyResendOtp(VerifyAccountOtpResendRequest(email)).message.orEmpty() }
     }
 
-    // reset password
-    override fun reqChangePasswordByEmail(email: String): Flow<ResultWrapper<Boolean>> {
-        return proceedFlow { dataSource.reqChangePasswordByEmail(email) }
+    override fun reqChangePasswordByEmail(email: String): Flow<ResultWrapper<String>> {
+        return proceedFlow { dataSource.reqChangePasswordByEmail(ResetPasswordRequest(email)).message.orEmpty() }
     }
 
-    override fun reqChangePasswordByEmailResendOtp(email: String): Flow<ResultWrapper<Boolean>> {
-        return proceedFlow { dataSource.reqChangePasswordByEmailResendOtp(email) }
+    override fun reqChangePasswordByEmailResendOtp(email: String): Flow<ResultWrapper<String>> {
+        return proceedFlow {
+            dataSource.reqChangePasswordByEmailResendOtp(
+                ResetPasswordResendOtpRequest(email),
+            ).message.orEmpty()
+        }
     }
 
-    override fun verifChangePasswordOtp(
+    override fun verifyChangePasswordOtp(
         code: String,
         email: String,
         password: String,
         confirmPassword: String,
-    ): Flow<ResultWrapper<Boolean>> {
-        return proceedFlow { dataSource.verifChangePasswordOtp(code, email, password, confirmPassword) }
-    }
-
-    override fun isLoggedIn(): Boolean {
-        return dataSource.isLoggedIn()
-    }
-
-    override fun doLogout(): Boolean {
-        return dataSource.doLogout()
-    }
-
-    override fun getCurrentUser(): User? {
-        return dataSource.getCurrentUser()
+    ): Flow<ResultWrapper<String>> {
+        return proceedFlow {
+            dataSource.verifyChangePasswordOtp(
+                VerifyPasswordChangeOtpRequest(
+                    code,
+                    email,
+                    password,
+                    confirmPassword,
+                ),
+            ).message.orEmpty()
+        }
     }
 }

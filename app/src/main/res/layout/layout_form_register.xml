@@ -7,11 +7,11 @@
     android:orientation="vertical"
     tools:context=".presentation.register.RegisterActivity">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_title_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="6dp"
         android:text="@string/title_name"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -32,11 +32,13 @@
             android:hint="@string/your_name" />
 
     </com.google.android.material.textfield.TextInputLayout>
-    <TextView
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_title_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="6dp"
         android:text="@string/title_phone"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -57,10 +59,12 @@
             android:inputType="phone" />
 
     </com.google.android.material.textfield.TextInputLayout>
-    <TextView
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_title_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
         android:layout_marginTop="16dp"
         android:text="@string/text_email"
         app:layout_constraintStart_toStartOf="parent" />
@@ -82,11 +86,13 @@
             android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
-    <TextView
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_title_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="6dp"
         android:text="@string/title_password"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -108,14 +114,15 @@
             android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
-    <TextView
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_title_confirm_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
         android:layout_marginTop="16dp"
         android:text="@string/title_confirm_password"
-        app:layout_constraintStart_toStartOf="parent"
-         />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_confirm_password"
