@@ -74,14 +74,13 @@ import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordV
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
-import com.nafi.airseat.presentation.updateprofile.UpdateProfileViewModel
 import com.nafi.airseat.presentation.splashscreen.SplashScreenViewModel
+import com.nafi.airseat.presentation.updateprofile.UpdateProfileViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
-import org.koin.core.scope.get
 import org.koin.dsl.module
 
 object AppModules {

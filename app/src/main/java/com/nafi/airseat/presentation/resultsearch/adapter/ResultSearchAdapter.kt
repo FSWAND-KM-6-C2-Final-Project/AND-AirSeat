@@ -10,9 +10,6 @@ import com.nafi.airseat.data.model.Flight
 import com.nafi.airseat.databinding.ItemResultSearchTicketBinding
 import com.nafi.airseat.utils.toCurrencyFormat
 import com.nafi.airseat.utils.toTimeClock
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
 
 class ResultSearchAdapter(private val typeSeatClass: String?, private val listener: (Flight, Int) -> Unit) :
     RecyclerView.Adapter<ResultSearchAdapter.ItemFlightViewHolder>() {
