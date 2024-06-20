@@ -18,7 +18,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OtpActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOtpBinding
-
     private val otpViewModel: OtpViewModel by viewModel()
     private var countDownTimer: CountDownTimer? = null
     private val timerDuration = 60000L
@@ -28,10 +27,13 @@ class OtpActivity : AppCompatActivity() {
         binding = ActivityOtpBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setClickListeners()
+        setTextData()
+        startTimer()
+    }
 
+    private fun setTextData() {
         val email = intent.getStringExtra("email")
         binding.textEmail.text = email
-
         binding.otpview.setText("")
         binding.otpview.setOtpCompletionListener { otp ->
             hideKeyboard()
@@ -39,7 +41,6 @@ class OtpActivity : AppCompatActivity() {
                 verifyOtp(email, otp)
             }
         }
-        startTimer()
     }
 
     private fun startTimer() {
@@ -48,19 +49,18 @@ class OtpActivity : AppCompatActivity() {
             object : CountDownTimer(timerDuration, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     val secondsRemaining = millisUntilFinished / 1000
-                    binding.textResendOTP.text = getString(R.string.text_resend_otp, secondsRemaining)
+                    binding.textResendOTP.text =
+                        getString(R.string.text_resend_otp, secondsRemaining)
                 }
 
                 override fun onFinish() {
                     binding.textNewCodeOTP.isVisible = true
                     binding.textResendOTP.isVisible = false
-
                     binding.textInfoOTP.isVisible = true
                 }
             }.start()
         binding.textNewCodeOTP.isVisible = false
         binding.textResendOTP.isVisible = true
-
         binding.textInfoOTP.isVisible = false
     }
 
@@ -84,7 +84,7 @@ class OtpActivity : AppCompatActivity() {
                     if (it.exception is ApiErrorException) {
                         showSnackBarError("$it")
                     } else if (it.exception is NoInternetException) {
-                        showSnackBarError("No Internet, Please Check Your Connection")
+                        showSnackBarError(getString(R.string.text_no_internet))
                     }
                 },
                 doOnLoading = {
@@ -108,7 +108,7 @@ class OtpActivity : AppCompatActivity() {
                     if (it.exception is ApiErrorException) {
                         showSnackBarError("${it.exception.errorResponse.message}")
                     } else if (it.exception is NoInternetException) {
-                        showSnackBarError("No Internet, Please Check Your Connection")
+                        showSnackBarError(getString(R.string.text_no_internet))
                     }
                 },
                 doOnLoading = {

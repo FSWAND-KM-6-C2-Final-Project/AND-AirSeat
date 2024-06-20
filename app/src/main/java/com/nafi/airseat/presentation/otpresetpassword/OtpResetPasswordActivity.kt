@@ -1,10 +1,8 @@
 package com.nafi.airseat.presentation.otpresetpassword
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.nafi.airseat.R
@@ -12,6 +10,7 @@ import com.nafi.airseat.databinding.ActivityOtpResetPasswordBinding
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordActivity
 import com.nafi.airseat.utils.ApiErrorException
 import com.nafi.airseat.utils.NoInternetException
+import com.nafi.airseat.utils.hideKeyboard
 import com.nafi.airseat.utils.proceedWhen
 import com.nafi.airseat.utils.showSnackBarError
 import com.nafi.airseat.utils.showSnackBarSuccess
@@ -19,7 +18,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OtpResetPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityOtpResetPasswordBinding
-
     private val otpResetPasswordViewModel: OtpResetPasswordViewModel by viewModel()
     private var countDownTimer: CountDownTimer? = null
     private val timerDuration = 60000L
@@ -29,10 +27,13 @@ class OtpResetPasswordActivity : AppCompatActivity() {
         binding = ActivityOtpResetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setClickListeners()
+        setTextData()
+        startTimer()
+    }
 
+    private fun setTextData() {
         val email = intent.getStringExtra("email")
         binding.textEmail.text = email
-
         binding.otpview.setText("")
         binding.otpview.setOtpCompletionListener { code ->
             hideKeyboard()
@@ -41,7 +42,6 @@ class OtpResetPasswordActivity : AppCompatActivity() {
                 navigateToResetPassword(code, email)
             }
         }
-        startTimer()
     }
 
     private fun startTimer() {
@@ -50,7 +50,8 @@ class OtpResetPasswordActivity : AppCompatActivity() {
             object : CountDownTimer(timerDuration, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     val secondsRemaining = millisUntilFinished / 1000
-                    binding.textResendOTP.text = getString(R.string.text_resend_otp, secondsRemaining)
+                    binding.textResendOTP.text =
+                        getString(R.string.text_resend_otp, secondsRemaining)
                 }
 
                 override fun onFinish() {
@@ -62,16 +63,7 @@ class OtpResetPasswordActivity : AppCompatActivity() {
             }.start()
         binding.textNewCodeOTP.isVisible = false
         binding.textResendOTP.isVisible = true
-
         binding.textInfoOTP.isVisible = false
-    }
-
-    private fun hideKeyboard() {
-        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE)as InputMethodManager
-
-        currentFocus?.let {
-            imm.hideSoftInputFromWindow(it.windowToken, 0)
-        }
     }
 
     private fun setClickListeners() {
@@ -92,9 +84,9 @@ class OtpResetPasswordActivity : AppCompatActivity() {
                 doOnError = {
                     binding.textNewCodeOTP.isVisible = true
                     if (it.exception is ApiErrorException) {
-                        showSnackBarError("$it")
+                        showSnackBarError("${it.exception.errorResponse.message}")
                     } else if (it.exception is NoInternetException) {
-                        showSnackBarError("No Internet, Please Check Your Connection")
+                        showSnackBarError(getString(R.string.text_no_internet))
                     }
                 },
                 doOnLoading = {
@@ -109,7 +101,7 @@ class OtpResetPasswordActivity : AppCompatActivity() {
         email: String,
     ) {
         startActivity(
-            Intent(this, ResetPasswordActivity::class.java).apply { // Replace with actual target activity
+            Intent(this, ResetPasswordActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
                 putExtra("code", code)
                 putExtra("email", email)

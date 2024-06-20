@@ -21,7 +21,6 @@ class RegisterActivity : AppCompatActivity() {
     private val binding: ActivityRegisterBinding by lazy {
         ActivityRegisterBinding.inflate(layoutInflater)
     }
-
     private val registerViewModel: RegisterViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +90,7 @@ class RegisterActivity : AppCompatActivity() {
                             val errorBody = it.exception.errorResponse.message.orEmpty()
                             showSnackBarError(errorBody)
                         } else if (it.exception is NoInternetException) {
-                            showSnackBarError("No Internet, Please Check Your Connection")
+                            showSnackBarError(getString(R.string.text_no_internet))
                         }
                     },
                     doOnLoading = {
@@ -120,10 +119,14 @@ class RegisterActivity : AppCompatActivity() {
         val phoneNumber = binding.layoutForm.etPhone.text.toString().trim()
 
         return checkNameValidation(fullName) && checkEmailValidation(email) &&
-            checkPasswordValidation(password, binding.layoutForm.tilPassword) &&
-            checkPasswordValidation(confirmPassword, binding.layoutForm.tilConfirmPassword) &&
-            checkPwdAndConfirmPwd(password, confirmPassword) &&
-            checkPhoneValidation(phoneNumber)
+            checkPasswordValidation(
+                password,
+                binding.layoutForm.tilPassword,
+            ) &&
+            checkPasswordValidation(
+                confirmPassword,
+                binding.layoutForm.tilConfirmPassword,
+            ) && checkPwdAndConfirmPwd(password, confirmPassword) && checkPhoneValidation(phoneNumber)
     }
 
     private fun checkNameValidation(fullName: String): Boolean {
@@ -169,13 +172,11 @@ class RegisterActivity : AppCompatActivity() {
     ): Boolean {
         return if (confirmPassword.isEmpty()) {
             textInputLayout.isErrorEnabled = true
-            textInputLayout.error =
-                getString(R.string.text_error_password_empty)
+            textInputLayout.error = getString(R.string.text_error_password_empty)
             false
         } else if (confirmPassword.length < 8) {
             textInputLayout.isErrorEnabled = true
-            textInputLayout.error =
-                getString(R.string.text_error_password_less_than_8_char)
+            textInputLayout.error = getString(R.string.text_error_password_less_than_8_char)
             false
         } else {
             textInputLayout.isErrorEnabled = false
@@ -189,8 +190,7 @@ class RegisterActivity : AppCompatActivity() {
     ): Boolean {
         return if (password != confirmPassword) {
             binding.layoutForm.tilPassword.isErrorEnabled = true
-            binding.layoutForm.tilPassword.error =
-                getString(R.string.text_password_does_not_match)
+            binding.layoutForm.tilPassword.error = getString(R.string.text_password_does_not_match)
             binding.layoutForm.tilConfirmPassword.isErrorEnabled = true
             binding.layoutForm.tilConfirmPassword.error =
                 getString(R.string.text_password_does_not_match)

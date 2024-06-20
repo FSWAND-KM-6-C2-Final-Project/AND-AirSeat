@@ -21,7 +21,6 @@ class ResetPasswordActivity : AppCompatActivity() {
     private val binding: ActivityResetPasswordBinding by lazy {
         ActivityResetPasswordBinding.inflate(layoutInflater)
     }
-
     private val resetPasswordViewModel: ResetPasswordViewModel by viewModel()
     private lateinit var code: String
     private lateinit var email: String
@@ -29,12 +28,14 @@ class ResetPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        code = intent.getStringExtra("code") ?: ""
-        email = intent.getStringExtra("email") ?: ""
-
+        setData()
         setupForm()
         setClickListeners()
+    }
+
+    private fun setData() {
+        code = intent.getStringExtra("code") ?: ""
+        email = intent.getStringExtra("email") ?: ""
     }
 
     private fun setClickListeners() {
@@ -55,7 +56,8 @@ class ResetPasswordActivity : AppCompatActivity() {
     private fun reqChangePassword() {
         if (isFormValid()) {
             val password = binding.layoutFormResetPassword.etPassword.text.toString().trim()
-            val confirmPassword = binding.layoutFormResetPassword.etConfirmPassword.text.toString().trim()
+            val confirmPassword =
+                binding.layoutFormResetPassword.etConfirmPassword.text.toString().trim()
             proceedResetPassword(code, email, password, confirmPassword)
         }
     }
@@ -66,30 +68,31 @@ class ResetPasswordActivity : AppCompatActivity() {
         password: String,
         confirmPassword: String,
     ) {
-        resetPasswordViewModel.verifyChangePasswordOtp(code, email, password, confirmPassword).observe(this) { result ->
-            result.proceedWhen(
-                doOnSuccess = {
-                    binding.pbLoading.isVisible = false
-                    binding.btnSave.isVisible = true
-                    showSnackBarSuccess(getString(R.string.text_change_password_success))
-                    navigateToLogin()
-                },
-                doOnError = {
-                    binding.pbLoading.isVisible = false
-                    binding.btnSave.isVisible = true
-                    if (it.exception is ApiErrorException) {
-                        showSnackBarError("${it.exception.errorResponse.message}")
-                    } else if (it.exception is NoInternetException) {
-                        showSnackBarError("No Internet, Please Check Your Connection")
-                    }
-                    navigateToOtpResetPassword(email)
-                },
-                doOnLoading = {
-                    binding.pbLoading.isVisible = true
-                    binding.btnSave.isVisible = false
-                },
-            )
-        }
+        resetPasswordViewModel.verifyChangePasswordOtp(code, email, password, confirmPassword)
+            .observe(this) { result ->
+                result.proceedWhen(
+                    doOnSuccess = {
+                        binding.pbLoading.isVisible = false
+                        binding.btnSave.isVisible = true
+                        showSnackBarSuccess(getString(R.string.text_change_password_success))
+                        navigateToLogin()
+                    },
+                    doOnError = {
+                        binding.pbLoading.isVisible = false
+                        binding.btnSave.isVisible = true
+                        if (it.exception is ApiErrorException) {
+                            showSnackBarError("${it.exception.errorResponse.message}")
+                        } else if (it.exception is NoInternetException) {
+                            showSnackBarError(getString(R.string.text_no_internet))
+                        }
+                        navigateToOtpResetPassword(email)
+                    },
+                    doOnLoading = {
+                        binding.pbLoading.isVisible = true
+                        binding.btnSave.isVisible = false
+                    },
+                )
+            }
     }
 
     private fun setupForm() {
@@ -101,10 +104,14 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private fun isFormValid(): Boolean {
         val password = binding.layoutFormResetPassword.etPassword.text.toString().trim()
-        val confirmPassword = binding.layoutFormResetPassword.etConfirmPassword.text.toString().trim()
+        val confirmPassword =
+            binding.layoutFormResetPassword.etConfirmPassword.text.toString().trim()
 
         return checkPasswordValidation(password, binding.layoutFormResetPassword.tilPassword) &&
-            checkPasswordValidation(confirmPassword, binding.layoutFormResetPassword.tilConfirmPassword) &&
+            checkPasswordValidation(
+                confirmPassword,
+                binding.layoutFormResetPassword.tilConfirmPassword,
+            ) &&
             checkPwdAndConfirmPwd(password, confirmPassword)
     }
 

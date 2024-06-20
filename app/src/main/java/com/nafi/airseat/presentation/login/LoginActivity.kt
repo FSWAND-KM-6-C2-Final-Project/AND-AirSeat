@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.kom.foodapp.utils.highLightWord
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityLoginBinding
 import com.nafi.airseat.presentation.main.MainActivity
@@ -21,7 +20,6 @@ class LoginActivity : AppCompatActivity() {
     private val binding: ActivityLoginBinding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
-
     private val loginViewModel: LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
         binding.layoutFormLogin.btnLogin.setOnClickListener {
             doLogin()
         }
-        binding.layoutFormLogin.tvNavToRegister.highLightWord(getString(R.string.text_sign_up_here)) {
+        binding.layoutFormLogin.tvNavToRegister.setOnClickListener {
             navigateToRegister()
         }
         binding.layoutFormLogin.tvForgetPassword.setOnClickListener {
@@ -84,9 +82,9 @@ class LoginActivity : AppCompatActivity() {
                     binding.layoutFormLogin.pbLoading.isVisible = false
                     binding.layoutFormLogin.btnLogin.isVisible = true
                     if (it.exception is ApiErrorException) {
-                        showSnackBarError("Invalid Email and Password")
+                        showSnackBarError(getString(R.string.text_invalid_email_and_password))
                     } else if (it.exception is NoInternetException) {
-                        showSnackBarError("No Internet, Please Check Your Connection")
+                        showSnackBarError(getString(R.string.text_no_internet))
                     }
                 },
                 doOnLoading = {
@@ -108,13 +106,10 @@ class LoginActivity : AppCompatActivity() {
     private fun isFormValid(): Boolean {
         val email = binding.layoutFormLogin.etEmail.text.toString().trim()
         val password = binding.layoutFormLogin.etPassword.text.toString().trim()
-
         return checkEmailValidation(email) && checkPasswordValidation(password)
     }
 
-    private fun checkPasswordValidation(
-        confirmPassword: String
-    ): Boolean {
+    private fun checkPasswordValidation(confirmPassword: String): Boolean {
         return if (confirmPassword.isEmpty()) {
             binding.layoutFormLogin.tilPassword.isErrorEnabled = true
             binding.layoutFormLogin.tilPassword.error = getString(R.string.error_password_empty)

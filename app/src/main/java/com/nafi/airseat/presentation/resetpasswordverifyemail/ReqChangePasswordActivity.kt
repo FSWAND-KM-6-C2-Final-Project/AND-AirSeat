@@ -20,7 +20,6 @@ class ReqChangePasswordActivity : AppCompatActivity() {
     private val binding: ActivityResetPasswordEmailBinding by lazy {
         ActivityResetPasswordEmailBinding.inflate(layoutInflater)
     }
-
     private val reqChangePasswordViewModel: ReqChangePasswordViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +77,7 @@ class ReqChangePasswordActivity : AppCompatActivity() {
                     if (it.exception is ApiErrorException) {
                         showSnackBarError("${it.exception.errorResponse.message}")
                     } else if (it.exception is NoInternetException) {
-                        showSnackBarError("No Internet, Please Check Your Connection")
+                        showSnackBarError(getString(R.string.text_no_internet))
                     }
                 },
                 doOnLoading = {
@@ -97,18 +96,19 @@ class ReqChangePasswordActivity : AppCompatActivity() {
 
     private fun isFormValid(): Boolean {
         val email = binding.layoutFormResetPasswordEmail.etEmail.text.toString().trim()
-
         return checkEmailValidation(email)
     }
 
     private fun checkEmailValidation(email: String): Boolean {
         return if (email.isEmpty()) {
             binding.layoutFormResetPasswordEmail.tilEmail.isErrorEnabled = true
-            binding.layoutFormResetPasswordEmail.tilEmail.error = getString(R.string.text_error_email_empty)
+            binding.layoutFormResetPasswordEmail.tilEmail.error =
+                getString(R.string.text_error_email_empty)
             false
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.layoutFormResetPasswordEmail.tilEmail.isErrorEnabled = true
-            binding.layoutFormResetPasswordEmail.tilEmail.error = getString(R.string.text_error_email_invalid)
+            binding.layoutFormResetPasswordEmail.tilEmail.error =
+                getString(R.string.text_error_email_invalid)
             false
         } else {
             binding.layoutFormResetPasswordEmail.tilEmail.isErrorEnabled = false
