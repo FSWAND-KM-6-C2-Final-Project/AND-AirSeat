@@ -19,6 +19,7 @@ data class Flight(
     var airline: FlightAirline,
     var departureAirport: FlightAirportDeparture,
     var arrivalAirport: FlightAirportArrival,
+    var duration: String,
 )
 
 data class FlightAirline(

@@ -36,7 +36,8 @@
                 android:textSize="10sp"
                 android:paddingHorizontal="12dp"
                 android:background="@drawable/image_radius"
-                tools:ignore="RtlSymmetry,SmallSp" />
+                tools:ignore="RtlSymmetry,SmallSp"
+                android:visibility="gone"/>
         </FrameLayout>
 
         <TextView

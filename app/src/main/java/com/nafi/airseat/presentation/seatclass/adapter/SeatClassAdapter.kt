@@ -7,7 +7,7 @@ import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ItemClassBinding
 
 class SeatClassAdapter(
-    private val items: List<String>,
+    private var items: List<String>,
     private val listener: (String) -> Unit,
 ) : RecyclerView.Adapter<SeatClassAdapter.ItemSeatClassViewHolder>() {
     private var selectedPosition = RecyclerView.NO_POSITION
@@ -35,6 +35,11 @@ class SeatClassAdapter(
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun updateItems(newItems: List<String>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 
     class ItemSeatClassViewHolder(private val binding: ItemClassBinding) :
         RecyclerView.ViewHolder(binding.root) {

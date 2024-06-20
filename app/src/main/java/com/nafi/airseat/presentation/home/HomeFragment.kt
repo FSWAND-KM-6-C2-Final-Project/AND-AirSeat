@@ -1,29 +1,35 @@
 package com.nafi.airseat.presentation.home
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
+import com.google.android.material.snackbar.Snackbar
+import com.nafi.airseat.data.datasource.flight.FlightApiDataSource
 import com.nafi.airseat.data.model.Airport
-import com.nafi.airseat.data.model.FavoriteDestination
-import com.nafi.airseat.data.repository.FavoriteDestinationRepositoryImpl
+import com.nafi.airseat.data.model.Flight
+import com.nafi.airseat.data.repository.FlightRepositoryImpl
+import com.nafi.airseat.data.source.network.services.AirSeatApiService
 import com.nafi.airseat.databinding.FragmentHomeBinding
-import com.nafi.airseat.presentation.blank.BlankActivity
 import com.nafi.airseat.presentation.calendar.CalendarBottomSheetFragment
 import com.nafi.airseat.presentation.common.sharedviewmodel.SharedViewModel
+import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.departcalendar.DepartCalendarFragment
 import com.nafi.airseat.presentation.home.adapter.FavoriteDestinationAdapter
 import com.nafi.airseat.presentation.passengers.PassengersFragment
 import com.nafi.airseat.presentation.resultsearch.ResultSearchActivity
 import com.nafi.airseat.presentation.searchticket.SearchTicketFragment
 import com.nafi.airseat.presentation.seatclass.SeatClassFragment
+import com.nafi.airseat.utils.NoInternetException
+import com.nafi.airseat.utils.proceedWhen
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListener, DepartCalendarFragment.OnDateDepartSelectedListener, PassengersFragment.OnPassengerCountUpdatedListener, SeatClassFragment.OnSeatClassSelectedListener {
@@ -31,14 +37,13 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
     private lateinit var viewModel: HomeViewModel
     private var selectedStartDate: LocalDate? = null
     private var selectedEndDate: LocalDate? = null
-    private var selectedDeparts: LocalDate? = null
-    private var selectedSeatClass: String? = null
+    private var passengerCount: Int? = null
     private lateinit var sharedViewModel: SharedViewModel
     private var selectedDepartAirport: Airport? = null
     private var selectedDestinationAirport: Airport? = null
     private val favoriteDestinationAdapter: FavoriteDestinationAdapter by lazy {
-        FavoriteDestinationAdapter {
-            BlankActivity.startActivity(requireContext(), it.id.toString())
+        FavoriteDestinationAdapter { flight ->
+            showConfirmationDialog(flight)
         }
     }
 
@@ -58,12 +63,12 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         super.onViewCreated(view, savedInstanceState)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        val favoriteDestinationRepository = FavoriteDestinationRepositoryImpl(FavoriteDestinationDataSourceImpl())
+        val favoriteDestinationRepository = FlightRepositoryImpl(FlightApiDataSource(AirSeatApiService.invoke()))
         viewModel = HomeViewModel(favoriteDestinationRepository)
 
         setupUI()
-        setupFavoriteDestination()
-        proceedFavoriteDestination()
+        setupAdapter()
+        proceedFavoriteDestination(destinationAirportId = "", departureAirportId = "", orderBy = "", searchDateInput = "", sortByClass = "")
     }
 
     private fun setupUI() {
@@ -72,6 +77,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 SearchTicketFragment {
                     binding.layoutHome.tvDepart.text = "${it.airportCity} (${it.airportCityCode})"
                     selectedDepartAirport = it
+                    updateSearchButtonState()
                 },
             )
         }
@@ -81,6 +87,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 SearchTicketFragment {
                     binding.layoutHome.tvDestination.text = "${it.airportCity} (${it.airportCityCode})"
                     selectedDestinationAirport = it
+                    updateSearchButtonState()
                 },
             )
         }
@@ -97,6 +104,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
             selectedDestinationAirport?.let {
                 binding.layoutHome.tvDestination.text = "${it.airportCity} (${it.airportCityCode})"
             }
+            updateSearchButtonState()
         }
 
         binding.layoutHome.tvDepartChoose.setOnClickListener {
@@ -127,10 +135,28 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
             val seatClassFragment = SeatClassFragment()
             seatClassFragment.setOnSeatClassSelectedListener(this)
             showBottomSheet(seatClassFragment)
-            // showBottomSheet(SeatClassFragment())
         }
 
         binding.layoutHome.btnSearchFlight.setOnClickListener {
+            if (passengerCount == null) {
+                Snackbar.make(requireView(), "Please select the number of passengers", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (selectedDepartAirport == null || selectedDestinationAirport == null) {
+                Snackbar.make(requireView(), "Please select the departure and destination airport", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (selectedStartDate == null) {
+                Snackbar.make(requireView(), "Please select the departure date", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (binding.layoutHome.swDepartReturn.isChecked && selectedEndDate == null) {
+                Snackbar.make(requireView(), "Please select the return date", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             if (selectedStartDate != null && selectedEndDate != null) {
                 val intent = Intent(requireContext(), ResultSearchActivity::class.java)
 
@@ -154,16 +180,11 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                     intent.putExtra("airportCityCodeDestination", destinationAirport.airportCityCode)
                 }
 
-                intent.putExtra("passengerCount", binding.layoutHome.tvPassengersCount.text.toString())
+                intent.putExtra("passengerCount", passengerCount.toString())
                 intent.putExtra("seatClassChoose", binding.layoutHome.tvSeatClassChoose.text)
 
-                Log.d(
-                    "HomeFragment",
-                    "Depart Airport ID: ${selectedDepartAirport?.id}, Destination Airport ID: ${selectedDestinationAirport?.id}",
-                )
                 startActivity(intent)
             } else {
-                // Handle case where selectedStartDate or selectedEndDate is null
                 val intent = Intent(requireContext(), ResultSearchActivity::class.java)
 
                 selectedStartDate?.let { startDate ->
@@ -186,13 +207,9 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                     intent.putExtra("airportCityCodeDestination", destinationAirport.airportCityCode)
                 }
 
-                intent.putExtra("passengerCount", binding.layoutHome.tvPassengersCount.text.toString())
+                intent.putExtra("passengerCount", passengerCount.toString())
                 intent.putExtra("seatClassChoose", binding.layoutHome.tvSeatClassChoose.text)
 
-                Log.d(
-                    "HomeFragment",
-                    "Depart Airport ID: ${selectedDepartAirport?.id}, Destination Airport ID: ${selectedDestinationAirport?.id}",
-                )
                 startActivity(intent)
             }
         }
@@ -209,6 +226,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 binding.layoutHome.tvReturnTitle.visibility = View.GONE
                 binding.layoutHome.tvArrivalChoose.visibility = View.GONE
             }
+            updateSearchButtonState()
         }
     }
 
@@ -216,22 +234,56 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         bottomSheet.show(parentFragmentManager, bottomSheet.tag)
     }
 
-    private fun setupFavoriteDestination() {
-        binding.rvFavorite.apply {
-            adapter = favoriteDestinationAdapter
+    private fun proceedFavoriteDestination(
+        searchDateInput: String,
+        sortByClass: String,
+        orderBy: String,
+        departureAirportId: String,
+        destinationAirportId: String,
+    ) {
+        viewModel.getFlightData(
+            searchDateInput,
+            sortByClass,
+            orderBy,
+            departureAirportId,
+            destinationAirportId,
+        ).observe(viewLifecycleOwner) { data ->
+            data.proceedWhen(
+                doOnSuccess = {
+                    binding.csvFavoriteDestination.setState(ContentState.SUCCESS)
+                    binding.rvFavorite.isVisible = true
+                    data.payload?.let {
+                        favoriteDestinationAdapter.submitData(it)
+                    }
+                },
+                doOnLoading = {
+                    binding.rvFavorite.isVisible = false
+                    binding.csvFavoriteDestination.setState(ContentState.LOADING)
+                },
+                doOnError = {
+                    if (it.exception is NoInternetException) {
+                        binding.csvFavoriteDestination.setState(ContentState.ERROR_NETWORK)
+                    } else {
+                        binding.csvFavoriteDestination.setState(
+                            ContentState.ERROR_GENERAL,
+                            desc = data.exception?.message.orEmpty(),
+                        )
+                    }
+                    binding.rvFavorite.isVisible = false
+                },
+                doOnEmpty = {
+                    binding.rvFavorite.isVisible = false
+                    binding.csvFavoriteDestination.setState(
+                        ContentState.EMPTY,
+                        desc = "No Favorites Found",
+                    )
+                },
+            )
         }
     }
 
-    private fun proceedFavoriteDestination() {
-        viewModel.getFavoriteDestinations().observe(viewLifecycleOwner) { data ->
-            data?.let {
-                bindFavoriteDestinationList(it)
-            }
-        }
-    }
-
-    private fun bindFavoriteDestinationList(data: List<FavoriteDestination>) {
-        favoriteDestinationAdapter.submitData(data)
+    private fun setupAdapter() {
+        binding.rvFavorite.adapter = favoriteDestinationAdapter
     }
 
     override fun onDateSelected(
@@ -245,6 +297,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
             binding.layoutHome.tvDepartChoose.text = startDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
             binding.layoutHome.tvArrivalChoose.text = endDate.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
         }
+        updateSearchButtonState()
     }
 
     override fun onDateDepartSelected(selectedDepart: LocalDate?) {
@@ -253,18 +306,83 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         selectedDepart?.let {
             binding.layoutHome.tvDepartChoose.text = it.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
         }
+        updateSearchButtonState()
     }
 
     override fun onPassengerCountUpdated(count: Int) {
-        binding.layoutHome.tvPassengersCount.text = count.toString()
+        passengerCount = count
+        val passengerText = count.toString()
+        binding.layoutHome.tvPassengersCount.text = passengerText
+        updateSearchButtonState()
     }
 
     override fun onSeatClassSelected(seatClass: String) {
         binding.layoutHome.tvSeatClassChoose.text = seatClass
+        updateSearchButtonState()
+    }
+
+    private fun showConfirmationDialog(flight: Flight) {
+        val departureCity = flight.departureAirport.airportCity
+        val arrivalCity = flight.arrivalAirport.airportCity
+        val message = "You have successfully selected the $departureCity - $arrivalCity flight"
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Flight Selected")
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+            updateHomeFragmentUI(flight)
+        }
+        builder.show()
     }
 
     fun LocalDate.toFormattedString(): String {
         val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         return this.format(formatter)
+    }
+
+    private fun updateHomeFragmentUI(flight: Flight) {
+        val departureAirport =
+            Airport(
+                id = flight.departureAirportId,
+                airportName = flight.departureAirport.airportName,
+                airportCity = flight.departureAirport.airportCity,
+                airportCityCode = flight.departureAirport.airportCityCode,
+                airportPicture = flight.departureAirport.airportPicture,
+            )
+
+        val arrivalAirport =
+            Airport(
+                id = flight.arrivalAirportId,
+                airportName = flight.arrivalAirport.airportName,
+                airportCity = flight.arrivalAirport.airportCity,
+                airportCityCode = flight.arrivalAirport.airportCityCode,
+                airportPicture = flight.arrivalAirport.airportPicture,
+            )
+
+        selectedDepartAirport = departureAirport
+        selectedDestinationAirport = arrivalAirport
+        selectedStartDate = LocalDateTime.parse(flight.departureTime, DateTimeFormatter.ISO_DATE_TIME).toLocalDate()
+        selectedEndDate = null
+
+        binding.layoutHome.tvDepart.text = "${departureAirport.airportCity} (${departureAirport.airportCityCode})"
+        binding.layoutHome.tvDestination.text = "${arrivalAirport.airportCity} (${arrivalAirport.airportCityCode})"
+        binding.layoutHome.tvDepartChoose.text = selectedStartDate?.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
+        binding.layoutHome.tvArrivalChoose.text = selectedEndDate?.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
+        binding.layoutHome.tvSeatClassChoose.text = "Economy"
+        binding.layoutHome.swDepartReturn.isChecked = false
+
+        updateSearchButtonState()
+    }
+
+    private fun validateInputs(): Boolean {
+        return selectedDepartAirport != null &&
+            selectedDestinationAirport != null &&
+            selectedStartDate != null &&
+            (binding.layoutHome.swDepartReturn.isChecked && selectedEndDate != null || !binding.layoutHome.swDepartReturn.isChecked)
+    }
+
+    private fun updateSearchButtonState() {
+        binding.layoutHome.btnSearchFlight.isEnabled = validateInputs()
     }
 }

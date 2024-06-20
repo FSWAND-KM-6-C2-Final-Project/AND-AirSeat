@@ -66,3 +66,16 @@ fun String?.toTimeFormat(): String? {
         null
     }
 }
+
+fun String.toTimeClock(): String {
+    // Define the input date-time formatter
+    val inputFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME
+    // Define the output time formatter
+    val outputFormatter = DateTimeFormatter.ofPattern("HH.mm")
+
+    // Parse the input date-time string
+    val zonedDateTime = ZonedDateTime.parse(this, inputFormatter)
+
+    // Format the time part and return it
+    return zonedDateTime.format(outputFormatter)
+}

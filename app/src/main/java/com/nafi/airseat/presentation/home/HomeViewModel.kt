@@ -1,12 +1,12 @@
 package com.nafi.airseat.presentation.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.nafi.airseat.data.model.FavoriteDestination
-import com.nafi.airseat.data.repository.FavoriteDestinationRepository
+import androidx.lifecycle.asLiveData
+import com.nafi.airseat.data.repository.FlightRepository
+import kotlinx.coroutines.Dispatchers
 
 class HomeViewModel(
-    private val favoriteDestinationRepository: FavoriteDestinationRepository,
+    private val favoriteDestinationRepository: FlightRepository,
     // private val userRepository: UserRepository,
 ) : ViewModel() {
     /*fun getCurrentUser() =
@@ -15,7 +15,19 @@ class HomeViewModel(
 
     fun isUserLoggedOut() = userRepository.doLogout()
 */
-    fun getFavoriteDestinations(): LiveData<List<FavoriteDestination>> {
-        return favoriteDestinationRepository.getFavoriteDestinations()
-    }
+    fun getFlightData(
+        searchDateInput: String,
+        sortByClass: String,
+        orderBy: String,
+        departureAirportId: String,
+        destinationAirportId: String,
+    ) = favoriteDestinationRepository.getFlights(
+        searchDateInput,
+        sortByClass,
+        orderBy,
+        departureAirportId,
+        destinationAirportId,
+    ).asLiveData(
+        Dispatchers.IO,
+    )
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -45,9 +46,25 @@ class SearchTicketFragment(private val listener: ((Airport) -> Unit)? = null) : 
     ) {
         super.onViewCreated(view, savedInstanceState)
         // sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        setHeightBottomSheet()
         setAdapter()
         getAirportsData()
         handelSearchView()
+    }
+
+    private fun setHeightBottomSheet() {
+        val bottomSheet =
+            dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+        val behavior = BottomSheetBehavior.from(bottomSheet!!)
+
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels
+
+        val height = (screenHeight * 0.87).toInt()
+        bottomSheet.layoutParams.height = height
+
+        bottomSheet.layoutParams = bottomSheet.layoutParams
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun handelSearchView() {

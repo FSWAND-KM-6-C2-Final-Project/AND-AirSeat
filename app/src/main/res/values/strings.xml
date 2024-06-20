@@ -81,7 +81,7 @@
     <string name="text_city_flight"><![CDATA[Jakarta –> Melbourne]]></string>
     <string name="text_duration_flight">(4h 50m)</string>
     <string name="text_total">Total</string>
-    <string name="text_price">IDR. 4.950.000/pax</string>
+    <string name="text_price">IDR. 4.950.000</string>
     <string name="text_favorite_title">Favorite Destination</string>
     <string name="text_welcome">Hi, Where will you go?</string>
     <string name="text_flight_option">Flight Options</string>

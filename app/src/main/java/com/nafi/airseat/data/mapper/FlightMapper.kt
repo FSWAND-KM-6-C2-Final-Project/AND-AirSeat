@@ -29,6 +29,7 @@ fun FlightItemResponse?.toFlight() =
         airline = this?.airline.toAirline(),
         departureAirport = this?.departureAirport.toAirportDeparture(),
         arrivalAirport = this?.arrivalAirport.toAirportArrival(),
+        duration = this?.duration.orEmpty(),
     )
 
 fun FlightAirlineResponse?.toAirline() =
