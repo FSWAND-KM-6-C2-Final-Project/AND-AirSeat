@@ -224,9 +224,9 @@ class PassengerBioActivity : AppCompatActivity() {
         setupRecyclerView()
         setClickListener()
 
-        val adultCount = intent.getIntExtra("adult_count", 0)
-        val childCount = intent.getIntExtra("child_count", 0)
-        val babyCount = intent.getIntExtra("baby_count", 0)
+        val adultCount = intent.getIntExtra("adultCount", 0)
+        val childCount = intent.getIntExtra("childCount", 0)
+        val babyCount = intent.getIntExtra("babyCount", 0)
 
         addPassenger(adultCount, childCount, babyCount)
     }
@@ -274,11 +274,25 @@ class PassengerBioActivity : AppCompatActivity() {
         }
 
         if (isValid) {
+            val adultCount = intent.getIntExtra("adultCount", 0)
+            val childCount = intent.getIntExtra("childCount", 0)
+            val babyCount = intent.getIntExtra("babyCount", 0)
+            val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
+            val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
+            val seatClassChoose = intent.getStringExtra("seatClassChoose")
+            val flightId = intent.getStringExtra("flightId")
+            val price = intent.getIntExtra("price", 0)
+
             val intent =
                 Intent(this, SeatBookActivity::class.java).apply {
-                    putExtra("adult_count", intent.getIntExtra("adult_count", 0))
-                    putExtra("child_count", intent.getIntExtra("child_count", 0))
-                    putExtra("baby_count", intent.getIntExtra("baby_count", 0))
+                    putExtra("adultCount", adultCount)
+                    putExtra("childCount", childCount)
+                    putExtra("babyCount", babyCount)
+                    putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
+                    putExtra("airportCityCodeDestination", airportCityCodeDestination)
+                    putExtra("seatClassChoose", seatClassChoose)
+                    putExtra("flightId", flightId)
+                    putExtra("price", price)
                     putExtra("full_name", intent.getStringExtra("full_name"))
                     putExtra("number_phone", intent.getStringExtra("number_phone"))
                     putExtra("email", intent.getStringExtra("email"))

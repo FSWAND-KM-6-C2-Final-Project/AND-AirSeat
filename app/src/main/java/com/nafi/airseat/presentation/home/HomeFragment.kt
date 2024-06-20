@@ -34,6 +34,9 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
     private var selectedDeparts: LocalDate? = null
     private var selectedSeatClass: String? = null
     private lateinit var sharedViewModel: SharedViewModel
+    private var adultCount: Int = 0
+    private var childCount: Int = 0
+    private var babyCount: Int = 0
     private var selectedDepartAirport: Airport? = null
     private var selectedDestinationAirport: Airport? = null
     private val favoriteDestinationAdapter: FavoriteDestinationAdapter by lazy {
@@ -153,7 +156,9 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                     intent.putExtra("destinationAirportId", destinationAirport.id)
                     intent.putExtra("airportCityCodeDestination", destinationAirport.airportCityCode)
                 }
-
+                intent.putExtra("adultCount", adultCount)
+                intent.putExtra("childCount", childCount)
+                intent.putExtra("babyCount", babyCount)
                 intent.putExtra("passengerCount", binding.layoutHome.tvPassengersCount.text.toString())
                 intent.putExtra("seatClassChoose", binding.layoutHome.tvSeatClassChoose.text)
 
@@ -185,7 +190,9 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                     intent.putExtra("destinationAirportId", destinationAirport.id)
                     intent.putExtra("airportCityCodeDestination", destinationAirport.airportCityCode)
                 }
-
+                intent.putExtra("adultCount", adultCount)
+                intent.putExtra("childCount", childCount)
+                intent.putExtra("babyCount", babyCount)
                 intent.putExtra("passengerCount", binding.layoutHome.tvPassengersCount.text.toString())
                 intent.putExtra("seatClassChoose", binding.layoutHome.tvSeatClassChoose.text)
 
@@ -255,8 +262,17 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         }
     }
 
-    override fun onPassengerCountUpdated(count: Int) {
+    override fun onPassengerCountUpdated(
+        count: Int,
+        adultCount: Int,
+        childCount: Int,
+        babyCount: Int,
+    ) {
+        this.adultCount = adultCount
+        this.childCount = childCount
+        this.babyCount = babyCount
         binding.layoutHome.tvPassengersCount.text = count.toString()
+        Log.d("HomeFragment", "Adults: $adultCount, Children: $childCount, Babies: $babyCount")
     }
 
     override fun onSeatClassSelected(seatClass: String) {

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_price_adults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+
+        android:layout_marginVertical="8dp"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/tv_adults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2 Adult"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_adult_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="IDR 0"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_price_child"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:visibility="gone"
+        android:layout_marginVertical="8dp"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/tv_child"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2 Child"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_child_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="IDR 0"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_price_baby"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:visibility="gone"
+        android:layout_marginVertical="8dp"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/tv_baby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="2 Baby"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_baby_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="IDR 0"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_tax"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="8dp"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tax"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_tax_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="IDR 300.000"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_promo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="8dp"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/promo"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_promo_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="IDR 0"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

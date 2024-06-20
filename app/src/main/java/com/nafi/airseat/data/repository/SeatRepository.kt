@@ -8,11 +8,11 @@ import com.nafi.airseat.utils.proceedFlow
 import kotlinx.coroutines.flow.Flow
 
 interface SeatRepository {
-    fun getSeats(): Flow<ResultWrapper<List<Seat>>>
+    fun getSeats(flightId: String): Flow<ResultWrapper<List<Seat>>>
 }
 
 class SeatRepositoryImpl(private val dataSource: SeatDataSource) : SeatRepository {
-    override fun getSeats(): Flow<ResultWrapper<List<Seat>>> {
-        return proceedFlow { dataSource.getSeats().data.seats.toSeats() }
+    override fun getSeats(flightId: String): Flow<ResultWrapper<List<Seat>>> {
+        return proceedFlow { dataSource.getSeats(flightId).data.seats.toSeats() }
     }
 }
