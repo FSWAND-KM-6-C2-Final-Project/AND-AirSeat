@@ -20,13 +20,12 @@ class OrdererBioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        val flightId = intent.getStringExtra("flightId")
+        val flightId = intent.getStringExtra("id")
         if (flightId != null) {
             Toast.makeText(this, "Received flight ID: $flightId", Toast.LENGTH_SHORT).show()
         }
         setupForm()
         setClickListener()
-        observeData()
         observeInputMode()
     }
 
@@ -42,38 +41,11 @@ class OrdererBioActivity : AppCompatActivity() {
         binding.mbSave.setOnClickListener {
             doSaveData()
         }
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
         binding.layoutFormTicketBooker.swFamilyName.setOnClickListener {
             ordererBioViewModel.changeInputMode()
-        }
-        binding.minusAdult.setOnClickListener {
-            ordererBioViewModel.subAdult()
-        }
-        binding.plusAdult.setOnClickListener {
-            ordererBioViewModel.addAdult()
-        }
-        binding.minusChild.setOnClickListener {
-            ordererBioViewModel.subChild()
-        }
-        binding.plusChild.setOnClickListener {
-            ordererBioViewModel.addChild()
-        }
-        binding.minusBaby.setOnClickListener {
-            ordererBioViewModel.subBaby()
-        }
-        binding.plusBaby.setOnClickListener {
-            ordererBioViewModel.addBaby()
-        }
-    }
-
-    private fun observeData() {
-        ordererBioViewModel.adultCount.observe(this) {
-            binding.adultCount.text = it.toString()
-        }
-        ordererBioViewModel.childCount.observe(this) {
-            binding.childCount.text = it.toString()
-        }
-        ordererBioViewModel.babyCount.observe(this) {
-            binding.babyCount.text = it.toString()
         }
     }
 
@@ -162,6 +134,14 @@ class OrdererBioActivity : AppCompatActivity() {
             val email = binding.layoutFormTicketBooker.etEmail.text.toString().trim()
             val isFamilyNameMode = ordererBioViewModel.isFamilyNameMode.value ?: false
             val familyName = if (isFamilyNameMode) binding.layoutFormTicketBooker.etFamilyName.text.toString().trim() else ""
+            val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
+            val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
+            val seatClassChoose = intent.getStringExtra("seatClassChoose")
+            val adultCount = intent.getIntExtra("adultCount", 0)
+            val childCount = intent.getIntExtra("childCount", 0)
+            val babyCount = intent.getIntExtra("babyCount", 0)
+            val flightId = intent.getStringExtra("id")
+            val price = intent.getIntExtra("price", 0)
 
             val intent =
                 Intent(this, PassengerBioActivity::class.java).apply {
@@ -169,9 +149,14 @@ class OrdererBioActivity : AppCompatActivity() {
                     putExtra("number_phone", numberPhone)
                     putExtra("email", email)
                     putExtra("family_name", familyName)
-                    putExtra("adult_count", ordererBioViewModel.adultCount.value ?: 0)
-                    putExtra("child_count", ordererBioViewModel.childCount.value ?: 0)
-                    putExtra("baby_count", ordererBioViewModel.babyCount.value ?: 0)
+                    putExtra("flightId", flightId)
+                    putExtra("price", price)
+                    putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
+                    putExtra("airportCityCodeDestination", airportCityCodeDestination)
+                    putExtra("seatClassChoose", seatClassChoose)
+                    putExtra("adultCount", adultCount)
+                    putExtra("childCount", childCount)
+                    putExtra("babyCount", babyCount)
                 }
             startActivity(intent)
         }

@@ -10,5 +10,5 @@ data class BookingFlightResponse(
     @SerializedName("data")
     var booking: BookingFlightRequest,
     @SerializedName("payment_data")
-    var payment: PaymentData
+    var payment: PaymentData,
 )

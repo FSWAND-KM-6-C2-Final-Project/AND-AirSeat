@@ -6,5 +6,5 @@ data class PaymentData(
     @SerializedName("token")
     val token: String,
     @SerializedName("redirect_url")
-    val redirectUrl: String
+    val redirectUrl: String,
 )

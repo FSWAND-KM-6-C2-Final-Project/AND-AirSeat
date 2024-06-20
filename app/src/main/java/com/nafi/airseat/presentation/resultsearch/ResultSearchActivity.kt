@@ -2,6 +2,7 @@ package com.nafi.airseat.presentation.resultsearch
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -33,12 +34,14 @@ class ResultSearchActivity : AppCompatActivity() {
     private lateinit var selectedDepart: LocalDate
     private lateinit var selectedDate: LocalDate
     private var typeSeatClass: String? = null
+    private lateinit var airportCityCodeDeparture: String
+    private lateinit var airportCityCodeDestination: String
     private val viewModel: ResultSearchViewModel by viewModel {
         parametersOf(intent.extras)
     }
     private val resultAdapter: ResultSearchAdapter by lazy {
         ResultSearchAdapter(typeSeatClass = typeSeatClass) { flight, price ->
-            navigateToDetailTicket(flight.id.toString(), price)
+            navigateToDetailTicket(flight.id.toString(), price, airportCityCodeDeparture, airportCityCodeDestination)
         }
     }
     private val dateFormatter = DateTimeFormatter.ofPattern("dd")
@@ -58,8 +61,12 @@ class ResultSearchActivity : AppCompatActivity() {
         val orderBy = intent.getStringExtra("orderDesc")
         val passengerCount = intent.getStringExtra("passengerCount")
         val seatClassChoose = intent.getStringExtra("seatClassChoose")
-        val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
-        val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
+        val adultCount = intent.getIntExtra("adultCount", 0)
+        val childCount = intent.getIntExtra("childCount", 0)
+        val babyCount = intent.getIntExtra("babyCount", 0)
+        Log.d("ResultSearch", "Adults: $adultCount, Children: $childCount, Babies: $babyCount")
+        airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture").orEmpty()
+        airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination").orEmpty()
         typeSeatClass = seatClassChoose
 
         if (startDateString != null && endDateString != null) {
@@ -209,11 +216,24 @@ class ResultSearchActivity : AppCompatActivity() {
     private fun navigateToDetailTicket(
         id: String,
         price: Int,
+        airportCityCodeDeparture: String,
+        airportCityCodeDestination: String,
     ) {
+        val seatClassChoose = intent.getStringExtra("seatClassChoose")
+        val adultCount = intent.getIntExtra("adultCount", 0)
+        val childCount = intent.getIntExtra("childCount", 0)
+        val babyCount = intent.getIntExtra("babyCount", 0)
+
         startActivity(
             Intent(this, DetailFlightActivity::class.java).apply {
                 putExtra("id", id)
                 putExtra("price", price)
+                putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
+                putExtra("airportCityCodeDestination", airportCityCodeDestination)
+                putExtra("seatClassChoose", seatClassChoose)
+                putExtra("adultCount", adultCount)
+                putExtra("childCount", childCount)
+                putExtra("babyCount", babyCount)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
