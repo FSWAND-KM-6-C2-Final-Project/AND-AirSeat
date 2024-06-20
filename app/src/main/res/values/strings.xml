@@ -202,4 +202,5 @@
     <string name="text_question_delete_account">Are you sure you want to delete your account?</string>
     <string name="text_desc_delete_account">If you delete your account, all of your information will delete permanentyl, are you sure?</string>
     <string name="text_agree_delete_account">Check to agree to delete account</string>
+    <string name="select_seat">Select seat</string>
 </resources>

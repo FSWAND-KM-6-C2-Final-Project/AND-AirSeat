@@ -20,6 +20,8 @@ import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
 import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
+import com.nafi.airseat.data.datasource.booking.BookingDataSource
+import com.nafi.airseat.data.datasource.booking.BookingDataSourceImpl
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
 import com.nafi.airseat.data.datasource.flight.FlightApiDataSource
@@ -34,6 +36,8 @@ import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSource
 import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSourceImpl
 import com.nafi.airseat.data.repository.AirportRepository
 import com.nafi.airseat.data.repository.AirportRepositoryImpl
+import com.nafi.airseat.data.repository.BookingRepository
+import com.nafi.airseat.data.repository.BookingRepositoryImpl
 import com.nafi.airseat.data.repository.FavoriteDestinationRepository
 import com.nafi.airseat.data.repository.FavoriteDestinationRepositoryImpl
 import com.nafi.airseat.data.repository.FlightDetailRepository
@@ -69,6 +73,8 @@ import com.nafi.airseat.presentation.appintro.AppIntroViewModel
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
 import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
+import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
+import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceViewModel
 import com.nafi.airseat.presentation.history.HistoryViewModel
 import com.nafi.airseat.presentation.home.HomeViewModel
 import com.nafi.airseat.presentation.login.LoginViewModel
@@ -79,8 +85,6 @@ import com.nafi.airseat.presentation.profile.ProfileViewModel
 import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
-import com.nafi.airseat.presentation.seatbook.SeatViewModel
-import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel

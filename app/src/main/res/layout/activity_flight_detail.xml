@@ -12,248 +12,149 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/md_theme_primary"
+        android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:padding="12dp"
-        android:gravity="center">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/ib_btn_back"
-            android:layout_marginStart="8dp"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@drawable/btn_back"
-            />
+            android:layout_marginStart="8dp"
+            android:background="@drawable/btn_back" />
 
         <TextView
             android:id="@+id/tv_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
             android:text="@string/flight_detail"
             android:textColor="@color/md_theme_onPrimary"
-            android:textSize="18sp"
-            android:layout_marginHorizontal="18dp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_flight_detail"
+        android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toTopOf="@id/cv_section_checkout"
-        android:layout_marginBottom="24dp">
+        app:layout_constraintTop_toBottomOf="@id/ll_flight_detail">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/destination"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Jakarta -> Melbourne"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="20dp"
-                android:textColor="@color/md_theme_primary"
-                />
-
-            <TextView
-                android:id="@+id/flight_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/destination"
-                tools:text="(4h 0m)"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginHorizontal="4dp"
-                app:layout_constraintStart_toEndOf="@id/destination"
-                />
-
-            <include
-                android:id="@+id/layout_flight_info"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="8dp"
+            <com.nafi.airseat.presentation.common.views.ContentStateView
+                android:id="@+id/csv_detail_flight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/layout_flight_info"
-                app:layout_constraintTop_toBottomOf="@id/flight_time"
-                />
+                android:layout_marginTop="24dp"/>
 
-            <TextView
-                android:id="@+id/tv_detail_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/layout_flight_info"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginHorizontal="20dp"
-                android:text="@string/detail_price"
-                android:layout_marginVertical="12dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                />
-
-            <LinearLayout
-                android:id="@+id/ll_price_adults"
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/pb_loading_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tv_detail_price"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="8dp"
-                android:weightSum="2">
+                android:indeterminate="true"
+                android:layout_marginTop="200dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_detail_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/tv_adults"
+                    android:id="@+id/tv_departure_place"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="24dp"
+                    android:textColor="@color/md_theme_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Jakarta" />
+
+                <ImageView
+                    android:id="@+id/img_arrow_right"
+                    android:layout_width="40dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_right"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginHorizontal="8dp"
+                    app:layout_constraintStart_toEndOf="@id/tv_departure_place"
+                    app:layout_constraintTop_toTopOf="@id/tv_departure_place"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_departure_place"/>
+
+                <TextView
+                    android:id="@+id/tv_arrival_place"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="24dp"
+                    android:textColor="@color/md_theme_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/img_arrow_right"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Melbourne" />
+
+                <TextView
+                    android:id="@+id/flight_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/tv_arrival_place"
+                    app:layout_constraintTop_toTopOf="@id/tv_arrival_place"
+                    tools:text="(4h 0m)" />
+
+                <include
+                    android:id="@+id/layout_flight_info"
+                    layout="@layout/layout_flight_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/flight_time" />
+
+                <TextView
+                    android:id="@+id/tv_detail_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="12dp"
+                    android:text="@string/detail_price"
                     android:textSize="16sp"
-                    android:text=" Adults" />
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_flight_info" />
 
-                <TextView
-                    android:id="@+id/tv_adult_price"
-                    android:layout_width="wrap_content"
+                <include
+                    android:id="@+id/layout_price"
+                    layout="@layout/layout_price"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="IDR 9.550.000"
-                    android:layout_weight="1"
-                    android:textAlignment="textEnd"
-                    />
+                    app:layout_constraintTop_toBottomOf="@id/tv_detail_price" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_price_child"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/ll_price_adults"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="8dp"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/tv_child"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Child"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_child_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="IDR 0"
-                    android:layout_weight="1"
-                    android:textAlignment="textEnd"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_price_baby"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/ll_price_child"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="8dp"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/tv_baby"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Baby"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_baby_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="IDR 0"
-                    android:layout_weight="1"
-                    android:textAlignment="textEnd"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_tax"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/ll_price_baby"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="8dp"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tax"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_tax_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="IDR 300.000"
-                    android:layout_weight="1"
-                    android:textAlignment="textEnd"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_promo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/ll_tax"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="8dp"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/promo"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_promo_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="IDR 0"
-                    android:layout_weight="1"
-                    android:textAlignment="textEnd"
-                    />
-
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
 
     </androidx.core.widget.NestedScrollView>
 
     <include
         android:id="@+id/cv_section_checkout"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
         layout="@layout/section_checkout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
