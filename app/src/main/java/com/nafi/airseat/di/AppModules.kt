@@ -22,6 +22,8 @@ import com.nafi.airseat.data.datasource.flight.FlightApiDataSource
 import com.nafi.airseat.data.datasource.flight.FlightDataSource
 import com.nafi.airseat.data.datasource.flightdetail.FlightDetailApiDataSource
 import com.nafi.airseat.data.datasource.flightdetail.FlightDetailDataSource
+import com.nafi.airseat.data.datasource.intro.IntroDataSource
+import com.nafi.airseat.data.datasource.intro.IntroDataSourceImpl
 import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSource
 import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSourceImpl
 import com.nafi.airseat.data.repository.AirportRepository
@@ -34,6 +36,8 @@ import com.nafi.airseat.data.repository.FlightRepository
 import com.nafi.airseat.data.repository.FlightRepositoryImpl
 import com.nafi.airseat.data.repository.HistoryRepository
 import com.nafi.airseat.data.repository.HistoryRepositoryImpl
+import com.nafi.airseat.data.repository.IntroRepository
+import com.nafi.airseat.data.repository.IntroRepositoryImpl
 import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
 import com.nafi.airseat.data.repository.ProfileRepository
@@ -53,6 +57,7 @@ import com.nafi.airseat.data.source.local.pref.UserPreferenceImpl
 import com.nafi.airseat.data.source.network.services.AirSeatApiService
 import com.nafi.airseat.data.source.network.services.AirSeatApiServiceWithAuthorization
 import com.nafi.airseat.data.source.network.services.TokenInterceptor
+import com.nafi.airseat.presentation.appintro.AppIntroViewModel
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
 import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
@@ -69,13 +74,13 @@ import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordV
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
+import com.nafi.airseat.presentation.splashscreen.SplashScreenViewModel
 import com.nafi.airseat.presentation.updateprofile.UpdateProfileViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
-import org.koin.core.scope.get
 import org.koin.dsl.module
 
 object AppModules {
@@ -117,6 +122,7 @@ object AppModules {
             single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
             single<HistoryDataSource> { HistoryDataSourceImpl(get()) }
             single<HistoryDataSource> { HistoryDataSourceImpl(get()) }
+            single<IntroDataSource> { IntroDataSourceImpl(get()) }
             single<SearchHistoryDataSource> { SearchHistoryDataSourceImpl(get()) }
         }
 
@@ -133,6 +139,7 @@ object AppModules {
             single<HistoryRepository> { HistoryRepositoryImpl(get()) }
             single<ProfileRepository> { ProfileRepositoryImpl(get()) }
             single<HistoryRepository> { HistoryRepositoryImpl(get()) }
+            single<IntroRepository> { IntroRepositoryImpl(get()) }
             single<SearchHistoryRepository> { SearchHistoryRepositoryImpl(get()) }
         }
 
@@ -142,6 +149,8 @@ object AppModules {
             viewModelOf(::PassengerBioViewModel)
             viewModelOf(::HomeViewModel)
             viewModelOf(::LoginViewModel)
+            viewModelOf(::AppIntroViewModel)
+            viewModelOf(::SplashScreenViewModel)
             viewModel {
                 RegisterViewModel(get())
             }

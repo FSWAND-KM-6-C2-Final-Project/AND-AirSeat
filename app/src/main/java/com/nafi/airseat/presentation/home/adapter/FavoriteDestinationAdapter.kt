@@ -6,32 +6,35 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.nafi.airseat.data.model.FavoriteDestination
+import com.nafi.airseat.data.model.Flight
 import com.nafi.airseat.databinding.LayoutFavoriteDestinationBinding
+import com.nafi.airseat.utils.toCurrencyFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-class FavoriteDestinationAdapter(private val listener: (FavoriteDestination) -> Unit) :
+class FavoriteDestinationAdapter(private val listener: (Flight) -> Unit) :
     RecyclerView.Adapter<FavoriteDestinationAdapter.ItemFavoriteDestinationViewHolder>() {
     private val dataDiffer =
         AsyncListDiffer(
             this,
-            object : DiffUtil.ItemCallback<FavoriteDestination>() {
+            object : DiffUtil.ItemCallback<Flight>() {
                 override fun areItemsTheSame(
-                    oldItem: FavoriteDestination,
-                    newItem: FavoriteDestination,
+                    oldItem: Flight,
+                    newItem: Flight,
                 ): Boolean {
                     return oldItem.id == newItem.id
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: FavoriteDestination,
-                    newItem: FavoriteDestination,
+                    oldItem: Flight,
+                    newItem: Flight,
                 ): Boolean {
                     return oldItem.hashCode() == newItem.hashCode()
                 }
             },
         )
 
-    fun submitData(data: List<FavoriteDestination>) {
+    fun submitData(data: List<Flight>) {
         dataDiffer.submitList(data)
     }
 
@@ -54,19 +57,26 @@ class FavoriteDestinationAdapter(private val listener: (FavoriteDestination) -> 
 
     class ItemFavoriteDestinationViewHolder(
         private val binding: LayoutFavoriteDestinationBinding,
-        val itemClick: (FavoriteDestination) -> Unit,
+        val itemClick: (Flight) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bindView(item: FavoriteDestination) {
+        fun bindView(item: Flight) {
             with(item) {
-                binding.ivFavoriteImage.load(item.img) {
+                binding.ivFavoriteImage.load(item.arrivalAirport.airportPicture) {
                     crossfade(true)
                 }
-                binding.tvDepartFavorite.text = item.departDestination
-                binding.tvAirlinesFavorite.text = item.airline // Only temporary
-                binding.tvDurationFavorite.text = item.duration
-                binding.tvPriceFavorite.text = "$${item.price}"
+                binding.tvDepartFavorite.text = "${item.departureAirport.airportCity} - ${item.arrivalAirport.airportCity}"
+                binding.tvAirlinesFavorite.text = item.airline.airlineName // Only temporary
+                binding.tvDurationFavorite.text = formatDate(item.departureTime)
+                binding.tvPriceFavorite.text = "Start from ${item.priceEconomy.toLong().toCurrencyFormat()}"
                 itemView.setOnClickListener { itemClick(this) }
             }
+        }
+
+        private fun formatDate(dateString: String): String {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            val dateTime = LocalDateTime.parse(dateString, formatter)
+            val outputFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy")
+            return dateTime.format(outputFormatter)
         }
     }
 }

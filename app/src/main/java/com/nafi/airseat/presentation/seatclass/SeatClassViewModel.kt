@@ -1,12 +1,15 @@
 package com.nafi.airseat.presentation.seatclass
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.nafi.airseat.data.model.SeatClass
-import com.nafi.airseat.data.repository.SeatClassRepository
 
-class SeatClassViewModel(private val repository: SeatClassRepository) : ViewModel() {
-    fun getSeatClass(): LiveData<List<SeatClass>> {
-        return repository.getSeatClasses()
+class SeatClassViewModel() : ViewModel() {
+    private val seatClassList = MutableLiveData<List<String>>()
+
+    val seatClassItems: LiveData<List<String>> get() = seatClassList
+
+    init {
+        seatClassList.value = listOf("Economy", "Premium Economy", "Business", "First Class")
     }
 }

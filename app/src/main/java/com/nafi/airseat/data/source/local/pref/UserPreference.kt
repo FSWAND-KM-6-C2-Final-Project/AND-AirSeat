@@ -1,6 +1,7 @@
 package com.nafi.airseat.data.source.local.pref
 
 import android.content.SharedPreferences
+import com.nafi.airseat.utils.SharedPreferenceUtils.set
 
 interface UserPreference {
     fun getToken(): String?
@@ -8,6 +9,10 @@ interface UserPreference {
     fun saveToken(token: String)
 
     fun cleaAll()
+
+    fun isAppIntroShown(): Boolean
+
+    fun setAppIntroShown(isShown: Boolean)
 }
 
 class UserPreferenceImpl(private val pref: SharedPreferences) : UserPreference {
@@ -21,8 +26,15 @@ class UserPreferenceImpl(private val pref: SharedPreferences) : UserPreference {
         pref.edit().clear().apply()
     }
 
+    override fun isAppIntroShown(): Boolean = pref.getBoolean(KEY_APP_INTRO_SHOWN, false)
+
+    override fun setAppIntroShown(isShown: Boolean) {
+        pref[KEY_APP_INTRO_SHOWN] = isShown
+    }
+
     companion object {
         const val PREF_NAME = "airseat-pref"
         const val KEY_TOKEN = "KEY_TOKEN"
+        const val KEY_APP_INTRO_SHOWN = "KEY_APP_INTRO_SHOWN"
     }
 }

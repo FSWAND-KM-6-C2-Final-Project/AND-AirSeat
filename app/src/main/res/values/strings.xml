@@ -81,7 +81,7 @@
     <string name="text_city_flight"><![CDATA[Jakarta –> Melbourne]]></string>
     <string name="text_duration_flight">(4h 50m)</string>
     <string name="text_total">Total</string>
-    <string name="text_price">IDR. 4.950.000/pax</string>
+    <string name="text_price">IDR. 4.950.000</string>
     <string name="text_favorite_title">Favorite Destination</string>
     <string name="text_welcome">Hi, Where will you go?</string>
     <string name="text_flight_option">Flight Options</string>
@@ -169,6 +169,8 @@
     <string name="text_desc_empy_notification">Stay tune for notification come yet</string>
     <string name="text_app_version">Version 1.0.0</string>
     <string name="text_snackbar_custom">GeeksforGeeks</string>
+    <string name="title_intro_started">Enjoy the trip with friendly price</string>
+    <string name="desc_intro_started">Always prioritize safety while traveling</string>
     <string name="text_login_failed">"Login Failed, please check your credentials and try again "</string>
     <string name="text_version_app">Version 1.0.0</string>
     <string name="text_change_profile">Change Profile</string>

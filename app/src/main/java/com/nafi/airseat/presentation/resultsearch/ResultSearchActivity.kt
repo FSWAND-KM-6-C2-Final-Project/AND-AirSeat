@@ -3,7 +3,6 @@ package com.nafi.airseat.presentation.resultsearch
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.kizitonwose.calendar.core.WeekDay
@@ -38,9 +37,6 @@ class ResultSearchActivity : AppCompatActivity() {
         parametersOf(intent.extras)
     }
     private val resultAdapter: ResultSearchAdapter by lazy {
-        /*ResultSearchAdapter(typeSeatClass = typeSeatClass) {
-            navigateToDetailTicket(it.id.toString())
-        }*/
         ResultSearchAdapter(typeSeatClass = typeSeatClass) { flight, price ->
             navigateToDetailTicket(flight.id.toString(), price)
         }
@@ -52,12 +48,10 @@ class ResultSearchActivity : AppCompatActivity() {
         binding = ActivityResultSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Get selected dates from intent
         val startDateString = intent.getStringExtra("startDate")
         val endDateString = intent.getStringExtra("endDate")
         val selectedDepartString = intent.getStringExtra("selectedDepart")
         val searchDateString = intent.getStringExtra("searchDate")
-        val searchDateDepartString = intent.getStringExtra("searchDateDepart")
         val departureAirportId = intent.getIntExtra("departAirportId", -1)
         val destinationAirportId = intent.getIntExtra("destinationAirportId", -1)
         val sortByClass = intent.getStringExtra("sortByClass")
@@ -67,16 +61,15 @@ class ResultSearchActivity : AppCompatActivity() {
         val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
         val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
         typeSeatClass = seatClassChoose
-        // Check if necessary data is present
+
         if (startDateString != null && endDateString != null) {
             startDate = LocalDate.parse(startDateString)
             endDate = LocalDate.parse(endDateString)
-            selectedDate = startDate // Assuming selectedDate represents either startDate or selectedDepart
+            selectedDate = startDate
         } else if (startDateString != null) {
             startDate = LocalDate.parse(selectedDepartString)
             selectedDate = startDate
         } else {
-            // Close the activity if no dates are provided
             finish()
             return
         }
@@ -88,7 +81,6 @@ class ResultSearchActivity : AppCompatActivity() {
         binding.layoutHeader.textName.text = "$airportCityCodeDeparture > $airportCityCodeDestination"
         binding.layoutHeader.textGreetings.text = "$passengerCount Passengers"
         binding.layoutHeader.tvClass.text = seatClassChoose
-        Toast.makeText(this, "Selected seat class: $seatClassChoose", Toast.LENGTH_SHORT).show()
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             val bind = HorizontalDayBinding.bind(view)
@@ -142,7 +134,6 @@ class ResultSearchActivity : AppCompatActivity() {
             binding.exSevenToolbar.title = getWeekPageTitle(weekDays)
         }
 
-        // Setup calendar only with selected dates range
         if (endDate == null) {
             val currentMonth = YearMonth.now()
             binding.exSevenCalendar.setup(
@@ -158,7 +149,7 @@ class ResultSearchActivity : AppCompatActivity() {
             )
         }
 
-        binding.exSevenCalendar.scrollToDate(startDate) // Scroll to start date
+        binding.exSevenCalendar.scrollToDate(startDate)
         setupAdapter()
         proceedResultTicket(
             searchDateString ?: "",
@@ -183,17 +174,13 @@ class ResultSearchActivity : AppCompatActivity() {
                         binding.csvResultSearch.setState(ContentState.SUCCESS)
                         resultAdapter.submitData(it)
                         binding.rvSearchTicket.isVisible = it.isNotEmpty()
-                        if (it.isEmpty()) {
-                            Toast.makeText(this, "No flights found", Toast.LENGTH_SHORT).show()
-                        }
                     }
                 },
                 doOnLoading = {
+                    binding.rvSearchTicket.isVisible = false
                     binding.csvResultSearch.setState(ContentState.LOADING)
-                    // Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show()
                 },
                 doOnError = {
-                    // Toast.makeText(this, "Error loading flights", Toast.LENGTH_SHORT).show()
                     if (it.exception is NoInternetException) {
                         binding.csvResultSearch.setState(ContentState.ERROR_NETWORK)
                     } else {
@@ -204,9 +191,8 @@ class ResultSearchActivity : AppCompatActivity() {
                     }
                 },
                 doOnEmpty = {
-                    /*clearAdapterData()
+                    clearAdapterData()
                     binding.rvSearchTicket.isVisible = false
-                    Toast.makeText(this, "No flights found", Toast.LENGTH_SHORT).show()*/
                     binding.csvResultSearch.setState(
                         ContentState.EMPTY,
                         desc = "No Flights Found",
@@ -220,14 +206,6 @@ class ResultSearchActivity : AppCompatActivity() {
         binding.rvSearchTicket.adapter = resultAdapter
     }
 
-    /*private fun navigateToDetailTicket(id: String) {
-        startActivity(
-            Intent(this, DetailFlightActivity::class.java).apply {
-                putExtra("id", id)
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            },
-        )
-    }*/
     private fun navigateToDetailTicket(
         id: String,
         price: Int,
