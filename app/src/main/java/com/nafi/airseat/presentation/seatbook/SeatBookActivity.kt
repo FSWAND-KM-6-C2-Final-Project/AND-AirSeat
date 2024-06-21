@@ -17,7 +17,6 @@ import com.nafi.airseat.presentation.flightdetail.FlightDetailActivity
 import com.nafi.airseat.utils.proceedWhen
 import com.nafi.airseat.utils.seatbook.SeatBookView
 import dev.jahidhasanco.seatbookview.SeatClickListener
-import dev.jahidhasanco.seatbookview.SeatLongClickListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SeatBookActivity : AppCompatActivity() {
@@ -30,9 +29,9 @@ class SeatBookActivity : AppCompatActivity() {
     }
 
     private lateinit var passengerList: MutableList<Passenger>
-    private lateinit var seats: List<Seat>
-    private lateinit var seatNames: List<String>
-    private lateinit var seatNamesList: List<String>
+    // private lateinit var seats: List<Seat>
+    // private lateinit var seatNames: List<String>
+    // private lateinit var seatNamesList: List<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,10 +55,10 @@ class SeatBookActivity : AppCompatActivity() {
         }
 
         val totalPassengers = adultCount + childCount
-        if (flightId != null) {
-            getSeatData(flightId)
+        if (flightId != null && seatClassChoose != null) {
+            getSeatData(flightId, seatClassChoose)
         }
-        setClickListenerSeat()
+        // setClickListenerSeat()
 
         seatBookView.setSelectSeatLimit(totalPassengers)
 
@@ -94,8 +93,11 @@ class SeatBookActivity : AppCompatActivity() {
         }
     }
 
-    private fun getSeatData(flightId: String) {
-        seatViewModel.getSeatData(flightId).observe(
+    private fun getSeatData(
+        flightId: String,
+        seatClassChoose: String,
+    ) {
+        seatViewModel.getFormattedSeatData(flightId, seatClassChoose).observe(
             this,
         ) { result ->
             result.proceedWhen(
@@ -108,9 +110,14 @@ class SeatBookActivity : AppCompatActivity() {
                     binding.csvSeat.setState(ContentState.SUCCESS)
                     binding.svSeatbook.isVisible = true
                     binding.cvBtnSave.isVisible = true
-                    result.payload?.let {
-                        showSeatBookView(it)
-                    }
+                    val formattedSeatStatus = it.payload?.first.orEmpty()
+                    val formattedSeatNames = it.payload?.second.orEmpty()
+                    val seatName = it.payload?.third.orEmpty()
+                    Log.d("formattedSeatStatus", formattedSeatStatus)
+                    Log.d("formattedSeatNames", formattedSeatNames.toString())
+                    Log.d("seatName", seatName.toString())
+                    showSeatBookView(formattedSeatStatus, formattedSeatNames)
+                    setClickListenerSeat(seatName)
                 },
                 doOnError = {
                     binding.csvSeat.setState(ContentState.ERROR_GENERAL)
@@ -126,7 +133,7 @@ class SeatBookActivity : AppCompatActivity() {
         }
     }
 
-    private fun setClickListenerSeat() {
+    /*private fun setClickListenerSeat() {
         seatBookView.setSeatClickListener(
             object : SeatClickListener {
                 override fun onAvailableSeatClick(
@@ -192,14 +199,17 @@ class SeatBookActivity : AppCompatActivity() {
                 }
             },
         )
-    }
+    }*/
 
-    private fun findSeatBySeatName(seatName: String): Seat? {
+    /*private fun findSeatBySeatName(seatName: String): Seat? {
         return seats.find { it.seatName == seatName }
-    }
+    }*/
 
-    private fun showSeatBookView(seats: List<Seat>) {
-        this.seats = seats
+    private fun showSeatBookView(
+        formattedSeatStatus: String,
+        formattedSeatNames: List<String>,
+    ) {
+        /*this.seats = seats
         val seatClassChoose = intent.getStringExtra("seatClassChoose")
         seatNames =
             when (seatClassChoose) {
@@ -213,15 +223,43 @@ class SeatBookActivity : AppCompatActivity() {
         val seatStatusesFormatted = formatSeatStatus(seatStatuses, seatClassChoose)
 
         Log.d("SeatBookActivity", "Formatted Seat Names: $seatNames")
-        Log.d("SeatBookActivity", "Seat Statuses: $seatStatusesFormatted")
+        Log.d("SeatBookActivity", "Seat Statuses: $seatStatusesFormatted")*/
 
-        seatBookView.setSeatsLayoutString(seatStatusesFormatted)
+        seatBookView.setSeatsLayoutString(formattedSeatStatus)
             .isCustomTitle(true)
-            .setCustomTitle(seatNames)
+            .setCustomTitle(formattedSeatNames)
             .setSeatLayoutPadding(2)
             .setSeatSizeBySeatsColumnAndLayoutWidth(7, -1)
 
         seatBookView.show()
+    }
+
+    private fun setClickListenerSeat(seatNamesList: List<String>) {
+        seatBookView.setSeatClickListener(
+            object : SeatClickListener {
+                override fun onAvailableSeatClick(
+                    selectedIdList: List<Int>,
+                    view: View,
+                ) {
+                    if (selectedIdList.isNotEmpty()) {
+                        val selectedSeatId = selectedIdList.first()
+                        val seatName = seatNamesList[selectedSeatId - 1]
+                        val row = seatName.last()
+                        val column = seatName.first()
+                        Toast.makeText(this@SeatBookActivity, "Seat Row : $row", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SeatBookActivity, "Seat Column : $column", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onBookedSeatClick(view: View) {
+
+                }
+
+                override fun onReservedSeatClick(view: View) {
+
+                }
+            },
+        )
     }
 
     private fun formatFirstClassSeatNames(seats: List<Seat>): List<String> {
