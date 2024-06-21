@@ -3,13 +3,13 @@ package com.nafi.airseat.presentation.passengers
 import androidx.lifecycle.ViewModel
 
 class PassengersViewModel : ViewModel() {
-    var adultCount = 1 // Default count of adult passengers
+    var adultCount = 0
         private set
 
-    var childCount = 0 // Default count of child passengers
+    var childCount = 0
         private set
 
-    var babyCount = 0 // Default count of baby passengers
+    var babyCount = 0
         private set
 
     // Increment methods
@@ -25,7 +25,6 @@ class PassengersViewModel : ViewModel() {
         babyCount++
     }
 
-    // Decrement methods
     fun decrementAdultCount() {
         if (adultCount > 1) {
             adultCount--
@@ -44,7 +43,6 @@ class PassengersViewModel : ViewModel() {
         }
     }
 
-    // Method to get total passenger count
     fun getTotalPassengerCount(): Int {
         return adultCount + childCount + babyCount
     }

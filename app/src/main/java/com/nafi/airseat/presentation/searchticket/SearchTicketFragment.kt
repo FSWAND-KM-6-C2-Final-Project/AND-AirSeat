@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafi.airseat.data.model.Airport
+import com.nafi.airseat.data.model.AirportHistory
 import com.nafi.airseat.databinding.FragmentSearchTicketBinding
 import com.nafi.airseat.presentation.common.sharedviewmodel.SharedViewModel
+import com.nafi.airseat.presentation.searchticket.adapter.AirportHistoryAdapter
 import com.nafi.airseat.presentation.searchticket.adapter.AirportsAdapter
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,6 +26,11 @@ class SearchTicketFragment(private val listener: ((Airport) -> Unit)? = null) : 
     private val airportAdapter: AirportsAdapter by lazy {
         AirportsAdapter {
             getClickedData(it)
+        }
+    }
+    private val adapter: AirportHistoryAdapter by lazy {
+        AirportHistoryAdapter {
+            viewModel.removeAirportHistory(it)
         }
     }
 
@@ -48,8 +56,9 @@ class SearchTicketFragment(private val listener: ((Airport) -> Unit)? = null) : 
         // sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         setHeightBottomSheet()
         setAdapter()
-        getAirportsData()
+        observeData()
         handelSearchView()
+        deleteAllHistories()
     }
 
     private fun setHeightBottomSheet() {
@@ -73,11 +82,17 @@ class SearchTicketFragment(private val listener: ((Airport) -> Unit)? = null) : 
         searchView.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
+                    binding.rvRecentSearches.isVisible = true
+                    addAirportHistory(AirportHistory(airportHistory = query))
+                    getAirportsData(query)
                     return true
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    airportAdapter.filter.filter(newText)
+                    if (newText.isNullOrEmpty()) {
+                        binding.rvRecentSearches.isVisible = false
+                        observeData()
+                    }
                     return true
                 }
             },
@@ -86,14 +101,19 @@ class SearchTicketFragment(private val listener: ((Airport) -> Unit)? = null) : 
 
     private fun setAdapter() {
         binding.rvRecentSearches.adapter = this@SearchTicketFragment.airportAdapter
+        binding.rvResultSearches.adapter = this@SearchTicketFragment.adapter
     }
 
-    private fun getAirportsData() {
-        viewModel.getAirportData().observe(viewLifecycleOwner) { result ->
+    private fun getAirportsData(cityName: String?) {
+        viewModel.getAirportData(cityName).observe(viewLifecycleOwner) { result ->
             result.proceedWhen(
                 doOnLoading = {
+                    binding.rvRecentSearches.isVisible = false
+                    binding.rvResultSearches.isVisible = false
                 },
                 doOnSuccess = {
+                    binding.rvRecentSearches.isVisible = true
+                    binding.rvResultSearches.isVisible = false
                     result.payload?.let {
                         airportAdapter.submitData(it)
                     }
@@ -102,8 +122,12 @@ class SearchTicketFragment(private val listener: ((Airport) -> Unit)? = null) : 
                     result.payload?.let {
                         airportAdapter.submitData(it)
                     }
+                    binding.rvRecentSearches.isVisible = false
+                    binding.rvResultSearches.isVisible = true
                 },
                 doOnError = {
+                    binding.rvRecentSearches.isVisible = false
+                    binding.rvResultSearches.isVisible = true
                 },
             )
         }
@@ -113,5 +137,47 @@ class SearchTicketFragment(private val listener: ((Airport) -> Unit)? = null) : 
         // sharedViewModel.setAirportCity(data)
         listener?.invoke(data)
         dismiss()
+    }
+
+    private fun observeData() {
+        viewModel.getAllAirportHistory().observe(viewLifecycleOwner) { result ->
+            result.proceedWhen(
+                doOnLoading = {
+                },
+                doOnSuccess = {
+                    result.payload?.let {
+                        adapter.insertData(it)
+                    }
+                },
+                doOnEmpty = {
+                    result.payload?.let {
+                        adapter.insertData(it)
+                    }
+                },
+                doOnError = {
+                },
+            )
+        }
+    }
+
+    private fun addAirportHistory(airportHistory: AirportHistory) {
+        viewModel.createAirportHistory(airportHistory).observe(viewLifecycleOwner) { result ->
+            result.proceedWhen(
+                doOnLoading = {
+                },
+                doOnSuccess = {
+                },
+                doOnEmpty = {
+                },
+                doOnError = {
+                },
+            )
+        }
+    }
+
+    private fun deleteAllHistories() {
+        binding.tvDeleteHistorySearches.setOnClickListener {
+            viewModel.deleteAllAirport()
+        }
     }
 }

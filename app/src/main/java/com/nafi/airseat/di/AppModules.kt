@@ -2,6 +2,8 @@ package com.nafi.airseat.di
 
 import android.content.SharedPreferences
 import com.nafi.airseat.core.BaseViewModel
+import com.nafi.airseat.data.datasource.AirportHistoryDataSource
+import com.nafi.airseat.data.datasource.AirportHistoryDataSourceImpl
 import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthDataSourceImpl
 import com.nafi.airseat.data.datasource.HistoryDataSource
@@ -30,6 +32,8 @@ import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
 import com.nafi.airseat.data.datasource.seat.SeatDataSource
 import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSource
 import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSourceImpl
+import com.nafi.airseat.data.repository.AirportHistoryRepository
+import com.nafi.airseat.data.repository.AirportHistoryRepositoryImpl
 import com.nafi.airseat.data.repository.AirportRepository
 import com.nafi.airseat.data.repository.AirportRepositoryImpl
 import com.nafi.airseat.data.repository.BookingRepository
@@ -59,6 +63,7 @@ import com.nafi.airseat.data.repository.UserPrefRepositoryImpl
 import com.nafi.airseat.data.repository.UserRepository
 import com.nafi.airseat.data.repository.UserRepositoryImpl
 import com.nafi.airseat.data.source.local.database.AppDatabase
+import com.nafi.airseat.data.source.local.database.dao.AirportHistoryDao
 import com.nafi.airseat.data.source.local.database.dao.SearchHistoryDao
 import com.nafi.airseat.data.source.local.pref.UserPreference
 import com.nafi.airseat.data.source.local.pref.UserPreferenceImpl
@@ -117,6 +122,7 @@ object AppModules {
             }
             single<UserPreference> { UserPreferenceImpl(get()) }
             single<SearchHistoryDao> { get<AppDatabase>().searchHistoryDao() }
+            single<AirportHistoryDao> { get<AppDatabase>().airportHistoryDao() }
         }
 
     private val datasource =
@@ -137,6 +143,7 @@ object AppModules {
             single<HistoryDataSource> { HistoryDataSourceImpl(get()) }
             single<IntroDataSource> { IntroDataSourceImpl(get()) }
             single<SearchHistoryDataSource> { SearchHistoryDataSourceImpl(get()) }
+            single<AirportHistoryDataSource> { AirportHistoryDataSourceImpl(get()) }
             single<SeatDataSource> { SeatApiDataSource(get()) }
         }
 
@@ -156,6 +163,7 @@ object AppModules {
             single<HistoryRepository> { HistoryRepositoryImpl(get()) }
             single<IntroRepository> { IntroRepositoryImpl(get()) }
             single<SearchHistoryRepository> { SearchHistoryRepositoryImpl(get()) }
+            single<AirportHistoryRepository> { AirportHistoryRepositoryImpl(get()) }
             single<BookingRepository> { BookingRepositoryImpl(get()) }
         }
 
@@ -193,7 +201,7 @@ object AppModules {
                 ReqChangePasswordViewModel(get())
             }
             viewModel {
-                SearchTicketViewModel(get())
+                SearchTicketViewModel(get(), get())
             }
             viewModel {
                 ResultSearchViewModel(get())

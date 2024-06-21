@@ -15,6 +15,7 @@ import com.nafi.airseat.databinding.ActivityResultSearchBinding
 import com.nafi.airseat.databinding.HorizontalDayBinding
 import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.detailflight.DetailFlightActivity
+import com.nafi.airseat.presentation.filter.FilterBottomSheetFragment
 import com.nafi.airseat.presentation.resultsearch.adapter.ResultSearchAdapter
 import com.nafi.airseat.utils.NoInternetException
 import com.nafi.airseat.utils.calendar.displayText
@@ -88,6 +89,7 @@ class ResultSearchActivity : AppCompatActivity() {
         binding.layoutHeader.textName.text = "$airportCityCodeDeparture > $airportCityCodeDestination"
         binding.layoutHeader.textGreetings.text = "$passengerCount Passengers"
         binding.layoutHeader.tvClass.text = seatClassChoose
+        setupFilter()
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             val bind = HorizontalDayBinding.bind(view)
@@ -246,5 +248,12 @@ class ResultSearchActivity : AppCompatActivity() {
     private fun LocalDate.toFormattedString(): String {
         val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         return this.format(formatter)
+    }
+
+    private fun setupFilter() {
+        binding.mcvFilter.setOnClickListener {
+            val bottomSheet = FilterBottomSheetFragment()
+            bottomSheet.show(supportFragmentManager, bottomSheet.tag)
+        }
     }
 }

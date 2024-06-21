@@ -7,14 +7,7 @@ import kotlinx.coroutines.Dispatchers
 
 class HomeViewModel(
     private val favoriteDestinationRepository: FlightRepository,
-    // private val userRepository: UserRepository,
 ) : ViewModel() {
-    /*fun getCurrentUser() =
-        userRepository
-            .getCurrentUser()
-
-    fun isUserLoggedOut() = userRepository.doLogout()
-*/
     fun getFlightData(
         searchDateInput: String,
         sortByClass: String,

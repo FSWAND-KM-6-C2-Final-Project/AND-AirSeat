@@ -141,7 +141,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         }
 
         binding.layoutHome.btnSearchFlight.setOnClickListener {
-            if (passengerCount == null) {
+            if (passengerCount == null || passengerCount == 0) {
                 Snackbar.make(requireView(), "Please select the number of passengers", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -153,6 +153,11 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
 
             if (selectedStartDate == null) {
                 Snackbar.make(requireView(), "Please select the departure date", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (binding.layoutHome.tvSeatClassChoose.text.isNullOrEmpty()) {
+                Snackbar.make(requireView(), "Please select the seat class", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 

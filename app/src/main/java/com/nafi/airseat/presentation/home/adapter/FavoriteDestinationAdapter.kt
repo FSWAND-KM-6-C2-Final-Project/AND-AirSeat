@@ -65,9 +65,9 @@ class FavoriteDestinationAdapter(private val listener: (Flight) -> Unit) :
                     crossfade(true)
                 }
                 binding.tvDepartFavorite.text = "${item.departureAirport.airportCity} - ${item.arrivalAirport.airportCity}"
-                binding.tvAirlinesFavorite.text = item.airline.airlineName // Only temporary
+                binding.tvAirlinesFavorite.text = item.airline.airlineName
                 binding.tvDurationFavorite.text = formatDate(item.departureTime)
-                binding.tvPriceFavorite.text = "Start from ${item.priceEconomy.toLong().toCurrencyFormat()}"
+                binding.tvPriceFavorite.text = "Start from\n${item.priceEconomy.toLong().toCurrencyFormat()}"
                 itemView.setOnClickListener { itemClick(this) }
             }
         }

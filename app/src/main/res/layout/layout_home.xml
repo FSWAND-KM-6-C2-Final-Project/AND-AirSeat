@@ -41,7 +41,7 @@
                 android:layout_weight="1"
                 android:textSize="16sp"
                 android:paddingVertical="2dp"
-                android:text="Select Flight"
+                android:hint="Select Flight"
                 android:fontFamily="@font/font_plusjakartasans_bold"
                 android:layout_marginStart="12dp"
                 android:ellipsize="end"
@@ -102,7 +102,7 @@
                 android:layout_weight="1"
                 android:textSize="16sp"
                 android:paddingVertical="2dp"
-                android:text="Select Flight"
+                android:hint="Select Flight"
                 android:fontFamily="@font/font_plusjakartasans_bold"
                 android:layout_marginStart="12dp"
                 android:ellipsize="end"
@@ -168,7 +168,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/tv_border_radius"
                 android:paddingVertical="8dp"
-                tools:text="1 Maret 2024"
+                android:hint="Select date"
                 android:fontFamily="@font/font_plusjakartasans_bold"/>
             <TextView
                 android:id="@+id/tv_space_2"
@@ -181,7 +181,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/tv_border_radius"
                 android:paddingVertical="8dp"
-                tools:text="2 Maret 2024"
+                android:hint="Select date"
                 android:fontFamily="@font/font_plusjakartasans_bold"/>
         </LinearLayout>
 
@@ -222,7 +222,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/tv_border_radius"
                 android:paddingVertical="8dp"
-                tools:text="@string/text_count_passengers"
+                android:hint="Add passenger"
                 android:fontFamily="@font/font_plusjakartasans_bold"/>
             <TextView
                 android:layout_width="60dp"
@@ -236,7 +236,7 @@
                 android:paddingVertical="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                tools:text="@string/text_choosen_class"
+                android:hint="Select seat class"
                 android:fontFamily="@font/font_plusjakartasans_bold"/>
         </LinearLayout>
 

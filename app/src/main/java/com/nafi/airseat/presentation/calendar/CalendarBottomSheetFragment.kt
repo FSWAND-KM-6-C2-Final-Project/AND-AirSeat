@@ -59,7 +59,6 @@ class CalendarBottomSheetFragment(private val isStartSelection: Boolean) : Botto
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentCalendarBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -77,9 +76,9 @@ class CalendarBottomSheetFragment(private val isStartSelection: Boolean) : Botto
             }
         }
         val currentMonth = YearMonth.now()
-        val startMonth = currentMonth.minusMonths(100) // Adjust as needed
-        val endMonth = currentMonth.plusMonths(100) // Adjust as needed
-        val daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.SUNDAY) // Available from the library
+        val startMonth = currentMonth.minusMonths(100)
+        val endMonth = currentMonth.plusMonths(100)
+        val daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.SUNDAY)
         binding.calendarView.setup(startMonth, endMonth, daysOfWeek.first())
         binding.calendarView.scrollToMonth(currentMonth)
 
@@ -134,20 +133,16 @@ class CalendarBottomSheetFragment(private val isStartSelection: Boolean) : Botto
         binding.tvStartDate.apply {
             if (selection.startDate != null) {
                 text = headerDateFormatter.format(selection.startDate)
-                // setTextColorRes(R.color.example_4_grey)
             } else {
                 text = getString(R.string.start_date)
-                // setTextColor(Color.GRAY)
             }
         }
 
         binding.tvEndDate.apply {
             if (selection.endDate != null) {
                 text = headerDateFormatter.format(selection.endDate)
-                // setTextColorRes(R.color.example_4_grey)
             } else {
                 text = getString(R.string.end_date)
-                // setTextColor(Color.GRAY)
             }
         }
 
@@ -159,11 +154,11 @@ class CalendarBottomSheetFragment(private val isStartSelection: Boolean) : Botto
         val ctx = requireContext()
         val rangeStartBackground =
             ctx.getDrawableCompat(R.drawable.calendar_continuous_selected_bg_start).also {
-                it.level = clipLevelHalf // Used by ClipDrawable
+                it.level = clipLevelHalf
             }
         val rangeEndBackground =
             ctx.getDrawableCompat(R.drawable.calendar_continuous_selected_bg_end).also {
-                it.level = clipLevelHalf // Used by ClipDrawable
+                it.level = clipLevelHalf
             }
         val rangeMiddleBackground =
             ctx.getDrawableCompat(R.drawable.calendar_continuous_selected_bg_middle)
@@ -171,7 +166,7 @@ class CalendarBottomSheetFragment(private val isStartSelection: Boolean) : Botto
         val todayBackground = ctx.getDrawableCompat(R.drawable.calendar_today_bg)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
-            lateinit var day: CalendarDay // Will be set when this container is bound.
+            lateinit var day: CalendarDay
             val binding = ItemSingleDayBinding.bind(view)
 
             val textView = view.findViewById<TextView>(R.id.calendarDayText)
@@ -250,8 +245,6 @@ class CalendarBottomSheetFragment(private val isStartSelection: Boolean) : Botto
                                 }
                             }
                         }
-                        // Make the coloured selection background continuous on the
-                        // invisible in and out dates across various months.
                         DayPosition.InDate ->
                             if (startDate != null && endDate != null &&
                                 isInDateBetweenSelection(data.date, startDate, endDate)
