@@ -99,13 +99,15 @@ interface AirSeatApiService {
         @Path("id") id: String,
     ): FlightDetailResponse
 
+    @GET("seat/flight/{id}")
+    suspend fun getSeatData(
+        @Path("id") flightId: String,
+    ): SeatResponse
+
     @POST("api/v1/booking")
     suspend fun bookingFlight(
         @Body bookingFlightRequest: BookingFlightRequest,
     ): BookingFlightResponse
-
-    @GET("seat/flight/1")
-    suspend fun getSeatData(): SeatResponse
 
     companion object {
         @JvmStatic

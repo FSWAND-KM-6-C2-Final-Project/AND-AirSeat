@@ -24,6 +24,8 @@ import com.nafi.airseat.data.datasource.flight.FlightApiDataSource
 import com.nafi.airseat.data.datasource.flight.FlightDataSource
 import com.nafi.airseat.data.datasource.flightdetail.FlightDetailApiDataSource
 import com.nafi.airseat.data.datasource.flightdetail.FlightDetailDataSource
+import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
+import com.nafi.airseat.data.datasource.seat.SeatDataSource
 import com.nafi.airseat.data.datasource.intro.IntroDataSource
 import com.nafi.airseat.data.datasource.intro.IntroDataSourceImpl
 import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
@@ -54,6 +56,8 @@ import com.nafi.airseat.data.repository.SearchHistoryRepository
 import com.nafi.airseat.data.repository.SearchHistoryRepositoryImpl
 import com.nafi.airseat.data.repository.SeatClassRepository
 import com.nafi.airseat.data.repository.SeatClassRepositoryImpl
+import com.nafi.airseat.data.repository.SeatRepository
+import com.nafi.airseat.data.repository.SeatRepositoryImpl
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.repository.UserPrefRepositoryImpl
 import com.nafi.airseat.data.repository.UserRepository
@@ -84,6 +88,7 @@ import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
+import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
 import com.nafi.airseat.presentation.splashscreen.SplashScreenViewModel
 import com.nafi.airseat.presentation.updateprofile.UpdateProfileViewModel
