@@ -1,10 +1,6 @@
 package com.nafi.airseat.di
 
 import android.content.SharedPreferences
-import com.nafi.airseat.data.repository.BookingRepository
-import com.nafi.airseat.data.repository.BookingRepositoryImpl
-import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceViewModel
-import com.nafi.airseat.presentation.deleteaccount.DeleteAccountViewModel
 import com.nafi.airseat.core.BaseViewModel
 import com.nafi.airseat.data.datasource.AuthDataSource
 import com.nafi.airseat.data.datasource.AuthDataSourceImpl
@@ -72,7 +68,7 @@ import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.appintro.AppIntroViewModel
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
-import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
+import com.nafi.airseat.presentation.deleteaccount.DeleteAccountViewModel
 import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
 import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceViewModel
 import com.nafi.airseat.presentation.history.HistoryViewModel

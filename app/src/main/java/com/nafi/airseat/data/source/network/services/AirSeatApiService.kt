@@ -94,11 +94,6 @@ interface AirSeatApiService {
         @Path("id") id: String,
     ): FlightDetailResponse
 
-    @POST("api/v1/booking")
-    suspend fun bookingFlight(
-        @Body bookingFlightRequest: BookingFlightRequest,
-    ): BookingFlightResponse
-
     companion object {
         @JvmStatic
         operator fun invoke(): AirSeatApiService {
@@ -142,16 +137,6 @@ interface AirSeatApiServiceWithAuthorization {
 
     @DELETE("profile")
     suspend fun deleteAccount(): BaseResponse<Any>
-
-    @GET("seat/flight/{id}")
-    suspend fun getSeatData(
-        @Path("id") flightId: String,
-    ): SeatResponse
-
-    @POST("booking")
-    suspend fun bookingFlight(
-        @Body bookingFlightRequest: BookingFlightRequest,
-    ): BaseResponse<BookingData>
 
     @GET("seat/flight/{id}")
     suspend fun getSeatData(
