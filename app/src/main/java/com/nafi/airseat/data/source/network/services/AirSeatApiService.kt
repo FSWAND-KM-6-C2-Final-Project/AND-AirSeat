@@ -153,6 +153,16 @@ interface AirSeatApiServiceWithAuthorization {
         @Body bookingFlightRequest: BookingFlightRequest,
     ): BaseResponse<BookingData>
 
+    @GET("seat/flight/{id}")
+    suspend fun getSeatData(
+        @Path("id") flightId: String,
+    ): SeatResponse
+
+    @POST("booking")
+    suspend fun bookingFlight(
+        @Body bookingFlightRequest: BookingFlightRequest,
+    ): BaseResponse<BookingData>
+
     companion object {
         @JvmStatic
         operator fun invoke(userPrefRepository: UserPrefRepository): AirSeatApiServiceWithAuthorization {
