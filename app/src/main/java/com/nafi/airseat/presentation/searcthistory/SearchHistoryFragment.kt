@@ -42,10 +42,6 @@ class SearchHistoryFragment : BottomSheetDialogFragment() {
         observeData()
         handelSearchView()
         setOnclickListener()
-        setLastQuery()
-    }
-
-    private fun setLastQuery() {
     }
 
     private fun setHeightBottomSheet() {
@@ -66,6 +62,7 @@ class SearchHistoryFragment : BottomSheetDialogFragment() {
     private fun setOnclickListener() {
         binding.tvDeleteAllHistory.setOnClickListener {
             viewModel.deleteAll()
+            observeData()
         }
     }
 
@@ -108,6 +105,9 @@ class SearchHistoryFragment : BottomSheetDialogFragment() {
                     }
                 },
                 doOnEmpty = {
+                    result.payload?.let {
+                        adapter.insertData(it)
+                    }
                 },
                 doOnError = {
                 },
