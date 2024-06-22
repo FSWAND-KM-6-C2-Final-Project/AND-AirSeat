@@ -1,18 +1,17 @@
 package com.nafi.airseat.presentation.updateprofile
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import com.google.android.material.snackbar.Snackbar
 import com.nafi.airseat.R
 import com.nafi.airseat.data.source.network.model.profile.UpdateProfileRequest
 import com.nafi.airseat.databinding.ActivityUpdateProfileBinding
+import com.nafi.airseat.utils.ApiErrorException
+import com.nafi.airseat.utils.NoInternetException
 import com.nafi.airseat.utils.proceedWhen
+import com.nafi.airseat.utils.showSnackBarError
+import com.nafi.airseat.utils.showSnackBarSuccess
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UpdateProfileActivity : AppCompatActivity() {
@@ -34,16 +33,21 @@ class UpdateProfileActivity : AppCompatActivity() {
         binding.etProfileFullName.doAfterTextChanged {
             binding.btnUpdate.isEnabled = true
         }
+        binding.etProfilePhoneNumber.doAfterTextChanged {
+            binding.btnUpdate.isEnabled = true
+        }
     }
 
     private fun setEditText() {
         binding.etProfileFullName.setText(intent.getStringExtra("fullName"))
+        binding.etProfilePhoneNumber.setText(intent.getStringExtra("phoneNumber"))
     }
 
     private fun setClickListener() {
         binding.btnUpdate.setOnClickListener {
             val fullName: String = binding.etProfileFullName.text.toString()
-            updateProfileData(fullName)
+            val phoneNumber: String = binding.etProfilePhoneNumber.text.toString()
+            updateProfileData(fullName, phoneNumber)
         }
 
         binding.ivArrowBack.setOnClickListener {
@@ -51,21 +55,22 @@ class UpdateProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateProfileData(fullName: String) {
-        viewModel.getUpdateProfile(setRequestData(fullName)).observe(this) { result ->
+    private fun updateProfileData(
+        fullName: String,
+        phoneNumber: String,
+    ) {
+        viewModel.getUpdateProfile(setRequestData(fullName, phoneNumber)).observe(this) { result ->
             result.proceedWhen(
                 doOnLoading = {
                     binding.btnUpdate.isEnabled = false
                     binding.pbUpdateProfile.isVisible = true
-                    binding.btnUpdate.text = ""
+                    "".also { binding.btnUpdate.text = it }
                 },
                 doOnSuccess = {
                     binding.btnUpdate.isEnabled = true
                     binding.pbUpdateProfile.isVisible = true
                     binding.btnUpdate.text = getString(R.string.text_button_update_profile)
-                    result.payload?.let {
-                        showSnackbarSuccess(it.message)
-                    }
+                    showSnackBarSuccess("$it")
                     finish()
                 },
                 doOnEmpty = {
@@ -74,8 +79,10 @@ class UpdateProfileActivity : AppCompatActivity() {
                     binding.btnUpdate.text = getString(R.string.text_button_update_profile)
                 },
                 doOnError = {
-                    result.payload?.let {
-                        showSnackbarError(it.message)
+                    if (it.exception is ApiErrorException) {
+                        showSnackBarError("$it")
+                    } else if (it.exception is NoInternetException) {
+                        showSnackBarError(getString(R.string.text_no_internet))
                     }
                     binding.btnUpdate.isEnabled = true
                     binding.pbUpdateProfile.isVisible = true
@@ -85,33 +92,10 @@ class UpdateProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun setRequestData(fullName: String): UpdateProfileRequest {
-        return UpdateProfileRequest(fullName)
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun showSnackbarSuccess(message: String) {
-        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
-        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_success, null)
-        customView.findViewById<TextView>(R.id.textView1).text = message
-        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
-
-        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
-        snackbarLayout.setPadding(0, 0, 0, 0)
-        snackbarLayout.addView(customView, 0)
-        snackbar.show()
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun showSnackbarError(message: String) {
-        val snackbar = Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
-        val customView = LayoutInflater.from(this).inflate(R.layout.custom_snackbar_error, null)
-        customView.findViewById<TextView>(R.id.textView1).text = message
-        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
-
-        val snackbarLayout = snackbar.view as Snackbar.SnackbarLayout
-        snackbarLayout.setPadding(0, 0, 0, 0)
-        snackbarLayout.addView(customView, 0)
-        snackbar.show()
+    private fun setRequestData(
+        fullName: String,
+        phoneNumber: String,
+    ): UpdateProfileRequest {
+        return UpdateProfileRequest(fullName, phoneNumber)
     }
 }

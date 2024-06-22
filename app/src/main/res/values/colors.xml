@@ -14,6 +14,7 @@
     </declare-styleable>
     <color name="success">#73CA5C</color>
     <color name="gray">#AAABAE</color>
+    <color name="dark_gray">#68686A</color>
     <color name="black">#000000</color>
     <color name="md_theme_primary">#006398</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>

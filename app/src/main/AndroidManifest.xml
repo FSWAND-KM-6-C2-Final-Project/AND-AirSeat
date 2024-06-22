@@ -17,6 +17,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.deleteaccount.DeleteAccountFragment"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.profilesetting.ProfileSettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.splashscreen.SplashScreenActivity"
             android:exported="false" />
         <activity
@@ -72,8 +78,7 @@
             android:exported="false" />
         <activity
             android:name=".presentation.main.MainActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".presentation.appintro.AppIntroActivity"
             android:exported="true">

@@ -30,10 +30,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
+            android:text="@string/text_header_update_profile"
             android:textColor="@color/md_theme_onPrimary"
             android:textSize="18sp"
-            android:textStyle="bold"
-            tools:text="Update Profile" />
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TextView
@@ -41,9 +41,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="28dp"
-        android:layout_marginVertical="16dp"
-        android:text="Full Name"
-        android:textSize="20sp"
+        android:layout_marginTop="16dp"
+        android:text="@string/text_update_full_name"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_background_top" />
 
@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="28dp"
-        android:layout_marginVertical="12dp"
+        android:layout_marginTop="6dp"
         app:hintEnabled="false"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:visibility="visible">
@@ -68,17 +68,51 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/tv_update_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="28dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/text_update_phone_number"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/til_update_full_name" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_update_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="28dp"
+        android:layout_marginTop="6dp"
+        app:hintEnabled="false"
+        app:layout_constraintTop_toBottomOf="@+id/tv_update_phone_number"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_profile_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:hint="@string/your_name"
+            android:inputType="textPersonName" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="18dp"
         android:layout_marginVertical="18dp"
+        android:layout_marginBottom="16dp"
         android:enabled="false"
         android:text="@string/text_button_update_profile"
         android:textSize="16sp"
         app:cornerRadius="12dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="17dp" />
 
     <ProgressBar
         android:id="@+id/pb_update_profile"

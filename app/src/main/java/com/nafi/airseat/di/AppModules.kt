@@ -60,6 +60,7 @@ import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.appintro.AppIntroViewModel
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
+import com.nafi.airseat.presentation.deleteaccount.DeleteAccountViewModel
 import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
 import com.nafi.airseat.presentation.history.HistoryViewModel
 import com.nafi.airseat.presentation.home.HomeViewModel
@@ -151,6 +152,7 @@ object AppModules {
             viewModelOf(::LoginViewModel)
             viewModelOf(::AppIntroViewModel)
             viewModelOf(::SplashScreenViewModel)
+            viewModelOf(::DeleteAccountViewModel)
             viewModel {
                 RegisterViewModel(get())
             }

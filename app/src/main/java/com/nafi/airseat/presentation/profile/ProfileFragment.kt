@@ -11,6 +11,7 @@ import com.nafi.airseat.core.BaseActivity
 import com.nafi.airseat.databinding.FragmentProfileBinding
 import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.login.LoginActivity
+import com.nafi.airseat.presentation.profilesetting.ProfileSettingActivity
 import com.nafi.airseat.presentation.updateprofile.UpdateProfileActivity
 import com.nafi.airseat.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -58,7 +59,7 @@ class ProfileFragment : Fragment() {
                         binding.tvUserFullname.text = it.fullName
                         binding.tvUserEmail.text = it.email
                         binding.tvUserPhoneNumber.text = it.phoneNumber
-                        btnToUpdateProfile(it.fullName)
+                        btnToUpdateProfile(it.fullName, it.phoneNumber)
                         binding.csvProfile.setState(ContentState.SUCCESS)
                     }
                 },
@@ -76,14 +77,28 @@ class ProfileFragment : Fragment() {
 
     private fun setOnclickListener() {
         binding.itemLogout.setOnClickListener {
-            (activity as BaseActivity).cleatToken()
+            (activity as BaseActivity).clearToken()
             navigateToLogin()
+        }
+        binding.itemProfileSetting.setOnClickListener {
+            navigateToDeleteAccount()
         }
     }
 
-    private fun btnToUpdateProfile(fullName: String) {
+    private fun navigateToDeleteAccount() {
+        startActivity(
+            Intent(requireContext(), ProfileSettingActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
+    }
+
+    private fun btnToUpdateProfile(
+        fullName: String,
+        phoneNumber: String,
+    ) {
         binding.itemChangeProfile.setOnClickListener {
-            navigateToUpdateProfile(fullName)
+            navigateToUpdateProfile(fullName, phoneNumber)
         }
     }
 
@@ -95,10 +110,14 @@ class ProfileFragment : Fragment() {
         )
     }
 
-    private fun navigateToUpdateProfile(fullName: String) {
+    private fun navigateToUpdateProfile(
+        fullName: String,
+        phoneNumber: String,
+    ) {
         startActivity(
             Intent(requireContext(), UpdateProfileActivity::class.java).apply {
                 putExtra("fullName", fullName)
+                putExtra("phoneNumber", phoneNumber)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
