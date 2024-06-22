@@ -1,20 +1,24 @@
 package com.nafi.airseat.presentation.flightdetail
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
+import com.nafi.airseat.R
 import com.nafi.airseat.data.model.FlightDetail
-import com.nafi.airseat.data.model.Passenger
+import com.nafi.airseat.data.source.network.model.booking.BookingPassenger
 import com.nafi.airseat.data.source.network.model.booking.OrderedBy
 import com.nafi.airseat.databinding.ActivityFlightDetailBinding
 import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.payment.WebViewMidtransActivity
+import com.nafi.airseat.utils.ApiErrorException
 import com.nafi.airseat.utils.NoInternetException
 import com.nafi.airseat.utils.proceedWhen
+import com.nafi.airseat.utils.showSnackBarError
+import com.nafi.airseat.utils.toConvertDateFormat
 import com.nafi.airseat.utils.toIndonesianFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
@@ -22,20 +26,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
-class FlightDetailActivity : AppCompatActivity() {
-    companion object {
-        const val EXTRAS_PASSENGER_LIST = "EXTRAS_PASSENGER_LIST"
-
-        fun startActivity(
-            context: Context,
-            passenger: ArrayList<Passenger>,
-        ) {
-            val intent = Intent(context, FlightDetailActivity::class.java)
-            intent.putExtra(EXTRAS_PASSENGER_LIST, passenger)
-            context.startActivity(intent)
-        }
-    }
-
+class FlightDetailPriceActivity : AppCompatActivity() {
     private val binding: ActivityFlightDetailBinding by lazy {
         ActivityFlightDetailBinding.inflate(layoutInflater)
     }
@@ -43,7 +34,7 @@ class FlightDetailActivity : AppCompatActivity() {
     private val flightDetailPriceViewModel: FlightDetailPriceViewModel by viewModel()
     private val paymentMethod = "snap"
     private var flightDetail: FlightDetail? = null
-    private lateinit var passengerList: MutableList<Passenger>
+    private lateinit var passengerList: MutableList<BookingPassenger>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +58,8 @@ class FlightDetailActivity : AppCompatActivity() {
 
         Log.d("OrderedBy", "Ordered Bio: $fullName, $familyName, $phoneNumber, $email")
 
-        passengerList = intent.getParcelableArrayListExtra(EXTRAS_PASSENGER_LIST) ?: arrayListOf()
-
         binding.cvSectionCheckout.btnPayment.setOnClickListener {
-            openUrl()
+            createBooking()
         }
         binding.ibBtnBack.setOnClickListener {
             onBackPressed()
@@ -86,31 +75,31 @@ class FlightDetailActivity : AppCompatActivity() {
         var totalPrice = 0.0
 
         if (adults > 0) {
-            binding.layoutPrice.llPriceAdults.visibility = View.VISIBLE
-            binding.layoutPrice.tvAdults.text = "$adults Adult${if (adults > 1) "s" else ""}"
+            binding.layoutFlightDetailPrice.layoutPrice.llPriceAdults.visibility = View.VISIBLE
+            binding.layoutFlightDetailPrice.layoutPrice.tvAdults.text = "$adults Adult${if (adults > 1) "s" else ""}"
             val totalPriceAdult = price * adults
-            binding.layoutPrice.tvAdultPrice.text = totalPriceAdult.toIndonesianFormat()
+            binding.layoutFlightDetailPrice.layoutPrice.tvAdultPrice.text = totalPriceAdult.toIndonesianFormat()
             totalPrice += totalPriceAdult
         } else {
-            binding.layoutPrice.llPriceAdults.visibility = View.GONE
+            binding.layoutFlightDetailPrice.layoutPrice.llPriceAdults.visibility = View.GONE
         }
 
         if (child > 0) {
-            binding.layoutPrice.llPriceChild.visibility = View.VISIBLE
-            binding.layoutPrice.tvChild.text = "$child Child${if (child > 1) "ren" else ""}"
+            binding.layoutFlightDetailPrice.layoutPrice.llPriceChild.visibility = View.VISIBLE
+            binding.layoutFlightDetailPrice.layoutPrice.tvChild.text = "$child Child${if (child > 1) "ren" else ""}"
             val totalPriceChild = price * child
-            binding.layoutPrice.tvChildPrice.text = totalPriceChild.toIndonesianFormat()
+            binding.layoutFlightDetailPrice.layoutPrice.tvChildPrice.text = totalPriceChild.toIndonesianFormat()
             totalPrice += totalPriceChild
         } else {
-            binding.layoutPrice.llPriceChild.visibility = View.GONE
+            binding.layoutFlightDetailPrice.layoutPrice.llPriceChild.visibility = View.GONE
         }
 
         if (baby > 0) {
-            binding.layoutPrice.llPriceBaby.visibility = View.VISIBLE
-            binding.layoutPrice.tvBaby.text = "$baby Baby${if (baby > 1) "ies" else ""}"
-            binding.layoutPrice.tvBabyPrice.text = priceBaby.toIndonesianFormat()
+            binding.layoutFlightDetailPrice.layoutPrice.llPriceBaby.visibility = View.VISIBLE
+            binding.layoutFlightDetailPrice.layoutPrice.tvBaby.text = "$baby Baby${if (baby > 1) "ies" else ""}"
+            binding.layoutFlightDetailPrice.layoutPrice.tvBabyPrice.text = priceBaby.toIndonesianFormat()
         } else {
-            binding.layoutPrice.llPriceBaby.visibility = View.GONE
+            binding.layoutFlightDetailPrice.layoutPrice.llPriceBaby.visibility = View.GONE
         }
         binding.cvSectionCheckout.totalPrice.text = totalPrice.toIndonesianFormat()
     }
@@ -120,7 +109,7 @@ class FlightDetailActivity : AppCompatActivity() {
             it.proceedWhen(
                 doOnSuccess = {
                     binding.csvDetailFlight.setState(ContentState.SUCCESS)
-                    binding.layoutFlightInfo.root.visibility = View.VISIBLE
+                    binding.layoutFlightDetailPrice.root.visibility = View.VISIBLE
                     it.payload?.let { detail ->
                         flightDetail = detail
                         bindView(detail)
@@ -128,7 +117,7 @@ class FlightDetailActivity : AppCompatActivity() {
                 },
                 doOnLoading = {
                     binding.csvDetailFlight.setState(ContentState.LOADING)
-                    binding.layoutFlightInfo.root.visibility = View.GONE
+                    binding.layoutFlightDetailPrice.root.visibility = View.GONE
                 },
                 doOnError = {
                     if (it.exception is NoInternetException) {
@@ -142,6 +131,15 @@ class FlightDetailActivity : AppCompatActivity() {
                 doOnEmpty = {
                     binding.csvDetailFlight.setState(ContentState.EMPTY, desc = "Data not found")
                 },
+            )
+        }
+    }
+
+    private fun convertPassengerDates(passengerList: List<BookingPassenger>): List<BookingPassenger> {
+        return passengerList.map { passenger ->
+            passenger.copy(
+                dob = passenger.dob.toConvertDateFormat(),
+                identificationExpired = passenger.identificationExpired?.toConvertDateFormat() ?: passenger.identificationExpired,
             )
         }
     }
@@ -192,39 +190,45 @@ class FlightDetailActivity : AppCompatActivity() {
         detail.let {
             val (departureDate, departureTimes) = processDateTime(it.departureTime)
             val (arrivalDate, arrivalTimes) = processDateTime(it.arrivalTime)
-            binding.tvDeparturePlace.text = it.departureAirport.airportCity
-            binding.tvArrivalPlace.text = it.arrivalAirport.airportCity
-            binding.flightTime.text = calculateDuration(it.departureTime, it.arrivalTime)
-            binding.layoutFlightInfo.tvDepartureTime.text = departureTimes
-            binding.layoutFlightInfo.tvDepartureDate.text = formatDate(departureDate)
-            binding.layoutFlightInfo.tvDepartureAirport.text = "${it.departureAirport.airportName} - ${it.departureTerminal}"
-            binding.layoutFlightInfo.tvAirplane.text = it.airline.airlineName
-            binding.layoutFlightInfo.ivAirplaneLogo.load(it.airline.airlinePicture) {
+            binding.layoutFlightDetailPrice.tvDeparturePlace.text = it.departureAirport.airportCity
+            binding.layoutFlightDetailPrice.tvArrivalPlace.text = it.arrivalAirport.airportCity
+            binding.layoutFlightDetailPrice.flightTime.text = calculateDuration(it.departureTime, it.arrivalTime)
+            binding.layoutFlightDetailPrice.layoutFlightInfo.tvDepartureTime.text = departureTimes
+            binding.layoutFlightDetailPrice.layoutFlightInfo.tvDepartureDate.text = formatDate(departureDate)
+            binding.layoutFlightDetailPrice.layoutFlightInfo.tvDepartureAirport.text = "${it.departureAirport.airportName} - ${it.departureTerminal}"
+            binding.layoutFlightDetailPrice.layoutFlightInfo.tvAirplane.text = it.airline.airlineName
+            binding.layoutFlightDetailPrice.layoutFlightInfo.ivAirplaneLogo.load(it.airline.airlinePicture) {
                 crossfade(true)
             }
-            binding.layoutFlightInfo.tvCodeAirplane.text = it.flightNumber
-            binding.layoutFlightInfo.tvFlightEntertain.text = it.information
-            binding.layoutFlightInfo.tvArrivalTime.text = arrivalTimes
-            binding.layoutFlightInfo.tvArrivalDate.text = formatDate(arrivalDate)
-            binding.layoutFlightInfo.tvArrivalAirport.text = it.arrivalAirport.airportName
+            binding.layoutFlightDetailPrice.layoutFlightInfo.tvCodeAirplane.text = it.flightNumber
+            binding.layoutFlightDetailPrice.layoutFlightInfo.tvFlightEntertain.text = it.information
+            binding.layoutFlightDetailPrice.layoutFlightInfo.tvArrivalTime.text = arrivalTimes
+            binding.layoutFlightDetailPrice.layoutFlightInfo.tvArrivalDate.text = formatDate(arrivalDate)
+            binding.layoutFlightDetailPrice.layoutFlightInfo.tvArrivalAirport.text = it.arrivalAirport.airportName
         }
     }
 
-    private fun openUrl() {
-        val intent = Intent(this, WebViewMidtransActivity::class.java)
-        intent.putExtra(
-            "URL",
-            "https://app.sandbox.midtrans.com/snap/v4/redirection/",
-        )
-        startActivity(intent)
+    private fun openUrl(redirectUrl: String?) {
+        val flightId = intent.getStringExtra("flightId")
+        if (!redirectUrl.isNullOrBlank()) {
+            val intent = Intent(this, WebViewMidtransActivity::class.java)
+            intent.putExtra("URL", redirectUrl)
+            intent.putExtra("flightId", flightId)
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Redirect URL is empty or null", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    private suspend fun proceedBooking() {
+    private fun createBooking() {
+        val flightId = intent.getStringExtra("flightId")?.toInt()
+        val returnFlightId = null
         val fullName = intent.getStringExtra("full_name")
         val phoneNumber = intent.getStringExtra("number_phone")
         val email = intent.getStringExtra("email")
         val familyName = intent.getStringExtra("family_name")
-
+        passengerList = intent.getParcelableArrayListExtra("passenger_list") ?: mutableListOf()
+        passengerList = convertPassengerDates(passengerList).toMutableList()
         val orderedBy =
             OrderedBy(
                 firstName = fullName ?: "",
@@ -233,47 +237,33 @@ class FlightDetailActivity : AppCompatActivity() {
                 email = email ?: "",
             )
 
-        Log.d("OrderedBy", "Ordered Bio: $fullName, $familyName, $phoneNumber, $email")
-
-        val passengers =
-            passengerList.map {
-                Passenger(
-                    firstName = it.firstName,
-                    familyName = it.familyName,
-                    title = it.title,
-                    dob = it.dob,
-                    nationality = it.nationality,
-                    identificationType = it.identificationType,
-                    identificationNumber = it.identificationNumber,
-                    identificationCountry = it.identificationCountry,
-                    identificationExpired = it.identificationExpired,
-                    seatDeparture = it.seatDeparture,
+        if (flightId != null) {
+            flightDetailPriceViewModel.doBooking(
+                flightId,
+                returnFlightId,
+                paymentMethod,
+                orderedBy,
+                passengerList,
+            ).observe(this) { result ->
+                result.proceedWhen(
+                    doOnSuccess = {
+                        Toast.makeText(this, "Booking Success ${it.payload}", Toast.LENGTH_SHORT).show()
+                        val redirectUrl = result.payload
+                        openUrl(redirectUrl)
+                    },
+                    doOnError = {
+                        if (it.exception is ApiErrorException) {
+                            val errorBody = it.exception.errorResponse.message.orEmpty()
+                            showSnackBarError(errorBody)
+                        } else if (it.exception is NoInternetException) {
+                            showSnackBarError(getString(R.string.text_no_internet))
+                        }
+                        Toast.makeText(this, "Booking Error", Toast.LENGTH_SHORT).show()
+                    },
+                    doOnLoading = {
+                    },
                 )
             }
-
-        /*try {
-            val response =
-                flightDetailPriceViewModel.doBooking(
-                    flightId = flightId,
-                    paymentMethod = paymentMethod,
-                    discountId = discountId,
-                    orderedBy = orderedBy,
-                    passenger = passengers,
-                )
-
-            if (response.status == "success") {
-                // Booking berhasil
-                Log.d("FlightDetailActivity", "Booking successful: ${response.message}")
-                // Tampilkan pesan atau lakukan tindakan setelah booking berhasil
-            } else {
-                // Booking gagal
-                Log.d("FlightDetailActivity", "Booking failed: ${response.message}")
-                // Tampilkan pesan atau lakukan tindakan setelah booking gagal
-            }
-        } catch (e: Exception) {
-            // Error saat melakukan booking
-            Log.e("FlightDetailActivity", "Error during booking: ${e.message}")
-            // Tampilkan pesan atau lakukan tindakan pemulihan jika diperlukan
-        }*/
+        }
     }
 }

@@ -203,4 +203,5 @@
     <string name="text_desc_delete_account">If you delete your account, all of your information will delete permanentyl, are you sure?</string>
     <string name="text_agree_delete_account">Check to agree to delete account</string>
     <string name="select_seat">Select seat</string>
+    <string name="text_detail_ticket">Detail ticket</string>
 </resources>

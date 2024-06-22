@@ -1,7 +1,10 @@
 package com.nafi.airseat.data.source.network.model.seat
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Seat(
     @SerializedName("id")
     val id: Int,
@@ -19,4 +22,4 @@ data class Seat(
     val seatStatus: String,
     @SerializedName("seat_status_android")
     val seatStatusAndroid: String,
-)
+) : Parcelable

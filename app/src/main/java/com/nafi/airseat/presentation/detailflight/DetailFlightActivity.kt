@@ -174,10 +174,6 @@ class DetailFlightActivity : AppCompatActivity() {
         val childCount = intent.getIntExtra("childCount", 0)
         val babyCount = intent.getIntExtra("babyCount", 0)
         val price = intent.getIntExtra("price", 0)
-        val departureTime = flightDetail?.departureTime ?: ""
-        val arrivalTime = flightDetail?.arrivalTime ?: ""
-        val (departureDate, departureTimes) = processDateTime(departureTime)
-        val (arrivalDate, arrivalTimes) = processDateTime(arrivalTime)
 
         startActivity(
             Intent(this, OrdererBioActivity::class.java).apply {
@@ -186,10 +182,6 @@ class DetailFlightActivity : AppCompatActivity() {
                 putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
                 putExtra("airportCityCodeDestination", airportCityCodeDestination)
                 putExtra("seatClassChoose", seatClassChoose)
-                putExtra("departureDate", departureDate)
-                putExtra("departureTimes", departureTimes)
-                putExtra("arrivalDate", arrivalDate)
-                putExtra("arrivalTimes", arrivalTimes)
                 putExtra("adultCount", adultCount)
                 putExtra("childCount", childCount)
                 putExtra("babyCount", babyCount)

@@ -322,7 +322,8 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         count: Int,
         adultCount: Int,
         childCount: Int,
-        babyCount: Int,) {
+        babyCount: Int,
+    ) {
         passengerCount = count
         this.adultCount = adultCount
         this.childCount = childCount

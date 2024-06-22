@@ -23,7 +23,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class AuthDataSourceTest {
+class AuthBookingDataSourceTest {
     @MockK
     lateinit var service: AirSeatApiService
 

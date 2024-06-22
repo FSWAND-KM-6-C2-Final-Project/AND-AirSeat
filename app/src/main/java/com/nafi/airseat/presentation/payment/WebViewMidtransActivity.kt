@@ -18,6 +18,8 @@ class WebViewMidtransActivity : AppCompatActivity() {
         ActivityWebViewMidtransBinding.inflate(layoutInflater)
     }
 
+    private var successDetected = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -45,12 +47,9 @@ class WebViewMidtransActivity : AppCompatActivity() {
                 ): Boolean {
                     val requestUrl = request.url.toString()
                     return when {
-                        requestUrl.contains("shopeeid://") ||
-                            requestUrl.contains("gopay") ||
-                            requestUrl.contains("/shopeepay/") -> {
-                            val intent = Intent(Intent.ACTION_VIEW, request.url)
-                            startActivity(intent)
-                            true
+                        requestUrl.contains("#/success") -> {
+                            successDetected = true
+                            false
                         }
                         else -> false
                     }
@@ -71,6 +70,10 @@ class WebViewMidtransActivity : AppCompatActivity() {
                     url: String,
                 ) {
                     pd.dismiss()
+                    if (successDetected) {
+                        handleSuccessRedirect()
+                        successDetected = false
+                    }
                     super.onPageFinished(view, url)
                 }
             }
@@ -81,5 +84,13 @@ class WebViewMidtransActivity : AppCompatActivity() {
         }
         webView.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
         webView.loadUrl(url)
+    }
+
+    private fun handleSuccessRedirect() {
+        val flightId = intent.getStringExtra("flightId")
+        val intent = Intent(this@WebViewMidtransActivity, PaymentSuccessActivity::class.java)
+        intent.putExtra("flightId", flightId)
+        startActivity(intent)
+        finish()
     }
 }

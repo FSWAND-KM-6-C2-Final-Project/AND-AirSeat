@@ -20,8 +20,8 @@ import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
 import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
+import com.nafi.airseat.data.datasource.booking.BookingApiDataSource
 import com.nafi.airseat.data.datasource.booking.BookingDataSource
-import com.nafi.airseat.data.datasource.booking.BookingDataSourceImpl
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
 import com.nafi.airseat.data.datasource.flight.FlightApiDataSource
@@ -129,7 +129,7 @@ object AppModules {
             single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
             single<NotificationDataSource> { NotificationDataSourceImpl(get()) }
-            single<BookingDataSource> { BookingDataSourceImpl(get()) }
+            single<BookingDataSource> { BookingApiDataSource(get()) }
             single<AirportDataSource> { AirportApiDataSource(get()) }
             single<FavoriteDestinationDataSource> { FavoriteDestinationDataSourceImpl() }
             single<SeatClassDummyDataSource> { SeatClassDummyDataSourceImpl() }
@@ -174,7 +174,6 @@ object AppModules {
             viewModel {
                 SeatViewModel(get())
             }
-            viewModelOf(::SeatViewModel)
 
             viewModelOf(::AppIntroViewModel)
             viewModelOf(::SplashScreenViewModel)

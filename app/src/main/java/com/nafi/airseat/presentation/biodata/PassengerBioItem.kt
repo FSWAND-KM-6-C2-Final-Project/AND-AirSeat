@@ -12,14 +12,16 @@ import com.nafi.airseat.R
 import com.nafi.airseat.databinding.LayoutFormOrderTicketBinding
 import com.xwray.groupie.viewbinding.BindableItem
 import java.util.Calendar
+import java.util.Locale
 
 class PassengerBioItem(
-    private val passengerType: String,
+    val passengerType: String,
     private val itemTitle: List<String>,
     private val itemIdType: List<String>,
     private val countryNames: List<String>,
     private val passengerBioViewModel: PassengerBioViewModel,
     private val lifecycleOwner: LifecycleOwner,
+    private val isBaby: Boolean,
 ) : BindableItem<LayoutFormOrderTicketBinding>() {
     lateinit var binding: LayoutFormOrderTicketBinding
 
@@ -36,7 +38,11 @@ class PassengerBioItem(
         binding = viewBinding
         val passengerNumber = position + 1
         viewBinding.tvHeaderPassenger.text =
-            viewBinding.root.context.getString(R.string.passenger_passengerindex, passengerNumber, passengerType)
+            viewBinding.root.context.getString(
+                R.string.passenger_passengerindex,
+                passengerNumber,
+                passengerType,
+            )
         setupTitleDropdown(viewBinding, viewBinding.root.context)
         setupIdTypeDropdown(viewBinding, viewBinding.root.context)
         setupCountryDropdown(viewBinding, viewBinding.root.context)
@@ -53,12 +59,28 @@ class PassengerBioItem(
         }
 
         // Observe Family Name mode specific to this passenger
-        passengerBioViewModel.getFamilyNameModeForPassenger(position).observe(lifecycleOwner) { isFamilyNameMode ->
-            updateFamilyNameVisibility(isFamilyNameMode)
-        }
+        passengerBioViewModel.getFamilyNameModeForPassenger(position)
+            .observe(lifecycleOwner) { isFamilyNameMode ->
+                updateFamilyNameVisibility(isFamilyNameMode)
+            }
 
         // Set initial visibility based on switch state
         updateFamilyNameVisibility(switchFamilyName.isChecked)
+
+        if (isBaby) {
+            viewBinding.tilIdType.isVisible = false
+            viewBinding.actvIdType.isVisible = false
+            viewBinding.tvIdType.isVisible = false
+            viewBinding.tilIdCard.isVisible = false
+            viewBinding.etIdCard.isVisible = false
+            viewBinding.tvIdCard.isVisible = false
+            viewBinding.tilCountry.isVisible = false
+            viewBinding.actvCountry.isVisible = false
+            viewBinding.tvCountry.isVisible = false
+            viewBinding.tilValidId.isVisible = false
+            viewBinding.etValidId.isVisible = false
+            viewBinding.tvValid.isVisible = false
+        }
     }
 
     private fun updateFamilyNameVisibility(isVisible: Boolean) {
@@ -126,11 +148,32 @@ class PassengerBioItem(
         binding: LayoutFormOrderTicketBinding,
         context: Context,
     ): Boolean {
-        val title = binding.actvTitle.text.toString()
+        if (isBaby) {
+            val title = binding.actvTitle.text.toString().lowercase(Locale.getDefault())
+            val fullName = binding.etFullname.text.toString().trim()
+            val dateOfBirth = binding.etDateOfBirth.text.toString().trim()
+            val citizenship = binding.etCitizenship.text.toString().trim()
+            val isFamilyNameMode = passengerBioViewModel.isFamilyNameMode.value ?: false
+
+            return ValidationUtil.checkTitleValidation(title, binding, context) &&
+                ValidationUtil.checkFullnameValidation(fullName, binding, context) &&
+                (
+                    !isFamilyNameMode ||
+                        ValidationUtil.checkFamilyNameValidation(
+                            binding.etFamilyName.text.toString().trim(),
+                            binding,
+                            context,
+                        )
+                ) &&
+                ValidationUtil.checkDateOfBirthValidation(dateOfBirth, binding, context) &&
+                ValidationUtil.checkCitizenshipValidation(citizenship, binding, context)
+        }
+
+        val title = binding.actvTitle.text.toString().lowercase(Locale.getDefault())
         val country = binding.actvCountry.text.toString()
         val fullName = binding.etFullname.text.toString().trim()
         val citizenship = binding.etCitizenship.text.toString().trim()
-        val idType = binding.actvIdType.text.toString().trim()
+        val idType = binding.actvIdType.text.toString().lowercase(Locale.getDefault())
         val idCard = binding.etIdCard.text.toString().trim()
         val validId = binding.etValidId.text.toString().trim()
         val dateOfBirth = binding.etDateOfBirth.text.toString().trim()
@@ -239,15 +282,10 @@ object ValidationUtil {
         binding: LayoutFormOrderTicketBinding,
         context: Context,
     ): Boolean {
-        val idCardLong = idCard.toLongOrNull()
         return if (idCard.isEmpty()) {
             binding.tilIdCard.isErrorEnabled = true
             binding.tilIdCard.error =
                 context.getString(R.string.text_error_id_card_cannot_be_empty)
-            false
-        } else if (idCardLong == null) {
-            binding.tilIdCard.error =
-                context.getString(R.string.text_error_id_card_must_be_number)
             false
         } else {
             binding.tilIdCard.isErrorEnabled = false
