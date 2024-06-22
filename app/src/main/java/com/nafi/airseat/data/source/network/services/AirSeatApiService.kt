@@ -4,6 +4,8 @@ import com.nafi.airseat.BuildConfig
 import com.nafi.airseat.data.model.BaseResponse
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.source.network.model.airport.AirportResponse
+import com.nafi.airseat.data.source.network.model.booking.BookingData
+import com.nafi.airseat.data.source.network.model.booking.BookingFlightRequest
 import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
 import com.nafi.airseat.data.source.network.model.flightdetail.FlightDetailResponse
 import com.nafi.airseat.data.source.network.model.history.HistoryData
@@ -18,6 +20,7 @@ import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordReq
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpData
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpRequest
 import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpRequest
+import com.nafi.airseat.data.source.network.model.seat.SeatResponse
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpRequest
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpResendData
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpResendRequest
@@ -134,6 +137,16 @@ interface AirSeatApiServiceWithAuthorization {
 
     @DELETE("profile")
     suspend fun deleteAccount(): BaseResponse<Any>
+
+    @GET("seat/flight/{id}")
+    suspend fun getSeatData(
+        @Path("id") flightId: String,
+    ): SeatResponse
+
+    @POST("booking")
+    suspend fun bookingFlight(
+        @Body bookingFlightRequest: BookingFlightRequest,
+    ): BaseResponse<BookingData>
 
     companion object {
         @JvmStatic

@@ -12,20 +12,20 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.nafi.airseat.R
 import com.nafi.airseat.databinding.ActivityWebViewMidtransBinding
-import com.nafi.airseat.presentation.flightdetail.FlightDetailActivity
 
 class WebViewMidtransActivity : AppCompatActivity() {
     private val binding: ActivityWebViewMidtransBinding by lazy {
         ActivityWebViewMidtransBinding.inflate(layoutInflater)
     }
 
+    private var successDetected = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         binding.btnBackWebview.setOnClickListener {
-            val intent = Intent(this, FlightDetailActivity::class.java)
-            startActivity(intent)
+            onBackPressed()
         }
 
         val url = intent.getStringExtra("URL")
@@ -47,14 +47,9 @@ class WebViewMidtransActivity : AppCompatActivity() {
                 ): Boolean {
                     val requestUrl = request.url.toString()
                     return when {
-                        requestUrl.contains("gojek://") ||
-                            requestUrl.contains("shopeeid://") ||
-                            requestUrl.contains("//wsa.wallet.airpay.co.id/") ||
-                            requestUrl.contains("/gopay/partner/") ||
-                            requestUrl.contains("/shopeepay/") -> {
-                            val intent = Intent(Intent.ACTION_VIEW, request.url)
-                            startActivity(intent)
-                            true
+                        requestUrl.contains("#/success") -> {
+                            successDetected = true
+                            false
                         }
                         else -> false
                     }
@@ -75,6 +70,10 @@ class WebViewMidtransActivity : AppCompatActivity() {
                     url: String,
                 ) {
                     pd.dismiss()
+                    if (successDetected) {
+                        handleSuccessRedirect()
+                        successDetected = false
+                    }
                     super.onPageFinished(view, url)
                 }
             }
@@ -85,5 +84,13 @@ class WebViewMidtransActivity : AppCompatActivity() {
         }
         webView.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
         webView.loadUrl(url)
+    }
+
+    private fun handleSuccessRedirect() {
+        val flightId = intent.getStringExtra("flightId")
+        val intent = Intent(this@WebViewMidtransActivity, PaymentSuccessActivity::class.java)
+        intent.putExtra("flightId", flightId)
+        startActivity(intent)
+        finish()
     }
 }

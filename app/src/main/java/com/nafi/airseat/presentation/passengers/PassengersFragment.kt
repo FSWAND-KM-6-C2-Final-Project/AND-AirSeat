@@ -14,7 +14,12 @@ class PassengersFragment : BottomSheetDialogFragment() {
     private var listener: OnPassengerCountUpdatedListener? = null
 
     interface OnPassengerCountUpdatedListener {
-        fun onPassengerCountUpdated(count: Int)
+        fun onPassengerCountUpdated(
+            count: Int,
+            adultCount: Int,
+            childCount: Int,
+            babyCount: Int,
+        )
     }
 
     override fun onCreateView(
@@ -71,7 +76,12 @@ class PassengersFragment : BottomSheetDialogFragment() {
         // Save button click listener
         binding.btnSave.setOnClickListener {
             // Update the passenger count in HomeFragment
-            listener?.onPassengerCountUpdated(viewModel.getTotalPassengerCount())
+            listener?.onPassengerCountUpdated(
+                viewModel.getTotalPassengerCount(),
+                viewModel.adultCount,
+                viewModel.childCount,
+                viewModel.babyCount,
+            )
 
             // Dismiss the bottom sheet
             dismiss()

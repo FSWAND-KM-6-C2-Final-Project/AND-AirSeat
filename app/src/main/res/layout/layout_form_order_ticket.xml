@@ -16,9 +16,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="8dp">
 
             <TextView
+                android:id="@+id/tv_header_passenger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/md_theme_primaryContainer"
@@ -40,6 +42,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_title"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +61,9 @@
                     android:hint="@string/text_hint_select_title"
                     android:inputType="none"
                     android:paddingHorizontal="16dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_fullname" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -73,6 +78,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_fullname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="6dp"
@@ -91,7 +97,12 @@
                     android:hint="@string/hint_full_name"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/sw_family_name"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -139,6 +150,7 @@
                 android:visibility="gone" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_family_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="6dp"
@@ -158,7 +170,12 @@
                     android:background="@drawable/custom_input"
                     android:hint="@string/hint_family_name"
                     android:paddingHorizontal="12dp"
-                    android:textSize="16sp" />
+                    android:paddingVertical="8dp"
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_date_of_birth"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,6 +190,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="6dp"
@@ -195,7 +213,11 @@
                     android:inputType="date"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_citizenship"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -210,6 +232,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_citizenship"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="6dp"
@@ -226,24 +249,68 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="6dp"
                     android:background="@drawable/custom_input"
+                    android:hint="@string/hint_enter_your_citizenship"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:textSize="16sp"
-                    tools:hint="Enter your citizenship" />
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/actv_id_type"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
+                android:id="@+id/tv_id_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="6dp"
+                android:text="@string/hint_identification_type"
                 android:textColor="@color/md_theme_primary"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="ID Card/Paspor" />
+                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_id_type"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="6dp"
+                android:paddingHorizontal="16dp"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:hintEnabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actv_id_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/hint_select_id_type"
+                    android:inputType="none"
+                    android:paddingHorizontal="16dp"
+                    android:textSize="16sp"
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_id_card" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_id_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="6dp"
+                android:text="@string/id_card_paspor"
+                android:textColor="@color/md_theme_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_id_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="6dp"
@@ -261,16 +328,20 @@
                     android:layout_marginTop="6dp"
                     android:background="@drawable/custom_input"
                     android:ellipsize="end"
-                    android:inputType="number"
+                    android:hint="@string/hint_enter_your_id_card_or_passport_number"
                     android:maxLines="1"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="8dp"
                     android:textSize="16sp"
-                    tools:hint="Enter your ID Card or Passport Number" />
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/actv_country"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <TextView
+                android:id="@+id/tv_country"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="16dp"
@@ -281,6 +352,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_country"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -296,14 +368,17 @@
                     android:id="@+id/actv_country"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:hint="@string/hint_select_country"
                     android:inputType="none"
                     android:paddingHorizontal="16dp"
                     android:textSize="16sp"
-                    tools:hint="Select Country" />
+                    android:imeOptions="actionNext"
+                    android:nextFocusForward="@id/et_valid_id" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
+                android:id="@+id/tv_valid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="16dp"
@@ -314,14 +389,18 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_valid_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="18dp"
                 android:paddingHorizontal="16dp"
                 app:boxCornerRadiusBottomEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusTopStart="10dp"
+                app:endIconDrawable="@drawable/calendar"
+                app:endIconMode="custom"
                 app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -329,11 +408,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="6dp"
-                    android:layout_marginBottom="18dp"
                     android:background="@drawable/custom_input"
+                    android:focusable="false"
                     android:hint="@string/hint_expiration_date"
                     android:inputType=""
+                    android:maxLines="1"
                     android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    android:singleLine="true"
                     android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>

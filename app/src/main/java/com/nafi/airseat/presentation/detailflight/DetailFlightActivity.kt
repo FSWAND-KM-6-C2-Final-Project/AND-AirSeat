@@ -3,6 +3,7 @@ package com.nafi.airseat.presentation.detailflight
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
@@ -34,7 +35,12 @@ class DetailFlightActivity : AppCompatActivity() {
         setContentView(binding.root)
         val id = intent.getStringExtra("id")
         val price = intent.getIntExtra("price", 0)
+        val adultCount = intent.getIntExtra("adultCount", 0)
+        val childCount = intent.getIntExtra("childCount", 0)
+        val babyCount = intent.getIntExtra("babyCount", 0)
+        Log.d("DetailFlight", "Adults: $adultCount, Children: $childCount, Babies: $babyCount")
         binding.tvTotalPrice.text = price.toString()
+
         proceedDetailTicket(id.toString())
         binding.layoutHeader.btnBackHome.setOnClickListener {
             finish()
@@ -161,9 +167,24 @@ class DetailFlightActivity : AppCompatActivity() {
     }
 
     private fun navigateToOrdererBio(id: String) {
+        val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
+        val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
+        val seatClassChoose = intent.getStringExtra("seatClassChoose")
+        val adultCount = intent.getIntExtra("adultCount", 0)
+        val childCount = intent.getIntExtra("childCount", 0)
+        val babyCount = intent.getIntExtra("babyCount", 0)
+        val price = intent.getIntExtra("price", 0)
+
         startActivity(
             Intent(this, OrdererBioActivity::class.java).apply {
                 putExtra("id", id)
+                putExtra("price", price)
+                putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
+                putExtra("airportCityCodeDestination", airportCityCodeDestination)
+                putExtra("seatClassChoose", seatClassChoose)
+                putExtra("adultCount", adultCount)
+                putExtra("childCount", childCount)
+                putExtra("babyCount", babyCount)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )

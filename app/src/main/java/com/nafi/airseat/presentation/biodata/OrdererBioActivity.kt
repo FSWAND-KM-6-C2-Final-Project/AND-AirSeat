@@ -1,5 +1,6 @@
 package com.nafi.airseat.presentation.biodata
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
@@ -19,7 +20,7 @@ class OrdererBioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        val flightId = intent.getStringExtra("flightId")
+        val flightId = intent.getStringExtra("id")
         if (flightId != null) {
             Toast.makeText(this, "Received flight ID: $flightId", Toast.LENGTH_SHORT).show()
         }
@@ -40,6 +41,9 @@ class OrdererBioActivity : AppCompatActivity() {
         binding.mbSave.setOnClickListener {
             doSaveData()
         }
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
         binding.layoutFormTicketBooker.swFamilyName.setOnClickListener {
             ordererBioViewModel.changeInputMode()
         }
@@ -47,6 +51,7 @@ class OrdererBioActivity : AppCompatActivity() {
 
     private fun observeInputMode() {
         ordererBioViewModel.isFamilyNameMode.observe(this) { isFamilyNameMode ->
+            binding.layoutFormTicketBooker.tilFamilyName.isVisible = isFamilyNameMode
             binding.layoutFormTicketBooker.etFamilyName.isVisible = isFamilyNameMode
             binding.layoutFormTicketBooker.etFamilyName.isEnabled = isFamilyNameMode
             binding.layoutFormTicketBooker.tvFmName.isVisible = isFamilyNameMode
@@ -62,53 +67,62 @@ class OrdererBioActivity : AppCompatActivity() {
         return checkFullNameValidation(fullName) &&
             checkPhoneNumberValidation(phoneNumber) &&
             checkEmailValidation(email) &&
-            (!isFamilyNameMode || checkFamilyNameValidation(binding.layoutFormTicketBooker.etFamilyName.text.toString().trim()))
+            (
+                !isFamilyNameMode ||
+                    checkFamilyNameValidation(
+                        binding.layoutFormTicketBooker.etFamilyName.text.toString().trim(),
+                    )
+            )
     }
 
     private fun checkFullNameValidation(fullName: String): Boolean {
         return if (fullName.isEmpty()) {
-            binding.layoutFormTicketBooker.etFullname.error =
+            binding.layoutFormTicketBooker.tilFullname.isErrorEnabled = true
+            binding.layoutFormTicketBooker.tilFullname.error =
                 getString(R.string.text_error_fullName_cannot_be_empty)
             false
         } else {
-            binding.layoutFormTicketBooker.etFullname.error = null
+            binding.layoutFormTicketBooker.tilFullname.isErrorEnabled = false
             true
         }
     }
 
     private fun checkPhoneNumberValidation(phoneNumber: String): Boolean {
         return if (phoneNumber.isEmpty()) {
-            binding.layoutFormTicketBooker.etNoPhone.error =
+            binding.layoutFormTicketBooker.tilNoPhone.isErrorEnabled = true
+            binding.layoutFormTicketBooker.tilNoPhone.error =
                 getString(R.string.text_error_number_phone_cannot_be_empty)
             false
         } else {
-            binding.layoutFormTicketBooker.etNoPhone.error = null
+            binding.layoutFormTicketBooker.tilNoPhone.isErrorEnabled = false
             true
         }
     }
 
     private fun checkEmailValidation(email: String): Boolean {
         return if (email.isEmpty()) {
-            binding.layoutFormTicketBooker.etEmail.error =
+            binding.layoutFormTicketBooker.tilEmail.isErrorEnabled = true
+            binding.layoutFormTicketBooker.tilEmail.error =
                 getString(R.string.text_error_email_should_not_be_empty)
             false
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.layoutFormTicketBooker.etEmail.error =
+            binding.layoutFormTicketBooker.tilEmail.error =
                 getString(R.string.text_error_enter_a_valid_format_email)
             false
         } else {
-            binding.layoutFormTicketBooker.etEmail.error = null
+            binding.layoutFormTicketBooker.tilEmail.isErrorEnabled = false
             true
         }
     }
 
     private fun checkFamilyNameValidation(familyName: String): Boolean {
         return if (familyName.isEmpty()) {
-            binding.layoutFormTicketBooker.etFamilyName.error =
+            binding.layoutFormTicketBooker.tilFamilyName.isErrorEnabled = true
+            binding.layoutFormTicketBooker.tilFamilyName.error =
                 getString(R.string.text_error_family_name_cannot_be_empty)
             false
         } else {
-            binding.layoutFormTicketBooker.etFamilyName.error = null
+            binding.layoutFormTicketBooker.tilFamilyName.isErrorEnabled = false
             true
         }
     }
@@ -119,30 +133,32 @@ class OrdererBioActivity : AppCompatActivity() {
             val numberPhone = binding.layoutFormTicketBooker.etNoPhone.text.toString().trim()
             val email = binding.layoutFormTicketBooker.etEmail.text.toString().trim()
             val isFamilyNameMode = ordererBioViewModel.isFamilyNameMode.value ?: false
+            val familyName = if (isFamilyNameMode) binding.layoutFormTicketBooker.etFamilyName.text.toString().trim() else ""
+            val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
+            val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
+            val seatClassChoose = intent.getStringExtra("seatClassChoose")
+            val adultCount = intent.getIntExtra("adultCount", 0)
+            val childCount = intent.getIntExtra("childCount", 0)
+            val babyCount = intent.getIntExtra("babyCount", 0)
+            val flightId = intent.getStringExtra("id")
+            val price = intent.getIntExtra("price", 0)
 
-            if (isFamilyNameMode) {
-                val familyName = binding.layoutFormTicketBooker.etFamilyName.text.toString().trim()
-                saveDataWithFamilyName(fullName, numberPhone, email, familyName)
-            } else {
-                saveDataWithoutFamilyName(fullName, numberPhone, email)
-            }
+            val intent =
+                Intent(this, PassengerBioActivity::class.java).apply {
+                    putExtra("full_name", fullName)
+                    putExtra("number_phone", numberPhone)
+                    putExtra("email", email)
+                    putExtra("family_name", familyName)
+                    putExtra("flightId", flightId)
+                    putExtra("price", price)
+                    putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
+                    putExtra("airportCityCodeDestination", airportCityCodeDestination)
+                    putExtra("seatClassChoose", seatClassChoose)
+                    putExtra("adultCount", adultCount)
+                    putExtra("childCount", childCount)
+                    putExtra("babyCount", babyCount)
+                }
+            startActivity(intent)
         }
-    }
-
-    private fun saveDataWithoutFamilyName(
-        fullName: String,
-        numberPhone: String,
-        email: String,
-    ) {
-        TODO("Not yet implemented")
-    }
-
-    private fun saveDataWithFamilyName(
-        fullName: String,
-        numberPhone: String,
-        email: String,
-        familyName: String,
-    ) {
-        TODO("Not yet implemented")
     }
 }

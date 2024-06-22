@@ -39,6 +39,9 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
     private var selectedEndDate: LocalDate? = null
     private var passengerCount: Int? = null
     private lateinit var sharedViewModel: SharedViewModel
+    private var adultCount: Int = 0
+    private var childCount: Int = 0
+    private var babyCount: Int = 0
     private var selectedDepartAirport: Airport? = null
     private var selectedDestinationAirport: Airport? = null
     private val favoriteDestinationAdapter: FavoriteDestinationAdapter by lazy {
@@ -181,6 +184,9 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 }
 
                 intent.putExtra("passengerCount", passengerCount.toString())
+                intent.putExtra("adultCount", adultCount)
+                intent.putExtra("childCount", childCount)
+                intent.putExtra("babyCount", babyCount)
                 intent.putExtra("seatClassChoose", binding.layoutHome.tvSeatClassChoose.text)
 
                 startActivity(intent)
@@ -208,6 +214,9 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 }
 
                 intent.putExtra("passengerCount", passengerCount.toString())
+                intent.putExtra("adultCount", adultCount)
+                intent.putExtra("childCount", childCount)
+                intent.putExtra("babyCount", babyCount)
                 intent.putExtra("seatClassChoose", binding.layoutHome.tvSeatClassChoose.text)
 
                 startActivity(intent)
@@ -309,8 +318,16 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         updateSearchButtonState()
     }
 
-    override fun onPassengerCountUpdated(count: Int) {
+    override fun onPassengerCountUpdated(
+        count: Int,
+        adultCount: Int,
+        childCount: Int,
+        babyCount: Int,
+    ) {
         passengerCount = count
+        this.adultCount = adultCount
+        this.childCount = childCount
+        this.babyCount = babyCount
         val passengerText = count.toString()
         binding.layoutHome.tvPassengersCount.text = passengerText
         updateSearchButtonState()

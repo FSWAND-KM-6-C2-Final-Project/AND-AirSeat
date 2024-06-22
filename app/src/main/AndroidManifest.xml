@@ -23,6 +23,9 @@
             android:name=".presentation.profilesetting.ProfileSettingActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.payment.PaymentSuccessActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.splashscreen.SplashScreenActivity"
             android:exported="false" />
         <activity
@@ -68,7 +71,7 @@
             android:name=".presentation.order.OrderInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.flightdetail.FlightDetailActivity"
+            android:name=".presentation.flightdetail.FlightDetailPriceActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.biodata.PassengerBioActivity"

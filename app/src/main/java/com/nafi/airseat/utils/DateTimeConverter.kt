@@ -1,6 +1,8 @@
 package com.nafi.airseat.utils
 
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -78,4 +80,25 @@ fun String.toTimeClock(): String {
 
     // Format the time part and return it
     return zonedDateTime.format(outputFormatter)
+}
+
+fun String.toConvertDateFormat(): String {
+    return try {
+        // Define the input and output date formats
+        val inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.getDefault())
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+
+        // Parse the input date string
+        val date = LocalDate.parse(this, inputFormatter)
+
+        // Convert to the output format with time set to 17:20:00.000Z
+        val dateTime = date.atStartOfDay()
+
+        // Format the date to the output format
+        dateTime.atOffset(ZoneOffset.UTC).format(outputFormatter)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        // Return a default value or an error message if parsing fails
+        "Invalid date format"
+    }
 }
