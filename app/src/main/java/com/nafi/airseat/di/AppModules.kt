@@ -16,16 +16,14 @@ import com.nafi.airseat.data.datasource.UserPrefDataSource
 import com.nafi.airseat.data.datasource.UserPrefDataSourceImpl
 import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
+import com.nafi.airseat.data.datasource.booking.BookingApiDataSource
 import com.nafi.airseat.data.datasource.booking.BookingDataSource
-import com.nafi.airseat.data.datasource.booking.BookingDataSourceImpl
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
 import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
 import com.nafi.airseat.data.datasource.flight.FlightApiDataSource
 import com.nafi.airseat.data.datasource.flight.FlightDataSource
 import com.nafi.airseat.data.datasource.flightdetail.FlightDetailApiDataSource
 import com.nafi.airseat.data.datasource.flightdetail.FlightDetailDataSource
-import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
-import com.nafi.airseat.data.datasource.seat.SeatDataSource
 import com.nafi.airseat.data.datasource.intro.IntroDataSource
 import com.nafi.airseat.data.datasource.intro.IntroDataSourceImpl
 import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
@@ -46,8 +44,6 @@ import com.nafi.airseat.data.repository.HistoryRepository
 import com.nafi.airseat.data.repository.HistoryRepositoryImpl
 import com.nafi.airseat.data.repository.IntroRepository
 import com.nafi.airseat.data.repository.IntroRepositoryImpl
-import com.nafi.airseat.data.repository.BookingRepository
-import com.nafi.airseat.data.repository.BookingRepositoryImpl
 import com.nafi.airseat.data.repository.NotificationRepository
 import com.nafi.airseat.data.repository.NotificationRepositoryImpl
 import com.nafi.airseat.data.repository.ProfileRepository
@@ -72,8 +68,6 @@ import com.nafi.airseat.data.source.network.services.TokenInterceptor
 import com.nafi.airseat.presentation.appintro.AppIntroViewModel
 import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
-import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceViewModel
-import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
 import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
 import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceViewModel
 import com.nafi.airseat.presentation.history.HistoryViewModel
@@ -88,8 +82,8 @@ import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
-import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
+import com.nafi.airseat.presentation.seatbook.SeatViewModel
 import com.nafi.airseat.presentation.splashscreen.SplashScreenViewModel
 import com.nafi.airseat.presentation.updateprofile.UpdateProfileViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
@@ -130,7 +124,7 @@ object AppModules {
             single<AuthDataSource> { AuthDataSourceImpl(get()) }
             single<UserPrefDataSource> { UserPrefDataSourceImpl(get()) }
             single<NotificationDataSource> { NotificationDataSourceImpl(get()) }
-            single<BookingDataSource> { BookingDataSourceImpl(get()) }
+            single<BookingDataSource> { BookingApiDataSource(get()) }
             single<AirportDataSource> { AirportApiDataSource(get()) }
             single<FavoriteDestinationDataSource> { FavoriteDestinationDataSourceImpl() }
             single<SeatClassDummyDataSource> { SeatClassDummyDataSourceImpl() }
@@ -177,7 +171,6 @@ object AppModules {
             viewModel {
                 SeatViewModel(get())
             }
-            viewModelOf(::SeatViewModel)
 
             viewModelOf(::AppIntroViewModel)
             viewModelOf(::SplashScreenViewModel)

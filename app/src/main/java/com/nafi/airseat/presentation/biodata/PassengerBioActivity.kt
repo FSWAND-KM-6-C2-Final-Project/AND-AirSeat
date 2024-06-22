@@ -4,12 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nafi.airseat.data.model.Passenger
+import com.nafi.airseat.data.source.network.model.booking.BookingPassenger
 import com.nafi.airseat.databinding.ActivityPassengerBioBinding
 import com.nafi.airseat.presentation.seatbook.SeatBookActivity
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.Locale
 
 class PassengerBioActivity : AppCompatActivity() {
     private val bindingActivityPassenger: ActivityPassengerBioBinding by lazy {
@@ -19,7 +20,7 @@ class PassengerBioActivity : AppCompatActivity() {
     private val passengerBioViewModel: PassengerBioViewModel by viewModel()
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
-    private val itemTitle = listOf("Mr", "Ms")
+    private val itemTitle = listOf("Mr", "Mrs")
     private val itemIdType = listOf("KTP", "Paspor")
     private val countryNames =
         listOf(
@@ -242,10 +243,9 @@ class PassengerBioActivity : AppCompatActivity() {
 
     private fun doSaveData() {
         var isValid = true
-        val passengerList = mutableListOf<Passenger>()
+        val passengerList = mutableListOf<BookingPassenger>()
         for (i in 0 until groupAdapter.itemCount) {
-            val viewHolder =
-                bindingActivityPassenger.rvFormOrderTicket.findViewHolderForAdapterPosition(i)
+            val viewHolder = bindingActivityPassenger.rvFormOrderTicket.findViewHolderForAdapterPosition(i)
             if (viewHolder is GroupieViewHolder) {
                 val item = groupAdapter.getItem(i)
                 if (item is PassengerBioItem) {
@@ -254,16 +254,17 @@ class PassengerBioActivity : AppCompatActivity() {
                         break
                     } else {
                         val passengerData =
-                            Passenger(
+                            BookingPassenger(
                                 firstName = item.binding.etFullname.text.toString().trim(),
                                 familyName = item.binding.etFamilyName.text.toString().trim(),
-                                title = item.binding.actvTitle.text.toString().trim(),
+                                title = item.binding.actvTitle.text.toString().lowercase(Locale.getDefault()).trim(),
                                 dob = item.binding.etDateOfBirth.text.toString().trim(),
                                 nationality = item.binding.etCitizenship.text.toString().trim(),
-                                identificationType = item.binding.actvIdType.text.toString().trim(),
+                                identificationType = item.binding.actvIdType.text.toString().lowercase(Locale.getDefault()).trim(),
                                 identificationNumber = item.binding.etIdCard.text.toString().trim(),
                                 identificationCountry = item.binding.actvCountry.text.toString().trim(),
                                 identificationExpired = item.binding.etValidId.text.toString().trim(),
+                                passengerType = item.passengerType,
                                 seatDeparture = null,
                                 seatReturn = null,
                             )
@@ -326,6 +327,7 @@ class PassengerBioActivity : AppCompatActivity() {
                     countryNames,
                     passengerBioViewModel,
                     lifecycleOwner = this,
+                    isBaby = false,
                 )
             groupAdapter.add(passengerItem)
             passengerBioViewModel.passengerBioItemList.add(passengerItem)
@@ -340,6 +342,7 @@ class PassengerBioActivity : AppCompatActivity() {
                     countryNames,
                     passengerBioViewModel,
                     lifecycleOwner = this,
+                    isBaby = false,
                 )
             groupAdapter.add(passengerItem)
             passengerBioViewModel.passengerBioItemList.add(passengerItem)
@@ -354,6 +357,7 @@ class PassengerBioActivity : AppCompatActivity() {
                     countryNames,
                     passengerBioViewModel,
                     lifecycleOwner = this,
+                    isBaby = true,
                 )
             groupAdapter.add(passengerItem)
             passengerBioViewModel.passengerBioItemList.add(passengerItem)

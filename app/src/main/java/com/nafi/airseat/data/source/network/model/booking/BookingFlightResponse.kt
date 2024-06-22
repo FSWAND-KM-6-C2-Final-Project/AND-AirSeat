@@ -1,14 +1,14 @@
 package com.nafi.airseat.data.source.network.model.booking
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class BookingFlightResponse(
     @SerializedName("status")
-    var status: String,
+    val status: String,
     @SerializedName("message")
-    var message: String,
+    val message: String,
     @SerializedName("data")
-    var booking: BookingFlightRequest,
-    @SerializedName("payment_data")
-    var payment: PaymentData,
+    val data: BookingData,
 )

@@ -196,4 +196,5 @@
     <string name="text_invalid_email_and_password">Invalid Email and Password</string>
     <string name="text_no_internet">No Internet, Please Check Your Connection</string>
     <string name="select_seat">Select seat</string>
+    <string name="text_detail_ticket">Detail ticket</string>
 </resources>

@@ -4,9 +4,9 @@ import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
 @Keep
-data class PaymentData(
-    @SerializedName("token")
-    val token: String,
-    @SerializedName("redirect_url")
-    val redirectUrl: String,
+data class VaNumber(
+    @SerializedName("bank")
+    val bank: String?,
+    @SerializedName("va_number")
+    val vaNumber: String?,
 )

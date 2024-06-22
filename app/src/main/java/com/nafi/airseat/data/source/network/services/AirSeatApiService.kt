@@ -4,8 +4,8 @@ import com.nafi.airseat.BuildConfig
 import com.nafi.airseat.data.model.BaseResponse
 import com.nafi.airseat.data.repository.UserPrefRepository
 import com.nafi.airseat.data.source.network.model.airport.AirportResponse
+import com.nafi.airseat.data.source.network.model.booking.BookingData
 import com.nafi.airseat.data.source.network.model.booking.BookingFlightRequest
-import com.nafi.airseat.data.source.network.model.booking.BookingFlightResponse
 import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
 import com.nafi.airseat.data.source.network.model.flightdetail.FlightDetailResponse
 import com.nafi.airseat.data.source.network.model.history.HistoryData
@@ -21,12 +21,7 @@ import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordReq
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpData
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordResendOtpRequest
 import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpRequest
-import com.nafi.airseat.data.source.network.model.resetpassword.VerifyPasswordChangeOtpResponse
 import com.nafi.airseat.data.source.network.model.seat.SeatResponse
-import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpRequest
-import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendRequest
-import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResendResponse
-import com.nafi.airseat.data.source.network.model.verifyaccount.VerifAccountOtpResponse
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpRequest
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpResendData
 import com.nafi.airseat.data.source.network.model.verifyaccount.VerifyAccountOtpResendRequest
@@ -99,16 +94,6 @@ interface AirSeatApiService {
         @Path("id") id: String,
     ): FlightDetailResponse
 
-    @GET("seat/flight/{id}")
-    suspend fun getSeatData(
-        @Path("id") flightId: String,
-    ): SeatResponse
-
-    @POST("api/v1/booking")
-    suspend fun bookingFlight(
-        @Body bookingFlightRequest: BookingFlightRequest,
-    ): BookingFlightResponse
-
     companion object {
         @JvmStatic
         operator fun invoke(): AirSeatApiService {
@@ -149,6 +134,16 @@ interface AirSeatApiServiceWithAuthorization {
     suspend fun updateProfile(
         @Body updateProfileData: UpdateProfileRequest,
     ): UpdateProfileResponse
+
+    @GET("seat/flight/{id}")
+    suspend fun getSeatData(
+        @Path("id") flightId: String,
+    ): SeatResponse
+
+    @POST("booking")
+    suspend fun bookingFlight(
+        @Body bookingFlightRequest: BookingFlightRequest,
+    ): BaseResponse<BookingData>
 
     companion object {
         @JvmStatic
