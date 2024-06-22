@@ -119,6 +119,7 @@ fun Passenger?.toPassengerHistory() =
         nationality = this?.nationality.orEmpty(),
         title = this?.title.orEmpty(),
         updatedAt = this?.createdAt.orEmpty(),
+        passengerType = this?.passengerType.orEmpty()
     )
 
 fun Collection<BookingDetail>?.toBookingListDetailList() =

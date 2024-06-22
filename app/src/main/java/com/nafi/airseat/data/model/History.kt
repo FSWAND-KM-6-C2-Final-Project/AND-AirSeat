@@ -84,6 +84,7 @@ data class PassengerHistory(
     val identificationExpired: String?,
     val identificationNumber: String?,
     val identificationType: String?,
+    val passengerType: String,
     val lastName: String?,
     val nationality: String?,
     val title: String?,
