@@ -11,7 +11,6 @@ import com.nafi.airseat.data.source.network.model.login.LoginRequest
 import com.nafi.airseat.data.source.network.model.notification.NotificationResponse
 import com.nafi.airseat.data.source.network.model.profile.ProfileResponse
 import com.nafi.airseat.data.source.network.model.profile.UpdateProfileRequest
-import com.nafi.airseat.data.source.network.model.profile.UpdateProfileResponse
 import com.nafi.airseat.data.source.network.model.register.RegisterData
 import com.nafi.airseat.data.source.network.model.register.RegisterRequest
 import com.nafi.airseat.data.source.network.model.resetpassword.ResetPasswordData
@@ -26,6 +25,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -130,7 +130,10 @@ interface AirSeatApiServiceWithAuthorization {
     @PATCH("profile")
     suspend fun updateProfile(
         @Body updateProfileData: UpdateProfileRequest,
-    ): UpdateProfileResponse
+    ): BaseResponse<Any>
+
+    @DELETE("profile")
+    suspend fun deleteAccount(): BaseResponse<Any>
 
     companion object {
         @JvmStatic

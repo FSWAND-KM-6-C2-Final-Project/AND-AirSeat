@@ -7,7 +7,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 open class BaseActivity : AppCompatActivity() {
     private val baseViewModel: BaseViewModel by viewModel()
 
-    fun cleatToken() {
+    fun clearToken() {
         baseViewModel.clearSession()
     }
 

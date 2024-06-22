@@ -181,4 +181,11 @@
     <string name="text_term_and_condition_notification">Syarat dan ketentuan berlaku</string>
     <string name="text_invalid_email_and_password">Invalid Email and Password</string>
     <string name="text_no_internet">No Internet, Please Check Your Connection</string>
+    <string name="text_update_full_name">Full Name</string>
+    <string name="text_update_phone_number">Phone Number</string>
+    <string name="text_header_update_profile">Update Profile</string>
+    <string name="text_delete_account">Delete Account</string>
+    <string name="text_question_delete_account">Are you sure you want to delete your account?</string>
+    <string name="text_desc_delete_account">If you delete your account, all of your information will delete permanentyl, are you sure?</string>
+    <string name="text_agree_delete_account">Check to agree to delete account</string>
 </resources>
