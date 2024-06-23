@@ -5,27 +5,27 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.resultsearch.ResultSearchActivity">
+    tools:context=".presentation.resultsearchreturn.ResultSearchReturnActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <include
-            android:id="@+id/layout_header"
+            android:id="@+id/layout_header_return"
             layout="@layout/item_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <LinearLayout
-            android:id="@+id/ll_result_calendar"
+            android:id="@+id/ll_result_calendar_return"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/md_theme_onPrimary"
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/layout_header"
+            app:layout_constraintTop_toBottomOf="@id/layout_header_return"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -59,12 +59,12 @@
             android:layout_height="1dp"
             android:layout_marginVertical="8dp"
             android:background="@android:color/darker_gray"
-            app:layout_constraintTop_toBottomOf="@id/ll_result_calendar"
+            app:layout_constraintTop_toBottomOf="@id/ll_result_calendar_return"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/mcv_filter"
+            android:id="@+id/mcv_filter_return"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
@@ -101,6 +101,18 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <TextView
+            android:id="@+id/tv_test_to_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_plusjakartasans_bold"
+            android:paddingBottom="4dp"
+            android:text="@string/text_filter"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/fl_result_search_ticket"
+            app:layout_constraintEnd_toStartOf="@+id/mcv_result_filter"
+            app:layout_constraintStart_toEndOf="@+id/mcv_filter_return" />
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcv_result_filter"
             android:layout_width="wrap_content"
@@ -117,7 +129,7 @@
             app:cardCornerRadius="16dp">
 
             <LinearLayout
-                android:id="@+id/ll_result_filter"
+                android:id="@+id/ll_result_filter_return"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -132,7 +144,7 @@
                     app:tint="@color/md_theme_primary" />
 
                 <TextView
-                    android:id="@+id/tv_result_filter"
+                    android:id="@+id/tv_result_filter_return"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -150,12 +162,12 @@
             android:id="@+id/fl_result_search_ticket"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/mcv_filter"
+            app:layout_constraintTop_toBottomOf="@id/mcv_filter_return"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_search_ticket"
+                android:id="@+id/rv_search_ticket_return"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -168,13 +180,13 @@
                 tools:listitem="@layout/item_result_search_ticket" />
 
             <com.nafi.airseat.presentation.common.views.ContentStateView
-                android:id="@+id/csv_result_search"
+                android:id="@+id/csv_result_search_return"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"/>
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/pb_loading_result"
+                android:id="@+id/pb_loading_result_return"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
@@ -183,6 +195,5 @@
                 android:visibility="gone"/>
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.core.widget.NestedScrollView>

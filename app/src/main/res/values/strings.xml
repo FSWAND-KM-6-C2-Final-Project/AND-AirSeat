@@ -195,6 +195,15 @@
     <string name="text_term_and_condition_notification">Syarat dan ketentuan berlaku</string>
     <string name="text_invalid_email_and_password">Invalid Email and Password</string>
     <string name="text_no_internet">No Internet, Please Check Your Connection</string>
+    <string name="text_airport_result_search_home">%1$s (%2$s)</string>
+    <string name="text_auto_economy_favorite">Economy</string>
+    <string name="text_auto_favorite_depart">%1$s (%2$s)</string>
+    <string name="text_auto_favorite_destination">%1$s (%2$s)</string>
+    <string name="text_depart_arrival_favorite">%1$s - %2$s</string>
+    <string name="text_price_favorite_start_from">Start from\n%1$s</string>
+    <string name="text_result_airline_seat_class">%1$s - %2$s</string>
+    <string name="text_code_depart_destination_header"><![CDATA[%1$s > %2$s]]></string>
+    <string name="text_count_passenger_header">%1$s Passengers</string>
     <string name="text_update_full_name">Full Name</string>
     <string name="text_update_phone_number">Phone Number</string>
     <string name="text_header_update_profile">Update Profile</string>

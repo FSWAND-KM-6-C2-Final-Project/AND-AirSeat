@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -136,8 +137,8 @@ class DepartCalendarFragment(private val isStartSelection: Boolean) : BottomShee
     }
 
     private fun configureBinders() {
-        val singleBackground = requireContext().getDrawable(R.drawable.calendar_single_selected_bg)
-        val todayBackground = requireContext().getDrawable(R.drawable.calendar_today_bg)
+        val singleBackground = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_single_selected_bg)
+        val todayBackground = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_today_bg)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay

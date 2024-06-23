@@ -169,8 +169,6 @@ class CalendarBottomSheetFragment(private val isStartSelection: Boolean) : Botto
             lateinit var day: CalendarDay
             val binding = ItemSingleDayBinding.bind(view)
 
-            val textView = view.findViewById<TextView>(R.id.calendarDayText)
-
             init {
                 view.setOnClickListener {
                     if (day.position == DayPosition.MonthDate &&

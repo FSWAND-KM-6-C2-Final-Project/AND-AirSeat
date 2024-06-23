@@ -13,7 +13,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafi.airseat.data.model.Airport
 import com.nafi.airseat.data.model.AirportHistory
 import com.nafi.airseat.databinding.FragmentSearchTicketBinding
-import com.nafi.airseat.presentation.common.sharedviewmodel.SharedViewModel
 import com.nafi.airseat.presentation.searchticket.adapter.AirportHistoryAdapter
 import com.nafi.airseat.presentation.searchticket.adapter.AirportsAdapter
 import com.nafi.airseat.utils.proceedWhen
@@ -21,7 +20,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchTicketFragment(private val listener: ((Airport) -> Unit)? = null) : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentSearchTicketBinding
-    private lateinit var sharedViewModel: SharedViewModel
     private val viewModel: SearchTicketViewModel by viewModel()
     private val airportAdapter: AirportsAdapter by lazy {
         AirportsAdapter {

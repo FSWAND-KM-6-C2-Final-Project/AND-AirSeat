@@ -87,6 +87,7 @@ import com.nafi.airseat.presentation.register.RegisterViewModel
 import com.nafi.airseat.presentation.resetpassword.ResetPasswordViewModel
 import com.nafi.airseat.presentation.resetpasswordverifyemail.ReqChangePasswordViewModel
 import com.nafi.airseat.presentation.resultsearch.ResultSearchViewModel
+import com.nafi.airseat.presentation.resultsearchreturn.ResultSearchReturnViewModel
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
 import com.nafi.airseat.presentation.seatbook.SeatViewModel
@@ -134,7 +135,6 @@ object AppModules {
             single<BookingDataSource> { BookingApiDataSource(get()) }
             single<AirportDataSource> { AirportApiDataSource(get()) }
             single<FavoriteDestinationDataSource> { FavoriteDestinationDataSourceImpl() }
-            single<SeatClassDummyDataSource> { SeatClassDummyDataSourceImpl() }
             single<FlightDataSource> { FlightApiDataSource(get()) }
             single<FlightDetailDataSource> { FlightDetailApiDataSource(get()) }
             single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
@@ -153,7 +153,6 @@ object AppModules {
             single<SeatRepository> { SeatRepositoryImpl(get()) }
             single<AirportRepository> { AirportRepositoryImpl(get()) }
             single<FavoriteDestinationRepository> { FavoriteDestinationRepositoryImpl(get()) }
-            single<SeatClassRepository> { SeatClassRepositoryImpl(get()) }
             single<FlightRepository> { FlightRepositoryImpl(get()) }
             single<FlightDetailRepository> { FlightDetailRepositoryImpl(get()) }
             single<UserPrefRepository> { UserPrefRepositoryImpl(get()) }
@@ -229,6 +228,9 @@ object AppModules {
             }
             viewModel {
                 UpdateProfileViewModel(get())
+            }
+            viewModel {
+                ResultSearchReturnViewModel(get())
             }
         }
 

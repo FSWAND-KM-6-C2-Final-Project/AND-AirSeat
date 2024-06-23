@@ -1,4 +1,4 @@
-package com.nafi.airseat.presentation.resultsearch.adapter
+package com.nafi.airseat.presentation.resultsearchreturn.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,8 +12,8 @@ import com.nafi.airseat.databinding.ItemResultSearchTicketBinding
 import com.nafi.airseat.utils.toCurrencyFormat
 import com.nafi.airseat.utils.toTimeClock
 
-class ResultSearchAdapter(private val typeSeatClass: String?, private val listener: (Flight, Int) -> Unit) :
-    RecyclerView.Adapter<ResultSearchAdapter.ItemFlightViewHolder>() {
+class ResultSearchReturnAdapter(private val typeSeatClass: String?, private val listener: (Flight, Int) -> Unit) :
+    RecyclerView.Adapter<ResultSearchReturnAdapter.ItemFlightViewHolder>() {
     private val dataDiffer =
         AsyncListDiffer(
             this,
