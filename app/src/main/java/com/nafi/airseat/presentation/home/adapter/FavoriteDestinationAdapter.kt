@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.nafi.airseat.R
 import com.nafi.airseat.data.model.Flight
 import com.nafi.airseat.databinding.LayoutFavoriteDestinationBinding
 import com.nafi.airseat.utils.toCurrencyFormat
@@ -64,10 +65,20 @@ class FavoriteDestinationAdapter(private val listener: (Flight) -> Unit) :
                 binding.ivFavoriteImage.load(item.arrivalAirport.airportPicture) {
                     crossfade(true)
                 }
-                binding.tvDepartFavorite.text = "${item.departureAirport.airportCity} - ${item.arrivalAirport.airportCity}"
-                binding.tvAirlinesFavorite.text = item.airline.airlineName // Only temporary
+                val context = binding.root.context
+                binding.tvDepartFavorite.text =
+                    context.getString(
+                        R.string.text_depart_arrival_favorite,
+                        item.departureAirport.airportCity,
+                        item.arrivalAirport.airportCity,
+                    )
+                binding.tvAirlinesFavorite.text = item.airline.airlineName
                 binding.tvDurationFavorite.text = formatDate(item.departureTime)
-                binding.tvPriceFavorite.text = "Start from ${item.priceEconomy.toLong().toCurrencyFormat()}"
+                binding.tvPriceFavorite.text =
+                    context.getString(
+                        R.string.text_price_favorite_start_from,
+                        item.priceEconomy.toLong().toCurrencyFormat(),
+                    )
                 itemView.setOnClickListener { itemClick(this) }
             }
         }

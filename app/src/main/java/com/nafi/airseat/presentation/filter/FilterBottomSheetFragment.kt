@@ -22,7 +22,7 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
     private var listener: OnFilterSelectedListener? = null
 
     interface OnFilterSelectedListener {
-        fun onFilterSelected(seatClass: String)
+        fun onFilterSelected(filterSelected: String)
     }
 
     override fun onCreateView(
@@ -43,16 +43,16 @@ class FilterBottomSheetFragment : BottomSheetDialogFragment() {
         setupFilterAdapter()
 
         binding.btnSaveFilter.setOnClickListener {
-            selectedFilter?.let { seatClass ->
-                listener?.onFilterSelected(seatClass) // Mengirimkan kelas kursi yang dipilih ke HomeFragment
+            selectedFilter?.let { filterSelected ->
+                listener?.onFilterSelected(filterSelected)
             }
             dismiss()
         }
 
         viewModel.filterItems.observe(
             viewLifecycleOwner,
-            Observer { seatClassItems ->
-                adapter.updateItems(seatClassItems)
+            Observer { filterItems ->
+                adapter.updateItems(filterItems)
             },
         )
     }

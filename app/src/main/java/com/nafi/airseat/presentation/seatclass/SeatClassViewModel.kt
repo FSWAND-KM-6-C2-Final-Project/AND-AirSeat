@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class SeatClassViewModel() : ViewModel() {
+class SeatClassViewModel : ViewModel() {
     private val seatClassList = MutableLiveData<List<String>>()
 
     val seatClassItems: LiveData<List<String>> get() = seatClassList

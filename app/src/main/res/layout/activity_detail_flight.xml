@@ -74,34 +74,129 @@
                     android:layout_marginStart="12dp"/>
             </LinearLayout>
 
-            <FrameLayout
+            <include
+                android:id="@+id/layout_detail"
+                layout="@layout/item_detail_flight_ticket"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp" />
 
-                <include
-                    android:id="@+id/layout_detail"
-                    layout="@layout/item_detail_flight_ticket"
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/ll_flight_return"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_departure_return"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"/>
+                    tools:text="Jakarta"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textColor="@color/md_theme_primary"
+                    android:fontFamily="@font/font_plusjakartasans_bold"
+                    android:layout_marginStart="8dp"/>
 
-                <com.nafi.airseat.presentation.common.views.ContentStateView
-                    android:id="@+id/csv_detail_flight"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/img_arrow_right_return"
+                    android:layout_width="40dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_right"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginHorizontal="8dp"/>
+
+                <TextView
+                    android:id="@+id/tv_arrival_return"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"/>
+                    tools:text="Melbourne"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textColor="@color/md_theme_primary"
+                    android:fontFamily="@font/font_plusjakartasans_bold" />
 
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/pb_loading_result"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_duration_return"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:indeterminate="true"
-                    android:layout_marginTop="200dp"
-                    android:layout_gravity="center_horizontal"
-                    android:visibility="gone"/>
+                    android:fontFamily="@font/font_plusjakartasans_bold"
+                    android:text="@string/text_duration_flight"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:layout_marginStart="12dp"/>
+            </LinearLayout>
 
-            </FrameLayout>
+            <LinearLayout
+                android:id="@+id/ll_flight_return_ticket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="16dp"
+                android:visibility="gone">
 
+                <TextView
+                    android:id="@+id/tv_departure_place_return"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Jakarta"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textColor="@color/md_theme_primary"
+                    android:fontFamily="@font/font_plusjakartasans_bold"
+                    android:layout_marginStart="8dp"/>
+
+                <ImageView
+                    android:id="@+id/img_arrow_right_return_ticket"
+                    android:layout_width="40dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_right"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginHorizontal="8dp"/>
+
+                <TextView
+                    android:id="@+id/tv_arrival_place_return"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Melbourne"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textColor="@color/md_theme_primary"
+                    android:fontFamily="@font/font_plusjakartasans_bold" />
+
+                <TextView
+                    android:id="@+id/tv_duration_detail_return"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/font_plusjakartasans_bold"
+                    android:text="@string/text_duration_flight"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:layout_marginStart="12dp"/>
+            </LinearLayout>
+
+            <include
+                android:id="@+id/layout_detail_return"
+                layout="@layout/item_detail_flight_ticket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"/>
+
+            <com.nafi.airseat.presentation.common.views.ContentStateView
+                android:id="@+id/csv_detail_flight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp" />
 
 
         </LinearLayout>

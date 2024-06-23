@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -52,7 +53,6 @@ class DepartCalendarFragment(private val isStartSelection: Boolean) : BottomShee
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentDepartCalendarBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -70,9 +70,9 @@ class DepartCalendarFragment(private val isStartSelection: Boolean) : BottomShee
             }
         }
         val currentMonth = YearMonth.now()
-        val startMonth = currentMonth.minusMonths(100) // Adjust as needed
-        val endMonth = currentMonth.plusMonths(100) // Adjust as needed
-        val daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.SUNDAY) // Available from the library
+        val startMonth = currentMonth.minusMonths(100)
+        val endMonth = currentMonth.plusMonths(100)
+        val daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.SUNDAY)
         binding.calendarView.setup(startMonth, endMonth, daysOfWeek.first())
         binding.calendarView.scrollToMonth(currentMonth)
 
@@ -128,10 +128,8 @@ class DepartCalendarFragment(private val isStartSelection: Boolean) : BottomShee
             val selectedDate = selection.startDate
             if (selectedDate != null) {
                 text = headerDateFormatter.format(selectedDate)
-                // setTextColorRes(R.color.example_4_grey)
             } else {
                 text = getString(R.string.start_date)
-                // setTextColor(Color.GRAY)
             }
         }
 
@@ -139,11 +137,11 @@ class DepartCalendarFragment(private val isStartSelection: Boolean) : BottomShee
     }
 
     private fun configureBinders() {
-        val singleBackground = requireContext().getDrawable(R.drawable.calendar_single_selected_bg)
-        val todayBackground = requireContext().getDrawable(R.drawable.calendar_today_bg)
+        val singleBackground = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_single_selected_bg)
+        val todayBackground = ContextCompat.getDrawable(requireContext(), R.drawable.calendar_today_bg)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
-            lateinit var day: CalendarDay // Will be set when this container is bound.
+            lateinit var day: CalendarDay
             val binding = ItemSingleDayBinding.bind(view)
 
             init {
@@ -197,7 +195,6 @@ class DepartCalendarFragment(private val isStartSelection: Boolean) : BottomShee
                                 }
                             }
                         }
-                        // Handle other positions if needed, but MonthDate is where the single selection logic is applied.
                         else -> {
                             textView.setTextColorRes(R.color.md_theme_outlineVariant)
                         }

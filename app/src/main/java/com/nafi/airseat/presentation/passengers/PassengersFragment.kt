@@ -37,12 +37,10 @@ class PassengersFragment : BottomSheetDialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize the text views with default counts
         binding.adultCount.text = viewModel.adultCount.toString()
         binding.childCount.text = viewModel.childCount.toString()
         binding.babyCount.text = viewModel.babyCount.toString()
 
-        // Increment or decrement counts when buttons are clicked
         binding.plusAdult.setOnClickListener {
             viewModel.incrementAdultCount()
             updatePassengerCount()

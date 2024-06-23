@@ -4,16 +4,20 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.nafi.airseat.data.source.local.database.dao.AirportHistoryDao
 import com.nafi.airseat.data.source.local.database.dao.SearchHistoryDao
+import com.nafi.airseat.data.source.local.database.entity.AirportHistoryEntity
 import com.nafi.airseat.data.source.local.database.entity.SearchHistoryEntity
 
 @Database(
-    entities = [SearchHistoryEntity::class],
+    entities = [SearchHistoryEntity::class, AirportHistoryEntity::class],
     version = 1,
     exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun searchHistoryDao(): SearchHistoryDao
+
+    abstract fun airportHistoryDao(): AirportHistoryDao
 
     companion object {
         private const val DB_NAME = "AirSeat.db"

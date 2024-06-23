@@ -6,17 +6,22 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import coil.load
 import com.nafi.airseat.data.model.FlightDetail
 import com.nafi.airseat.databinding.ActivityDetailFlightBinding
 import com.nafi.airseat.presentation.biodata.OrdererBioActivity
+import com.nafi.airseat.presentation.bottomsheet.ProtectedLoginBottomSheet
 import com.nafi.airseat.presentation.common.views.ContentState
+import com.nafi.airseat.presentation.resultsearchreturn.ResultSearchReturnActivity
 import com.nafi.airseat.utils.NoInternetException
 import com.nafi.airseat.utils.proceedWhen
+import com.nafi.airseat.utils.toCompleteDateFormat
+import com.nafi.airseat.utils.toCurrencyFormat
+import com.nafi.airseat.utils.toTimeFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -27,27 +32,83 @@ class DetailFlightActivity : AppCompatActivity() {
     private val viewModel: DetailFlightViewModel by viewModel {
         parametersOf(intent.extras)
     }
-
     private var flightDetail: FlightDetail? = null
+    private var endDate: String? = null
+    private var passengerCount: String? = null
+    private var seatClassChoose: String? = null
+    private var idDepart: String? = null
+    private var isReturn: Boolean? = null
+    private var priceDepart: Int? = null
+    private var priceReturn: Int? = null
+
+    override fun onResume() {
+        super.onResume()
+        val id = intent.getStringExtra("id")
+        val returnFlight = intent.getIntExtra("returnFlight", 0)
+        if (returnFlight != 0) {
+            val idReturn = intent.getIntExtra("returnFlight", 0)
+            binding.llFlightReturnTicket.isVisible = true
+            binding.layoutDetailReturn.root.isVisible = true
+            proceedDetailTicket(id.orEmpty())
+            proceedDetailTicketReturn(idReturn.toString())
+        } else {
+            proceedDetailTicket(id.orEmpty())
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        if (intent.hasExtra("returnFlight")) {
+            val returnFlight = intent.getIntExtra("returnFlight", -1)
+            if (returnFlight != 0) {
+                val idReturn = intent.getIntExtra("returnFlight", 0)
+                binding.llFlightReturnTicket.isVisible = true
+                binding.layoutDetailReturn.root.isVisible = true
+                proceedDetailTicket(idDepart.orEmpty())
+                proceedDetailTicketReturn(idReturn.toString())
+            } else {
+                proceedDetailTicket(idDepart.orEmpty())
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val id = intent.getStringExtra("id")
         val price = intent.getIntExtra("price", 0)
+        binding.tvTotalPrice.text = price.toLong().toCurrencyFormat()
         val adultCount = intent.getIntExtra("adultCount", 0)
         val childCount = intent.getIntExtra("childCount", 0)
         val babyCount = intent.getIntExtra("babyCount", 0)
         Log.d("DetailFlight", "Adults: $adultCount, Children: $childCount, Babies: $babyCount")
         binding.tvTotalPrice.text = price.toString()
-
         proceedDetailTicket(id.toString())
+        idDepart = id.orEmpty()
+        priceDepart = intent.getIntExtra("priceDepart", 0)
+        priceReturn = intent.getIntExtra("priceReturn", 0)
+        isReturn = intent.getBooleanExtra("isReturnFlight", false)
         binding.layoutHeader.btnBackHome.setOnClickListener {
-            finish()
+            onBackPressed()
         }
+        endDate = intent.getStringExtra("endDate")
+        passengerCount = intent.getStringExtra("passengerCount")
+        seatClassChoose = intent.getStringExtra("seatClassChoose")
+        totalPrice()
+        handleIntent(intent)
         binding.btnSave.setOnClickListener {
-            flightDetail?.let {
-                navigateToOrdererBio(it.id.toString())
+            if (isReturn as Boolean) {
+                navigateBackToResultSearch()
+                isReturn = false
+            } else {
+                /*flightDetail?.let {
+                    //navigateToOrderBio()
+                }*/
+                handleLogin()
             }
         }
     }
@@ -74,16 +135,15 @@ class DetailFlightActivity : AppCompatActivity() {
                     it.payload?.let { detail ->
                         flightDetail = detail
                         bindView(detail)
-                        // Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                        getPriceDepart(detail)
+                        totalPrice()
                     }
                 },
                 doOnLoading = {
                     binding.csvDetailFlight.setState(ContentState.LOADING)
                     binding.layoutDetail.root.visibility = View.GONE
-                    // Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
                 },
                 doOnError = {
-                    // Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
                     if (it.exception is NoInternetException) {
                         binding.csvDetailFlight.setState(ContentState.ERROR_NETWORK)
                     } else {
@@ -94,32 +154,45 @@ class DetailFlightActivity : AppCompatActivity() {
                 },
                 doOnEmpty = {
                     binding.csvDetailFlight.setState(ContentState.EMPTY, desc = "Data not found")
-                    // Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show()
                 },
             )
         }
     }
 
-    private fun processDateTime(departureTime: String): Pair<String, String> {
-        val parts = departureTime.split("T")
-        val date = parts[0]
-        var times = parts[1].removeSuffix(".000Z")
-
-        if (times.endsWith(":00")) {
-            times = times.replace(Regex(":00$"), "")
+    private fun proceedDetailTicketReturn(id: String) {
+        viewModel.getDetailFlight(id).observe(this) {
+            it.proceedWhen(
+                doOnSuccess = {
+                    binding.csvDetailFlight.setState(ContentState.SUCCESS)
+                    binding.layoutDetailReturn.root.visibility = View.VISIBLE
+                    it.payload?.let { detail ->
+                        flightDetail = detail
+                        bindViewReturn(detail)
+                        getPriceReturn(detail)
+                        totalPrice()
+                    }
+                },
+                doOnLoading = {
+                    binding.csvDetailFlight.setState(ContentState.LOADING)
+                    binding.layoutDetailReturn.root.visibility = View.GONE
+                },
+                doOnError = {
+                    if (it.exception is NoInternetException) {
+                        binding.csvDetailFlight.setState(ContentState.ERROR_NETWORK)
+                    } else {
+                        binding.csvDetailFlight.setState(
+                            ContentState.ERROR_GENERAL,
+                        )
+                    }
+                },
+                doOnEmpty = {
+                    binding.csvDetailFlight.setState(ContentState.EMPTY, desc = "Data not found")
+                },
+            )
         }
-
-        return Pair(date, times)
     }
 
-    private fun formatDate(dateString: String): String {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-        val date = inputFormat.parse(dateString)
-        return outputFormat.format(date as Date)
-    }
-
-    fun calculateDuration(
+    private fun calculateDuration(
         departureTime: String,
         arrivalTime: String,
     ): String {
@@ -144,13 +217,11 @@ class DetailFlightActivity : AppCompatActivity() {
 
     private fun bindView(detail: FlightDetail) {
         detail.let {
-            val (departureDate, departureTimes) = processDateTime(it.departureTime)
-            val (arrivalDate, arrivalTimes) = processDateTime(it.arrivalTime)
             binding.tvDeparturePlace.text = it.departureAirport.airportCity
             binding.tvArrivalPlace.text = it.arrivalAirport.airportCity
             binding.tvDurationDetail.text = calculateDuration(it.departureTime, it.arrivalTime)
-            binding.layoutDetail.tvDepartureTime.text = departureTimes
-            binding.layoutDetail.tvDepartureDate.text = formatDate(departureDate)
+            binding.layoutDetail.tvDepartureTime.text = it.departureTime.toTimeFormat()
+            binding.layoutDetail.tvDepartureDate.text = it.departureTime.toCompleteDateFormat()
             binding.layoutDetail.tvDepartureAirportDetail.text = it.departureAirport.airportName
             binding.layoutDetail.tvDeparturePlace.text = it.departureTerminal
             binding.layoutDetail.imgAirlineLogo.load(it.airline.airlinePicture) {
@@ -159,14 +230,34 @@ class DetailFlightActivity : AppCompatActivity() {
             binding.layoutDetail.tvAirlineName.text = it.airline.airlineName
             binding.layoutDetail.tvAirlineCode.text = it.flightNumber
             binding.layoutDetail.tvFlightType.text = it.information
-            binding.layoutDetail.tvArrivalTime.text = arrivalTimes
-            binding.layoutDetail.tvArrivalDate.text = formatDate(arrivalDate)
+            binding.layoutDetail.tvArrivalTime.text = it.arrivalTime.toTimeFormat()
+            binding.layoutDetail.tvArrivalDate.text = it.arrivalTime.toCompleteDateFormat()
             binding.layoutDetail.tvArrivalPlace.text = it.arrivalAirport.airportName
-            // binding.tvTotalPrice.text = it.pricePremiumEconomy
         }
     }
 
-    private fun navigateToOrdererBio(id: String) {
+    private fun bindViewReturn(detail: FlightDetail) {
+        detail.let {
+            binding.tvDeparturePlaceReturn.text = it.departureAirport.airportCity
+            binding.tvArrivalPlaceReturn.text = it.arrivalAirport.airportCity
+            binding.tvDurationDetailReturn.text = calculateDuration(it.departureTime, it.arrivalTime)
+            binding.layoutDetailReturn.tvDepartureTime.text = it.departureTime.toTimeFormat()
+            binding.layoutDetailReturn.tvDepartureDate.text = it.departureTime.toCompleteDateFormat()
+            binding.layoutDetailReturn.tvDepartureAirportDetail.text = it.departureAirport.airportName
+            binding.layoutDetailReturn.tvDeparturePlace.text = it.departureTerminal
+            binding.layoutDetailReturn.imgAirlineLogo.load(it.airline.airlinePicture) {
+                crossfade(true)
+            }
+            binding.layoutDetailReturn.tvAirlineName.text = it.airline.airlineName
+            binding.layoutDetailReturn.tvAirlineCode.text = it.flightNumber
+            binding.layoutDetailReturn.tvFlightType.text = it.information
+            binding.layoutDetailReturn.tvArrivalTime.text = it.arrivalTime.toTimeFormat()
+            binding.layoutDetailReturn.tvArrivalDate.text = it.arrivalTime.toCompleteDateFormat()
+            binding.layoutDetailReturn.tvArrivalPlace.text = it.arrivalAirport.airportName
+        }
+    }
+
+    private fun navigateToOrderBio() {
         val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
         val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
         val seatClassChoose = intent.getStringExtra("seatClassChoose")
@@ -177,7 +268,7 @@ class DetailFlightActivity : AppCompatActivity() {
 
         startActivity(
             Intent(this, OrdererBioActivity::class.java).apply {
-                putExtra("id", id)
+                putExtra("id", idDepart)
                 putExtra("price", price)
                 putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
                 putExtra("airportCityCodeDestination", airportCityCodeDestination)
@@ -185,8 +276,81 @@ class DetailFlightActivity : AppCompatActivity() {
                 putExtra("adultCount", adultCount)
                 putExtra("childCount", childCount)
                 putExtra("babyCount", babyCount)
+                putExtra("idDepart", idDepart)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
+    }
+
+    private fun navigateBackToResultSearch() {
+        val intent = Intent(this, ResultSearchReturnActivity::class.java)
+        intent.putExtra("departureAirportId", flightDetail?.arrivalAirportId)
+        intent.putExtra("destinationAirportId", flightDetail?.departureAirportId)
+        intent.putExtra("airportCityCodeDeparture", flightDetail?.arrivalAirport?.airportCityCode)
+        intent.putExtra("airportCityCodeDestination", flightDetail?.departureAirport?.airportCityCode)
+        intent.putExtra("startDate", endDate)
+        intent.putExtra("selectedDepart", endDate)
+        intent.putExtra("seatClassChoose", seatClassChoose)
+        intent.putExtra("passengerCount", passengerCount)
+        startActivity(intent)
+    }
+
+    private fun totalPrice() {
+        val totalPrice = priceReturn?.let { priceDepart?.plus(it) }
+        binding.tvTotalPrice.text = totalPrice?.toLong()?.toCurrencyFormat()
+    }
+
+    private fun getPriceDepart(data: FlightDetail) {
+        when (seatClassChoose) {
+            "Economy" -> {
+                priceDepart = data.priceEconomy.toInt()
+            }
+
+            "Premium Economy" -> {
+                priceDepart = data.pricePremiumEconomy.toInt()
+            }
+
+            "Business" -> {
+                priceDepart = data.priceBusiness.toInt()
+            }
+
+            "First Class" -> {
+                priceDepart = data.priceFirstClass.toInt()
+            }
+        }
+    }
+
+    private fun getPriceReturn(data: FlightDetail) {
+        when (seatClassChoose) {
+            "Economy" -> {
+                priceReturn = data.priceEconomy.toInt()
+            }
+
+            "Premium Economy" -> {
+                priceReturn = data.pricePremiumEconomy.toInt()
+            }
+
+            "Business" -> {
+                priceReturn = data.priceBusiness.toInt()
+            }
+
+            "First Class" -> {
+                priceReturn = data.priceFirstClass.toInt()
+            }
+        }
+    }
+
+    private fun handleLogin() {
+        viewModel.getIsLogin().observe(this) { result ->
+            result.proceedWhen(
+                doOnSuccess = {
+                    navigateToOrderBio()
+                },
+                doOnError = {
+                    val dialog = ProtectedLoginBottomSheet()
+                    dialog.show(supportFragmentManager, dialog.tag)
+                },
+            )
+        }
     }
 }

@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
+import com.nafi.airseat.R
 import com.nafi.airseat.data.datasource.flight.FlightApiDataSource
 import com.nafi.airseat.data.model.Airport
 import com.nafi.airseat.data.model.Flight
@@ -18,7 +18,6 @@ import com.nafi.airseat.data.repository.FlightRepositoryImpl
 import com.nafi.airseat.data.source.network.services.AirSeatApiService
 import com.nafi.airseat.databinding.FragmentHomeBinding
 import com.nafi.airseat.presentation.calendar.CalendarBottomSheetFragment
-import com.nafi.airseat.presentation.common.sharedviewmodel.SharedViewModel
 import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.departcalendar.DepartCalendarFragment
 import com.nafi.airseat.presentation.home.adapter.FavoriteDestinationAdapter
@@ -38,12 +37,12 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
     private var selectedStartDate: LocalDate? = null
     private var selectedEndDate: LocalDate? = null
     private var passengerCount: Int? = null
-    private lateinit var sharedViewModel: SharedViewModel
     private var adultCount: Int = 0
     private var childCount: Int = 0
     private var babyCount: Int = 0
     private var selectedDepartAirport: Airport? = null
     private var selectedDestinationAirport: Airport? = null
+    private var isReturnFlight: Boolean? = null
     private val favoriteDestinationAdapter: FavoriteDestinationAdapter by lazy {
         FavoriteDestinationAdapter { flight ->
             showConfirmationDialog(flight)
@@ -64,7 +63,6 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         val favoriteDestinationRepository = FlightRepositoryImpl(FlightApiDataSource(AirSeatApiService.invoke()))
         viewModel = HomeViewModel(favoriteDestinationRepository)
@@ -78,7 +76,12 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         binding.layoutHome.tvDepart.setOnClickListener {
             showBottomSheet(
                 SearchTicketFragment {
-                    binding.layoutHome.tvDepart.text = "${it.airportCity} (${it.airportCityCode})"
+                    binding.layoutHome.tvDepart.text =
+                        getString(
+                            R.string.text_airport_result_search_home,
+                            it.airportCity,
+                            it.airportCityCode,
+                        )
                     selectedDepartAirport = it
                     updateSearchButtonState()
                 },
@@ -88,7 +91,12 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         binding.layoutHome.tvDestination.setOnClickListener {
             showBottomSheet(
                 SearchTicketFragment {
-                    binding.layoutHome.tvDestination.text = "${it.airportCity} (${it.airportCityCode})"
+                    binding.layoutHome.tvDestination.text =
+                        getString(
+                            R.string.text_airport_result_search_home,
+                            it.airportCity,
+                            it.airportCityCode,
+                        )
                     selectedDestinationAirport = it
                     updateSearchButtonState()
                 },
@@ -101,11 +109,21 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
             selectedDestinationAirport = tempAirport
 
             selectedDepartAirport?.let {
-                binding.layoutHome.tvDepart.text = "${it.airportCity} (${it.airportCityCode})"
+                binding.layoutHome.tvDepart.text =
+                    getString(
+                        R.string.text_airport_result_search_home,
+                        it.airportCity,
+                        it.airportCityCode,
+                    )
             }
 
             selectedDestinationAirport?.let {
-                binding.layoutHome.tvDestination.text = "${it.airportCity} (${it.airportCityCode})"
+                binding.layoutHome.tvDestination.text =
+                    getString(
+                        R.string.text_airport_result_search_home,
+                        it.airportCity,
+                        it.airportCityCode,
+                    )
             }
             updateSearchButtonState()
         }
@@ -115,10 +133,12 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 val bottomSheet = CalendarBottomSheetFragment(isStartSelection = true)
                 bottomSheet.setOnDateSelectedListener(this)
                 bottomSheet.show(parentFragmentManager, bottomSheet.tag)
+                isReturnFlight = true
             } else {
                 val bottomSheet = DepartCalendarFragment(isStartSelection = true)
                 bottomSheet.setOnDateDepartSelectedListener(this)
                 bottomSheet.show(parentFragmentManager, bottomSheet.tag)
+                isReturnFlight = false
             }
         }
 
@@ -141,7 +161,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         }
 
         binding.layoutHome.btnSearchFlight.setOnClickListener {
-            if (passengerCount == null) {
+            if (passengerCount == null || passengerCount == 0) {
                 Snackbar.make(requireView(), "Please select the number of passengers", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -153,6 +173,11 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
 
             if (selectedStartDate == null) {
                 Snackbar.make(requireView(), "Please select the departure date", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (binding.layoutHome.tvSeatClassChoose.text.isNullOrEmpty()) {
+                Snackbar.make(requireView(), "Please select the seat class", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -188,6 +213,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 intent.putExtra("childCount", childCount)
                 intent.putExtra("babyCount", babyCount)
                 intent.putExtra("seatClassChoose", binding.layoutHome.tvSeatClassChoose.text)
+                intent.putExtra("isReturnFlight", isReturnFlight)
 
                 startActivity(intent)
             } else {
@@ -218,6 +244,7 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 intent.putExtra("childCount", childCount)
                 intent.putExtra("babyCount", babyCount)
                 intent.putExtra("seatClassChoose", binding.layoutHome.tvSeatClassChoose.text)
+                intent.putExtra("isReturnFlight", isReturnFlight)
 
                 startActivity(intent)
             }
@@ -229,11 +256,13 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
                 binding.layoutHome.tvArrivalChoose.visibility = View.VISIBLE
                 binding.layoutHome.tvSpace1.visibility = View.VISIBLE
                 binding.layoutHome.tvSpace2.visibility = View.VISIBLE
+                isReturnFlight = true
             } else {
                 binding.layoutHome.tvSpace1.visibility = View.GONE
                 binding.layoutHome.tvSpace2.visibility = View.GONE
                 binding.layoutHome.tvReturnTitle.visibility = View.GONE
                 binding.layoutHome.tvArrivalChoose.visibility = View.GONE
+                isReturnFlight = false
             }
             updateSearchButtonState()
         }
@@ -382,11 +411,21 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
         selectedStartDate = LocalDateTime.parse(flight.departureTime, DateTimeFormatter.ISO_DATE_TIME).toLocalDate()
         selectedEndDate = null
 
-        binding.layoutHome.tvDepart.text = "${departureAirport.airportCity} (${departureAirport.airportCityCode})"
-        binding.layoutHome.tvDestination.text = "${arrivalAirport.airportCity} (${arrivalAirport.airportCityCode})"
+        binding.layoutHome.tvDepart.text =
+            getString(
+                R.string.text_auto_favorite_depart,
+                departureAirport.airportCity,
+                departureAirport.airportCityCode,
+            )
+        binding.layoutHome.tvDestination.text =
+            getString(
+                R.string.text_auto_favorite_destination,
+                arrivalAirport.airportCity,
+                arrivalAirport.airportCityCode,
+            )
         binding.layoutHome.tvDepartChoose.text = selectedStartDate?.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
         binding.layoutHome.tvArrivalChoose.text = selectedEndDate?.format(DateTimeFormatter.ofPattern("d MMM yyyy"))
-        binding.layoutHome.tvSeatClassChoose.text = "Economy"
+        binding.layoutHome.tvSeatClassChoose.text = getString(R.string.text_auto_economy_favorite)
         binding.layoutHome.swDepartReturn.isChecked = false
 
         updateSearchButtonState()

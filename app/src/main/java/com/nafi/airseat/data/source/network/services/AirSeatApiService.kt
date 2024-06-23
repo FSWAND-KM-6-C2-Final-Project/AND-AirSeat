@@ -73,9 +73,8 @@ interface AirSeatApiService {
     ): BaseResponse<Any>
 
     @GET("airport")
-    suspend fun getAirports(
-        @Query("limit") limit: Int = 20,
-        @Query("page") page: Int = 1,
+    suspend fun getAirportsByQuery(
+        @Query("cityName") cityName: String?,
     ): AirportResponse
 
     @GET("flight")
