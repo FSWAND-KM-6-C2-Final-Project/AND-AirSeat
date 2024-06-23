@@ -30,8 +30,6 @@ import com.nafi.airseat.data.datasource.intro.IntroDataSource
 import com.nafi.airseat.data.datasource.intro.IntroDataSourceImpl
 import com.nafi.airseat.data.datasource.seat.SeatApiDataSource
 import com.nafi.airseat.data.datasource.seat.SeatDataSource
-import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSource
-import com.nafi.airseat.data.datasource.seatclass.SeatClassDummyDataSourceImpl
 import com.nafi.airseat.data.repository.AirportHistoryRepository
 import com.nafi.airseat.data.repository.AirportHistoryRepositoryImpl
 import com.nafi.airseat.data.repository.AirportRepository
@@ -54,8 +52,6 @@ import com.nafi.airseat.data.repository.ProfileRepository
 import com.nafi.airseat.data.repository.ProfileRepositoryImpl
 import com.nafi.airseat.data.repository.SearchHistoryRepository
 import com.nafi.airseat.data.repository.SearchHistoryRepositoryImpl
-import com.nafi.airseat.data.repository.SeatClassRepository
-import com.nafi.airseat.data.repository.SeatClassRepositoryImpl
 import com.nafi.airseat.data.repository.SeatRepository
 import com.nafi.airseat.data.repository.SeatRepositoryImpl
 import com.nafi.airseat.data.repository.UserPrefRepository
@@ -206,7 +202,7 @@ object AppModules {
                 ResultSearchViewModel(get())
             }
             viewModel {
-                DetailFlightViewModel(get())
+                DetailFlightViewModel(get(), get())
             }
             viewModel {
                 NotificationViewModel(get())

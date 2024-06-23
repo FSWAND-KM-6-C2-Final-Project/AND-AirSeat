@@ -20,7 +20,6 @@ class OrdererBioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        val flightId = intent.getStringExtra("idDepart")
         val flightId = intent.getStringExtra("id")
         if (flightId != null) {
             Toast.makeText(this, "Received flight ID: $flightId", Toast.LENGTH_SHORT).show()

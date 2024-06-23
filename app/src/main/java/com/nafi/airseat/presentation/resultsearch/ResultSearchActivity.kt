@@ -66,8 +66,8 @@ class ResultSearchActivity : AppCompatActivity(), FilterBottomSheetFragment.OnFi
         val orderBy = intent.getStringExtra("orderDesc")
         val passengerCount = intent.getStringExtra("passengerCount")
         val seatClassChoose = intent.getStringExtra("seatClassChoose")
-        val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
-        val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
+        /*val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
+        val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")*/
         val roundTrip = intent.getBooleanExtra("isReturnFlight", false)
         isReturnFlight = roundTrip
         val adultCount = intent.getIntExtra("adultCount", 0)

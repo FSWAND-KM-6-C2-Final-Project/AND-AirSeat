@@ -1,5 +1,6 @@
 package com.nafi.airseat.presentation.bottomsheet
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafi.airseat.databinding.FragmentProtectedLoginBottomSheetBinding
+import com.nafi.airseat.presentation.login.LoginActivity
 
 class ProtectedLoginBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentProtectedLoginBottomSheetBinding
@@ -31,10 +33,21 @@ class ProtectedLoginBottomSheet : BottomSheetDialogFragment() {
         binding.ivClose.setOnClickListener {
             dismiss()
         }
+        binding.layoutLoginProtection.btnLogin.setOnClickListener {
+            navigateToLogin()
+        }
     }
 
     override fun onStart() {
         super.onStart()
         (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    private fun navigateToLogin() {
+        startActivity(
+            Intent(requireContext(), LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 }

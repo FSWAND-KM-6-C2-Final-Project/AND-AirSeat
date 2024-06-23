@@ -37,7 +37,6 @@ class HomeFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListe
     private var selectedStartDate: LocalDate? = null
     private var selectedEndDate: LocalDate? = null
     private var passengerCount: Int? = null
-    private lateinit var sharedViewModel: SharedViewModel
     private var adultCount: Int = 0
     private var childCount: Int = 0
     private var babyCount: Int = 0

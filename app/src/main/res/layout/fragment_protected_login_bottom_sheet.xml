@@ -16,6 +16,7 @@
         />
 
     <include
+        android:id="@+id/layout_login_protection"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"

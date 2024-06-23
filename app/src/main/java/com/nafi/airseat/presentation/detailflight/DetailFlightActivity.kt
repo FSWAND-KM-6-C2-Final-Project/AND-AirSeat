@@ -11,6 +11,7 @@ import coil.load
 import com.nafi.airseat.data.model.FlightDetail
 import com.nafi.airseat.databinding.ActivityDetailFlightBinding
 import com.nafi.airseat.presentation.biodata.OrdererBioActivity
+import com.nafi.airseat.presentation.bottomsheet.ProtectedLoginBottomSheet
 import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.resultsearchreturn.ResultSearchReturnActivity
 import com.nafi.airseat.utils.NoInternetException
@@ -86,7 +87,6 @@ class DetailFlightActivity : AppCompatActivity() {
         val babyCount = intent.getIntExtra("babyCount", 0)
         Log.d("DetailFlight", "Adults: $adultCount, Children: $childCount, Babies: $babyCount")
         binding.tvTotalPrice.text = price.toString()
-
         proceedDetailTicket(id.toString())
         idDepart = id.orEmpty()
         priceDepart = intent.getIntExtra("priceDepart", 0)
@@ -105,9 +105,10 @@ class DetailFlightActivity : AppCompatActivity() {
                 navigateBackToResultSearch()
                 isReturn = false
             } else {
-                flightDetail?.let {
-                    navigateToOrderBio(it.id.toString())
-                }
+                /*flightDetail?.let {
+                    //navigateToOrderBio()
+                }*/
+                handleLogin()
             }
         }
     }
@@ -256,8 +257,7 @@ class DetailFlightActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToOrderBio(id: String) {
-    private fun navigateToOrdererBio(id: String) {
+    private fun navigateToOrderBio() {
         val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
         val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
         val seatClassChoose = intent.getStringExtra("seatClassChoose")
@@ -268,7 +268,7 @@ class DetailFlightActivity : AppCompatActivity() {
 
         startActivity(
             Intent(this, OrdererBioActivity::class.java).apply {
-                putExtra("id", id)
+                putExtra("id", idDepart)
                 putExtra("price", price)
                 putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
                 putExtra("airportCityCodeDestination", airportCityCodeDestination)
@@ -276,7 +276,7 @@ class DetailFlightActivity : AppCompatActivity() {
                 putExtra("adultCount", adultCount)
                 putExtra("childCount", childCount)
                 putExtra("babyCount", babyCount)
-                putExtra("idDepart", id)
+                putExtra("idDepart", idDepart)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
@@ -337,6 +337,20 @@ class DetailFlightActivity : AppCompatActivity() {
             "First Class" -> {
                 priceReturn = data.priceFirstClass.toInt()
             }
+        }
+    }
+
+    private fun handleLogin() {
+        viewModel.getIsLogin().observe(this) { result ->
+            result.proceedWhen(
+                doOnSuccess = {
+                    navigateToOrderBio()
+                },
+                doOnError = {
+                    val dialog = ProtectedLoginBottomSheet()
+                    dialog.show(supportFragmentManager, dialog.tag)
+                },
+            )
         }
     }
 }
