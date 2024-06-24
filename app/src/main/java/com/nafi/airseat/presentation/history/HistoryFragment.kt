@@ -1,5 +1,6 @@
 package com.nafi.airseat.presentation.history
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +10,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafi.airseat.R
+import com.nafi.airseat.data.model.History
 import com.nafi.airseat.databinding.FragmentHistoryBinding
 import com.nafi.airseat.presentation.common.views.ContentState
+import com.nafi.airseat.presentation.detailhistory.DetailHistoryActivity
 import com.nafi.airseat.presentation.history.adapter.HistoryDataItem
 import com.nafi.airseat.presentation.history.adapter.MonthHeaderItem
+import com.nafi.airseat.presentation.login.LoginActivity
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryFragment
 import com.nafi.airseat.utils.ApiErrorException
 import com.nafi.airseat.utils.NoInternetException
@@ -73,6 +77,10 @@ class HistoryFragment : Fragment() {
         binding.ivClearWhiteHistory.setOnClickListener {
             observeHistoryData()
         }
+
+        binding.layoutLoginProtectionHistory.btnLogin.setOnClickListener {
+            navigateToLogin()
+        }
     }
 
     private fun observeHistoryData() {
@@ -119,7 +127,11 @@ class HistoryFragment : Fragment() {
                         groupedData.forEach { (monthYear, dataList) ->
                             items.add(MonthHeaderItem(monthYear))
                             dataList.forEach { data ->
-                                items.add(HistoryDataItem(data))
+                                items.add(
+                                    HistoryDataItem(data) { history ->
+                                        navigateToDetailHistory(history)
+                                    },
+                                )
                             }
                         }
                         groupAdapter.update(items)
@@ -208,7 +220,11 @@ class HistoryFragment : Fragment() {
                         groupedData.forEach { (monthYear, dataList) ->
                             items.add(MonthHeaderItem(monthYear))
                             dataList.forEach { data ->
-                                items.add(HistoryDataItem(data))
+                                items.add(
+                                    HistoryDataItem(data) { history ->
+                                        navigateToDetailHistory(history)
+                                    },
+                                )
                             }
                         }
                         groupAdapter.update(items)
@@ -227,6 +243,8 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = false
                     binding.ivClearHistory.isVisible = true
                     binding.ivClearWhiteHistory.isVisible = false
+                    binding.layoutLoginProtectionHistory.btnLogin.setOnClickListener {
+                    }
                 },
                 doOnError = {
                     binding.bgHistoryGradient.isVisible = false
@@ -240,16 +258,30 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = false
                     binding.ivClearHistory.isVisible = false
                     binding.ivClearWhiteHistory.isVisible = false
-                    if (it.exception is NoInternetException) {
+                    if (it.exception is ApiErrorException) {
+                        val errorBody = it.exception.errorResponse.message
+                        if (errorBody == "jwt malformed" || errorBody == "Token not found!") {
+                            binding.layoutLoginProtectionHistory.root.isVisible = true
+                        } else {
+                            binding.csvHistory.setState(ContentState.ERROR_GENERAL)
+                        }
+                    } else if (it.exception is NoInternetException) {
                         binding.csvHistory.setState(ContentState.ERROR_NETWORK)
-                    } else {
-                        binding.csvHistory.setState(
-                            ContentState.ERROR_GENERAL,
-                            desc = result.exception?.message.orEmpty(),
-                        )
                     }
                 },
             )
         }
+    }
+
+    private fun navigateToDetailHistory(data: History) {
+        DetailHistoryActivity.startActivity(requireContext(), data)
+    }
+
+    private fun navigateToLogin() {
+        startActivity(
+            Intent(requireContext(), LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 }

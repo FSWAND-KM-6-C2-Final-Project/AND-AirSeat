@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface SeatRepository {
-    fun getSeats(flightId: String): Flow<ResultWrapper<List<Seat>>>
+    fun getSeats(
+        flightId: String,
+        seatClass: String,
+    ): Flow<ResultWrapper<List<Seat>>>
 
     fun getFormattedSeatData(
         flightId: String,
@@ -19,15 +22,27 @@ interface SeatRepository {
 }
 
 class SeatRepositoryImpl(private val dataSource: SeatDataSource) : SeatRepository {
-    override fun getSeats(flightId: String): Flow<ResultWrapper<List<Seat>>> {
-        return proceedFlow { dataSource.getSeats(flightId).data.seats.toSeats() }
+    override fun getSeats(
+        flightId: String,
+        seatClass: String,
+    ): Flow<ResultWrapper<List<Seat>>> {
+        return proceedFlow { dataSource.getSeats(flightId, seatClass).data.seats.toSeats() }
     }
 
     override fun getFormattedSeatData(
         flightId: String,
         seatClassChoose: String,
     ): Flow<ResultWrapper<Triple<String, List<String>, List<String>>>> {
-        return getSeats(flightId).map {
+        val seatClassFormat =
+            when (seatClassChoose) {
+                "Economy" -> "economy"
+                "Premium Economy" -> "premium_economy"
+                "Business" -> "business"
+                "First Class" -> "first_class"
+                else -> seatClassChoose.toLowerCase().replace(" ", "_")
+            }
+
+        return getSeats(flightId, seatClassFormat).map {
             proceed {
                 val formattedSeatStatus: String
                 val formattedSeatNames: List<String>

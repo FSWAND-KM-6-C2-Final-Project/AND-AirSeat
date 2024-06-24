@@ -1,5 +1,6 @@
 package com.nafi.airseat.presentation.notification
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import com.nafi.airseat.data.model.NotificationModel
 import com.nafi.airseat.databinding.FragmentNotificationBinding
 import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.detailnotification.DetailNotificationActivity
+import com.nafi.airseat.presentation.login.LoginActivity
 import com.nafi.airseat.presentation.notification.adapter.NotificationAdapter
 import com.nafi.airseat.utils.ApiErrorException
 import com.nafi.airseat.utils.NoInternetException
@@ -38,6 +40,13 @@ class NotificationFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         setData()
+        setOnClickListener()
+    }
+
+    private fun setOnClickListener() {
+        binding.layoutLoginProtectionNotification.btnLogin.setOnClickListener {
+            navigateToLogin()
+        }
     }
 
     private fun setAdapter() {
@@ -96,5 +105,13 @@ class NotificationFragment : Fragment() {
 
     private fun navigateToDetailNotification(data: NotificationModel) {
         DetailNotificationActivity.startActivity(requireContext(), data)
+    }
+
+    private fun navigateToLogin() {
+        startActivity(
+            Intent(requireContext(), LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 }

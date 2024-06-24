@@ -29,4 +29,6 @@ data class Passenger(
     val title: String?,
     @SerializedName("updated_at")
     val updatedAt: String?,
+    @SerializedName("passenger_type")
+    val passengerType: String?,
 )
