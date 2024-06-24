@@ -21,8 +21,9 @@ class OrdererBioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val flightId = intent.getStringExtra("id")
+        val returnFlight = intent.getIntExtra("idReturn", 0)
         if (flightId != null) {
-            Toast.makeText(this, "Received flight ID: $flightId", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Received flight ID: $flightId & $returnFlight", Toast.LENGTH_SHORT).show()
         }
         setupForm()
         setClickListener()
@@ -141,6 +142,7 @@ class OrdererBioActivity : AppCompatActivity() {
             val childCount = intent.getIntExtra("childCount", 0)
             val babyCount = intent.getIntExtra("babyCount", 0)
             val flightId = intent.getStringExtra("id")
+            val idReturn = intent.getIntExtra("idReturn", 0)
             val price = intent.getIntExtra("price", 0)
 
             val intent =
@@ -157,6 +159,7 @@ class OrdererBioActivity : AppCompatActivity() {
                     putExtra("adultCount", adultCount)
                     putExtra("childCount", childCount)
                     putExtra("babyCount", babyCount)
+                    putExtra("idReturn", idReturn)
                 }
             startActivity(intent)
         }

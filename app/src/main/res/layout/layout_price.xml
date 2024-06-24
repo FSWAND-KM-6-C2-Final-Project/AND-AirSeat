@@ -5,12 +5,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tv_detail_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="12dp"
+        android:text="@string/detail_price"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:id="@+id/ll_price_adults"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-
         android:layout_marginVertical="8dp"
         android:weightSum="2">
 
@@ -98,7 +107,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="8dp"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -125,7 +135,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="8dp"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

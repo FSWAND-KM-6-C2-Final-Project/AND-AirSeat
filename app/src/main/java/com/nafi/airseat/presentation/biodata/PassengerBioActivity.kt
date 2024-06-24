@@ -282,6 +282,7 @@ class PassengerBioActivity : AppCompatActivity() {
             val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
             val seatClassChoose = intent.getStringExtra("seatClassChoose")
             val flightId = intent.getStringExtra("flightId")
+            val idReturn = intent.getIntExtra("idReturn", 0)
             val price = intent.getIntExtra("price", 0)
 
             val intent =
@@ -299,6 +300,7 @@ class PassengerBioActivity : AppCompatActivity() {
                     putExtra("email", intent.getStringExtra("email"))
                     putExtra("family_name", intent.getStringExtra("family_name"))
                     putParcelableArrayListExtra("passenger_list", ArrayList(passengerList))
+                    putExtra("idReturn", idReturn)
                 }
             startActivity(intent)
         }
