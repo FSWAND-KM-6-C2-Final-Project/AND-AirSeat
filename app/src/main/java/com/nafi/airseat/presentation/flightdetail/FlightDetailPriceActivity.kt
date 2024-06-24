@@ -41,11 +41,7 @@ class FlightDetailPriceActivity : AppCompatActivity() {
 
         val flightId = intent.getStringExtra("idDepart")
         val idReturn = intent.getIntExtra("idReturn", 0)
-        /*val fullName = intent.getStringExtra("full_name")
-        val phoneNumber = intent.getStringExtra("number_phone")
-        val email = intent.getStringExtra("email")
-        val familyName = intent.getStringExtra("family_name")
-        passengerList = intent.getParcelableArrayListExtra("passenger_list") ?: mutableListOf()*/
+        passengerList = intent.getParcelableArrayListExtra("passenger_list") ?: mutableListOf()
 
         if (idReturn != 0) {
             binding.layoutFlightDetailPrice.llFlightDetailReturnTicket.isVisible = true
@@ -58,12 +54,6 @@ class FlightDetailPriceActivity : AppCompatActivity() {
 
         bindPrice()
 
-        /*passengerList.forEach { passenger ->
-            Log.d("FlightDetailPriceActivity", "Passenger: $passenger & $idReturn & $flightId")
-        }
-
-        Log.d("OrderedBy", "Ordered Bio: $fullName, $familyName, $phoneNumber, $email")*/
-
         binding.cvSectionCheckout.btnPayment.setOnClickListener {
             createBooking()
         }
@@ -72,7 +62,6 @@ class FlightDetailPriceActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("StringFormatMatches")
     private fun bindPrice() {
         val price = intent.getIntExtra("price", 0).toLong()
         val priceBaby = 0.0
