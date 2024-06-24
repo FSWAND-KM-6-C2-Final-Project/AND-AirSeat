@@ -27,11 +27,11 @@ class BookingRepositoryImpl(private val dataSource: BookingDataSource) : Booking
         passenger: List<BookingPassenger>,
     ): Flow<ResultWrapper<String>> {
         return proceedFlow {
-            val bookingRespone =
+            val bookingResponse =
                 dataSource.createBooking(
                     BookingFlightRequest(flightId, returnFlightId, paymentMethod, orderedBy, passenger),
                 )
-            val redirectUrl = bookingRespone.data?.paymentData?.redirectUrl.orEmpty()
+            val redirectUrl = bookingResponse.data?.paymentData?.redirectUrl.orEmpty()
             redirectUrl
         }
     }
