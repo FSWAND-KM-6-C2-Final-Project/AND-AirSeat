@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import coil.load
 import com.nafi.airseat.R
 import com.nafi.airseat.data.model.FlightDetail
@@ -42,18 +43,27 @@ class FlightDetailPriceActivity : AppCompatActivity() {
 
         val tax = intent.getDoubleExtra("tax", 0.0)
         val promo = intent.getDoubleExtra("promo", 0.0)
-        val price = intent.getIntExtra("price", 0)
-        val flightId = intent.getStringExtra("flightId")
+        val flightId = intent.getStringExtra("idDepart")
+        val idReturn = intent.getIntExtra("idReturn", 0)
         val fullName = intent.getStringExtra("full_name")
         val phoneNumber = intent.getStringExtra("number_phone")
         val email = intent.getStringExtra("email")
         val familyName = intent.getStringExtra("family_name")
         passengerList = intent.getParcelableArrayListExtra("passenger_list") ?: mutableListOf()
-        proceedDetailTicket(flightId.toString())
+
+        if (idReturn != 0) {
+            binding.layoutFlightDetailPrice.llFlightDetailReturnTicket.isVisible = true
+            proceedDetailTicket(flightId.toString())
+            proceedDetailReturnTicket(idReturn.toString())
+        } else {
+            proceedDetailTicket(flightId.toString())
+            binding.layoutFlightDetailPrice.llFlightDetailReturnTicket.isVisible = false
+        }
+
         bindPrice()
 
         passengerList.forEach { passenger ->
-            Log.d("FlightDetailPriceActivity", "Passenger: $passenger")
+            Log.d("FlightDetailPriceActivity", "Passenger: $passenger & $idReturn & $flightId")
         }
 
         Log.d("OrderedBy", "Ordered Bio: $fullName, $familyName, $phoneNumber, $email")
@@ -135,6 +145,37 @@ class FlightDetailPriceActivity : AppCompatActivity() {
         }
     }
 
+    private fun proceedDetailReturnTicket(idReturn: String) {
+        flightDetailPriceViewModel.getDetailFlight(idReturn).observe(this) {
+            it.proceedWhen(
+                doOnSuccess = {
+                    binding.csvDetailFlight.setState(ContentState.SUCCESS)
+                    binding.layoutFlightDetailPrice.root.visibility = View.VISIBLE
+                    it.payload?.let { detail ->
+                        flightDetail = detail
+                        bindViewReturn(detail)
+                    }
+                },
+                doOnLoading = {
+                    binding.csvDetailFlight.setState(ContentState.LOADING)
+                    binding.layoutFlightDetailPrice.root.visibility = View.GONE
+                },
+                doOnError = {
+                    if (it.exception is NoInternetException) {
+                        binding.csvDetailFlight.setState(ContentState.ERROR_NETWORK)
+                    } else {
+                        binding.csvDetailFlight.setState(
+                            ContentState.ERROR_GENERAL,
+                        )
+                    }
+                },
+                doOnEmpty = {
+                    binding.csvDetailFlight.setState(ContentState.EMPTY, desc = "Data not found")
+                },
+            )
+        }
+    }
+
     private fun convertPassengerDates(passengerList: List<BookingPassenger>): List<BookingPassenger> {
         return passengerList.map { passenger ->
             if (passenger.passengerType == "Baby") {
@@ -167,7 +208,7 @@ class FlightDetailPriceActivity : AppCompatActivity() {
         return outputFormat.format(date as Date)
     }
 
-    fun calculateDuration(
+    private fun calculateDuration(
         departureTime: String,
         arrivalTime: String,
     ): String {
@@ -209,6 +250,28 @@ class FlightDetailPriceActivity : AppCompatActivity() {
             binding.layoutFlightDetailPrice.layoutFlightInfo.tvArrivalTime.text = arrivalTimes
             binding.layoutFlightDetailPrice.layoutFlightInfo.tvArrivalDate.text = formatDate(arrivalDate)
             binding.layoutFlightDetailPrice.layoutFlightInfo.tvArrivalAirport.text = it.arrivalAirport.airportName
+        }
+    }
+
+    private fun bindViewReturn(detail: FlightDetail) {
+        detail.let {
+            val (departureDate, departureTimes) = processDateTime(it.departureTime)
+            val (arrivalDate, arrivalTimes) = processDateTime(it.arrivalTime)
+            binding.layoutFlightDetailPrice.tvDeparturePlaceReturn.text = it.departureAirport.airportCity
+            binding.layoutFlightDetailPrice.tvArrivalPlaceReturn.text = it.arrivalAirport.airportCity
+            binding.layoutFlightDetailPrice.flightTimeReturn.text = calculateDuration(it.departureTime, it.arrivalTime)
+            binding.layoutFlightDetailPrice.layoutFlightInfoReturn.tvDepartureTime.text = departureTimes
+            binding.layoutFlightDetailPrice.layoutFlightInfoReturn.tvDepartureDate.text = formatDate(departureDate)
+            binding.layoutFlightDetailPrice.layoutFlightInfoReturn.tvDepartureAirport.text = "${it.departureAirport.airportName} - ${it.departureTerminal}"
+            binding.layoutFlightDetailPrice.layoutFlightInfoReturn.tvAirplane.text = it.airline.airlineName
+            binding.layoutFlightDetailPrice.layoutFlightInfoReturn.ivAirplaneLogo.load(it.airline.airlinePicture) {
+                crossfade(true)
+            }
+            binding.layoutFlightDetailPrice.layoutFlightInfoReturn.tvCodeAirplane.text = it.flightNumber
+            binding.layoutFlightDetailPrice.layoutFlightInfoReturn.tvFlightEntertain.text = it.information
+            binding.layoutFlightDetailPrice.layoutFlightInfoReturn.tvArrivalTime.text = arrivalTimes
+            binding.layoutFlightDetailPrice.layoutFlightInfoReturn.tvArrivalDate.text = formatDate(arrivalDate)
+            binding.layoutFlightDetailPrice.layoutFlightInfoReturn.tvArrivalAirport.text = it.arrivalAirport.airportName
         }
     }
 

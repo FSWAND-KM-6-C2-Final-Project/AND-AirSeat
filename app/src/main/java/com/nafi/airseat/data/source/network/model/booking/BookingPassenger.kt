@@ -29,7 +29,7 @@ data class BookingPassenger(
     @SerializedName("seat_departure")
     var seatDeparture: SeatPassenger? = null,
     @SerializedName("seat_return")
-    val seatReturn: SeatPassenger? = null,
+    var seatReturn: SeatPassenger? = null,
 ) : Parcelable
 
 @Parcelize

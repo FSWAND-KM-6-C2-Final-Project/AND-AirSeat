@@ -8,12 +8,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.nafi.airseat.R
-import com.nafi.airseat.data.model.Seat
 import com.nafi.airseat.data.source.network.model.booking.BookingPassenger
 import com.nafi.airseat.data.source.network.model.booking.SeatPassenger
 import com.nafi.airseat.databinding.ActivitySeatBookBinding
 import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceActivity
+import com.nafi.airseat.presentation.seatbookreturn.SeatBookReturnActivity
 import com.nafi.airseat.utils.proceedWhen
 import com.nafi.airseat.utils.seatbook.SeatBookView
 import dev.jahidhasanco.seatbookview.SeatClickListener
@@ -39,11 +39,12 @@ class SeatBookActivity : AppCompatActivity() {
         seatBookView = findViewById(R.id.layout_seat)
 
         val flightId = intent.getStringExtra("flightId")
+        val idReturn = intent.getIntExtra("idReturn", 0)
         val adultCount = intent.getIntExtra("adultCount", 0)
         val childCount = intent.getIntExtra("childCount", 0)
         val babyCount = intent.getIntExtra("babyCount", 0)
         val price = intent.getIntExtra("price", 0)
-        Log.d("SeatBookActivity", "Seat: $flightId")
+        Log.d("SeatBookActivity", "Seat: $flightId, Seat Return: $idReturn")
         val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
         val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
         val seatClassChoose = intent.getStringExtra("seatClassChoose")
@@ -62,10 +63,11 @@ class SeatBookActivity : AppCompatActivity() {
 
         seatBookView.setSelectSeatLimit(totalPassengers)
 
-        binding.tvHeaderDestinationInfo.text = "($airportCityCodeDeparture > $airportCityCodeDestination - $seatClassChoose)"
+        binding.tvHeaderDestinationInfo.text =
+            "($airportCityCodeDeparture > $airportCityCodeDestination - $seatClassChoose)"
         binding.layoutSeatbook.typeSeat.text = "$seatClassChoose"
 
-        binding.btnSave.setOnClickListener {
+        /*binding.btnSave.setOnClickListener {
             if (seatBookView.getSelectedSeatCount() == totalPassengers) {
                 val intent =
                     Intent(this, FlightDetailPriceActivity::class.java).apply {
@@ -85,6 +87,42 @@ class SeatBookActivity : AppCompatActivity() {
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Please select seats for all passengers.", Toast.LENGTH_SHORT).show()
+            }
+        }*/
+
+        binding.btnSave.setOnClickListener {
+            if (seatBookView.getSelectedSeatCount() == totalPassengers) {
+                val nextActivityClass =
+                    if (idReturn != 0) {
+                        SeatBookReturnActivity::class.java
+                    } else {
+                        FlightDetailPriceActivity::class.java
+                    }
+
+                val intent =
+                    Intent(this, nextActivityClass).apply {
+                        putExtra("adults", adultCount)
+                        putExtra("child", childCount)
+                        putExtra("baby", babyCount)
+                        putExtra("totalPassenger", totalPassengers)
+                        putExtra("price", price)
+                        putExtra("full_name", intent.getStringExtra("full_name"))
+                        putExtra("number_phone", intent.getStringExtra("number_phone"))
+                        putExtra("email", intent.getStringExtra("email"))
+                        putExtra("family_name", intent.getStringExtra("family_name"))
+                        putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
+                        putExtra("airportCityCodeDestination", airportCityCodeDestination)
+                        putExtra("seatClassChoose", seatClassChoose)
+                        putExtra("idDepart", flightId)
+                        putExtra("tax", 300000.0)
+                        putExtra("promo", 0.0)
+                        putExtra("passenger_list", ArrayList(passengerList))
+                        putExtra("idReturn", idReturn)
+                    }
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Please select seats for all passengers.", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -241,25 +279,37 @@ class SeatBookActivity : AppCompatActivity() {
                     selectedIdList: List<Int>,
                     view: View,
                 ) {
-                    /*if (selectedIdList.isNotEmpty()) {
+                    if (selectedIdList.isNotEmpty()) {
                         val selectedSeatId = selectedIdList.first()
                         val seatName = seatNamesList[selectedSeatId - 1]
                         val row = seatName.last().toString()
-                        val column = seatName.first().digitToIntOrNull() ?: 0
-                        Toast.makeText(this@SeatBookActivity, "Seat Row : $row", Toast.LENGTH_SHORT).show()
-                        Toast.makeText(this@SeatBookActivity, "Seat Column : $column", Toast.LENGTH_SHORT).show()
+                        val column = seatName.dropLast(1).toString()
+                        Toast.makeText(this@SeatBookActivity, "Seat Row : $row", Toast.LENGTH_SHORT)
+                            .show()
+                        Toast.makeText(
+                            this@SeatBookActivity,
+                            "Seat Column : $column",
+                            Toast.LENGTH_SHORT,
+                        ).show()
                         val seatPassenger = SeatPassenger(seatRow = row, seatColumn = column)
 
                         val passengerIndex = selectedIdList.size - 1
                         if (passengerIndex < passengerList.size) {
                             passengerList[passengerIndex].seatDeparture = seatPassenger
                             // Log the updated passenger info
-                            Log.d("SeatBookActivity", "Updated Passenger: ${passengerList[passengerIndex]}")
+                            Log.d(
+                                "SeatBookActivity",
+                                "Updated Passenger: ${passengerList[passengerIndex]}",
+                            )
                         }
 
-                        Toast.makeText(this@SeatBookActivity, "Seat Row : $row, Seat Column : $column", Toast.LENGTH_SHORT).show()
-                    }*/
-                    if (selectedIdList.isNotEmpty()) {
+                        Toast.makeText(
+                            this@SeatBookActivity,
+                            "Seat Row : $row, Seat Column : $column",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
+                    /*if (selectedIdList.isNotEmpty()) {
                         val selectedSeatId = selectedIdList.last()
                         val seatName = seatNamesList[selectedSeatId - 1]
                         val row = seatName.last().toString()
@@ -275,7 +325,7 @@ class SeatBookActivity : AppCompatActivity() {
                         }
 
                         Toast.makeText(this@SeatBookActivity, "Seat Row : $row, Seat Column : $column", Toast.LENGTH_SHORT).show()
-                    }
+                    }*/
                 }
 
                 override fun onBookedSeatClick(view: View) {
@@ -285,265 +335,5 @@ class SeatBookActivity : AppCompatActivity() {
                 }
             },
         )
-    }
-
-    private fun formatFirstClassSeatNames(seats: List<Seat>): List<String> {
-        val seatNames = mutableListOf<String>()
-        val maxRow = 2
-        val maxCol = 2
-
-        for (col in 1..maxCol) {
-            seatNames.add("/")
-
-            for (row in 1..maxRow) {
-                val rowChar = 'A' + (row - 1)
-                val seatName =
-                    seats.find { it.seatRow == rowChar.toString() && it.seatColumn == col }?.seatName
-                        ?: "$col$rowChar"
-                seatNames.add(seatName)
-                if (row < maxCol) {
-                    seatNames.add("")
-                }
-            }
-        }
-
-        return seatNames
-    }
-
-    private fun formatBusinessClassSeatNames(seats: List<Seat>): List<String> {
-        val seatNames = mutableListOf<String>()
-        val maxRow = 4
-        val maxCol = 5
-
-        for (col in 1..maxCol) {
-            if (col > 1) {
-                seatNames.add("/")
-            }
-
-            for (row in 1..maxRow) {
-                val rowChar = 'A' + (row - 1)
-                val seatName =
-                    seats.find { it.seatRow == rowChar.toString() && it.seatColumn == col }?.seatName
-                        ?: "${rowChar}$col"
-                seatNames.add(seatName)
-
-                if (row == 2) {
-                    seatNames.add("")
-                }
-            }
-        }
-
-        return seatNames
-    }
-
-    private fun formatPremiumEconomySeatNames(seats: List<Seat>): List<String> {
-        val seatNames = mutableListOf<String>()
-        val maxRow = 4
-        val maxCol = 6
-
-        for (col in 1..maxCol) {
-            if (col > 1) {
-                seatNames.add("/")
-            }
-
-            for (row in 1..maxRow) {
-                val rowChar = 'A' + (row - 1)
-                val seatName =
-                    seats.find { it.seatRow == rowChar.toString() && it.seatColumn == col }?.seatName
-                        ?: "${rowChar}$col"
-                seatNames.add(seatName)
-
-                if (row == 2) {
-                    seatNames.add("")
-                }
-            }
-        }
-
-        return seatNames
-    }
-
-    private fun formatEconomySeatNames(seats: List<Seat>): List<String> {
-        val seatNames = mutableListOf<String>()
-
-        // Find the maximum row and column numbers
-        val maxRow = seats.maxOf { it.seatRow.first() }.toInt() - 'A'.toInt() + 1
-        val maxCol = seats.maxOf { it.seatColumn }
-
-        for (col in 1..maxCol) {
-            seatNames.add("/")
-
-            var isEmptyAdded = false
-
-            for (row in 0 until maxRow) {
-                val rowChar = 'A' + row
-
-                val seatName =
-                    seats.find { it.seatRow == rowChar.toString() && it.seatColumn == col }?.seatName
-                        ?: "$col$rowChar"
-
-                if (row % 3 == 0 && row != 0) {
-                    seatNames.add("")
-                    isEmptyAdded = true
-
-                    val rowChar1D = 'A' + 3
-                    val seatName1D =
-                        seats.find { it.seatRow == rowChar1D.toString() && it.seatColumn == col }?.seatName
-                            ?: "$col$rowChar1D"
-                    seatNames.add(seatName1D)
-                } else {
-                    seatNames.add(seatName)
-                }
-            }
-        }
-
-        return seatNames
-    }
-
-    /*private fun extractSeatStatus(seats: List<Seat>): String {
-        val seatStatusBuilder = StringBuilder()
-        seats.forEach { seat ->
-            seatStatusBuilder.append(seat.seatStatusAndroid)
-        }
-        return seatStatusBuilder.toString()
-    }*/
-
-    /*private fun formatSeatStatus(seatStatus: String): String {
-        val formattedBuilder = StringBuilder()
-        formattedBuilder.append("/")
-        var isSlash = true // flag to alternate between "/" and "_"
-        for (i in seatStatus.indices) {
-            if (i % 3 == 0 && i != 0) {
-                if (isSlash) {
-                    formattedBuilder.append("_")
-                } else {
-                    formattedBuilder.append("/")
-                }
-                isSlash = !isSlash // toggle the flag
-            }
-            formattedBuilder.append(seatStatus[i])
-        }
-        return formattedBuilder.toString()
-    }*/
-
-    private fun extractSeatStatus(
-        seats: List<Seat>,
-        seatClassChoose: String?,
-    ): String {
-        val seatStatusBuilder = StringBuilder()
-
-        when (seatClassChoose) {
-            "First Class" -> {
-                val maxRow = 2
-                val maxCol = 2
-                for (col in 1..maxCol) {
-                    seatStatusBuilder.append("/")
-                    for (row in 1..maxRow) {
-                        val rowChar = 'A' + (row - 1)
-                        val seatStatus =
-                            seats.find { it.seatRow == rowChar.toString() && it.seatColumn == col }?.seatStatusAndroid
-                                ?: "A"
-                        seatStatusBuilder.append(seatStatus)
-                    }
-                }
-            }
-            "Business" -> {
-                val maxRow = 4
-                val maxCol = 5
-                for (col in 1..maxCol) {
-                    seatStatusBuilder.append("/")
-                    for (row in 1..maxRow) {
-                        val rowChar = 'A' + (row - 1)
-                        val seatStatus =
-                            seats.find { it.seatRow == rowChar.toString() && it.seatColumn == col }?.seatStatusAndroid
-                                ?: "A"
-                        seatStatusBuilder.append(seatStatus)
-                    }
-                }
-            }
-            "Premium Economy" -> {
-                val maxRow = 6
-                val maxCol = 4
-                for (col in 1..maxCol) {
-                    seatStatusBuilder.append("/")
-                    for (row in 1..maxRow) {
-                        val rowChar = 'A' + (row - 1)
-                        val seatStatus =
-                            seats.find { it.seatRow == rowChar.toString() && it.seatColumn == col }?.seatStatusAndroid
-                                ?: "A"
-                        seatStatusBuilder.append(seatStatus)
-                    }
-                }
-            }
-            else -> {
-                seats.forEach { seat ->
-                    seatStatusBuilder.append(seat.seatStatusAndroid)
-                }
-            }
-        }
-
-        return seatStatusBuilder.toString()
-    }
-
-    private fun formatSeatStatus(
-        seatStatus: String,
-        seatClassChoose: String?,
-    ): String {
-        val formattedBuilder = StringBuilder()
-        var isSlash = true
-
-        when (seatClassChoose) {
-            "First Class" -> {
-                var isFirstChar = true
-
-                for (i in seatStatus.indices) {
-                    if (seatStatus[i] == '/') {
-                        formattedBuilder.append("/")
-                        isFirstChar = true
-                    } else {
-                        if (!isFirstChar && i % 2 == 0) {
-                            formattedBuilder.append("_")
-                        }
-                        formattedBuilder.append(seatStatus[i])
-                        isFirstChar = false
-                    }
-                }
-            }
-            "Business Class" -> {
-                for (i in seatStatus.indices) {
-                    if (i % 5 == 0 && i != 0) {
-                        formattedBuilder.append("/")
-                    }
-                    formattedBuilder.append(seatStatus[i])
-                }
-            }
-            "Premium Economy" -> {
-                for (i in seatStatus.indices) {
-                    if (i % 6 == 0 && i != 0) {
-                        formattedBuilder.append("/")
-                    }
-                    formattedBuilder.append(seatStatus[i])
-                }
-            }
-            else -> {
-                for (i in seatStatus.indices) {
-                    if (i % 3 == 0 && i != 0) {
-                        if (isSlash) {
-                            formattedBuilder.append("_")
-                        } else {
-                            formattedBuilder.append("/")
-                        }
-                        isSlash = !isSlash // Toggle flag isSlash
-                    }
-                    formattedBuilder.append(seatStatus[i])
-                }
-            }
-        }
-
-        return formattedBuilder.toString()
-    }
-
-    private fun getSeatNames(seats: List<Seat>): List<String> {
-        return seats.sortedWith(compareBy({ it.seatColumn }, { it.seatRow }))
-            .map { it.seatName }
     }
 }
