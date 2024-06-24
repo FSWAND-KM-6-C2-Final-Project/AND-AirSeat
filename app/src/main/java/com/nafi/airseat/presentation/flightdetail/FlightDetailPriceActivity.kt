@@ -137,10 +137,14 @@ class FlightDetailPriceActivity : AppCompatActivity() {
 
     private fun convertPassengerDates(passengerList: List<BookingPassenger>): List<BookingPassenger> {
         return passengerList.map { passenger ->
-            passenger.copy(
-                dob = passenger.dob.toConvertDateFormat(),
-                identificationExpired = passenger.identificationExpired?.toConvertDateFormat() ?: passenger.identificationExpired,
-            )
+            if (passenger.passengerType == "Baby") {
+                passenger
+            } else {
+                passenger.copy(
+                    dob = passenger.dob.toConvertDateFormat(),
+                    identificationExpired = passenger.identificationExpired?.toConvertDateFormat() ?: passenger.identificationExpired,
+                )
+            }
         }
     }
 

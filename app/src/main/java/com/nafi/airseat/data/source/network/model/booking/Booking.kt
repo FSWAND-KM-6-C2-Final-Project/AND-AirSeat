@@ -6,13 +6,11 @@ import com.google.gson.annotations.SerializedName
 @Keep
 data class Booking(
     @SerializedName("booking_code")
-    val bookingCode: String?,
+    val bookingCode: String,
     @SerializedName("booking_expired")
     val bookingExpired: String?,
     @SerializedName("booking_status")
     val bookingStatus: String?,
-    @SerializedName("created_at")
-    val createdAt: String?,
     @SerializedName("discount_id")
     val discountId: Int?,
     @SerializedName("flight_id")
