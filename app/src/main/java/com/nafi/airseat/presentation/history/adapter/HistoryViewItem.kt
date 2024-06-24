@@ -10,6 +10,7 @@ import com.nafi.airseat.databinding.ItemMonthHistoryBinding
 import com.nafi.airseat.utils.capitalizeFirstLetter
 import com.nafi.airseat.utils.toCompleteDateFormat
 import com.nafi.airseat.utils.toCurrencyFormat
+import com.nafi.airseat.utils.toSeatClassNameMultiLine
 import com.nafi.airseat.utils.toTimeFormat
 import com.xwray.groupie.viewbinding.BindableItem
 
@@ -28,7 +29,10 @@ class MonthHeaderItem(private val month: String) : BindableItem<ItemMonthHistory
     }
 }
 
-class HistoryDataItem(private val data: History) : BindableItem<ItemCardHistoryBinding>() {
+class HistoryDataItem(
+    private val data: History,
+    private val onClick: (History) -> Unit,
+) : BindableItem<ItemCardHistoryBinding>() {
     override fun bind(
         viewBinding: ItemCardHistoryBinding,
         position: Int,
@@ -43,8 +47,11 @@ class HistoryDataItem(private val data: History) : BindableItem<ItemCardHistoryB
         viewBinding.tvTimeDestination.text = data.flight.departureTime.toTimeFormat()
         viewBinding.tvJourneyTime.text = data.duration
         viewBinding.bookingCode.text = data.bookingCode
-        viewBinding.classSeat.text = data.classes.capitalizeFirstLetter()
+        viewBinding.classSeat.text = data.classes.toSeatClassNameMultiLine()
         viewBinding.tvTotalHistory.text = data.totalAmount.toCurrencyFormat()
+        viewBinding.root.setOnClickListener {
+            onClick(data)
+        }
     }
 
     override fun getLayout() = R.layout.item_card_history

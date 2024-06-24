@@ -121,7 +121,7 @@ interface AirSeatApiServiceWithAuthorization {
 
     @GET("booking/detail")
     suspend fun getHistoryData(
-        @Query("limit") limit: Int = 10,
+        @Query("limit") limit: Int = 99,
         @Query("page") page: Int = 1,
         @Query("bookingCode") bookingCode: String? = null,
     ): BaseResponse<HistoryData>
@@ -140,6 +140,7 @@ interface AirSeatApiServiceWithAuthorization {
     @GET("seat/flight/{id}")
     suspend fun getSeatData(
         @Path("id") flightId: String,
+        @Query("seatClass") seatClass: String,
     ): SeatResponse
 
     @POST("booking")

@@ -1,7 +1,23 @@
 package com.nafi.airseat.utils
 
-fun String.capitalizeFirstLetter(): String {
-    if (isEmpty()) return this // Return the original string if it's empty
+import java.util.Locale
 
-    return substring(0, 1).toUpperCase() + substring(1)
+fun String.capitalizeFirstLetter(): String {
+    if (isEmpty()) return this
+
+    return substring(0, 1).uppercase(Locale.ROOT) + substring(1)
+}
+
+fun String.toSeatClassNameMultiLine(): String {
+    return if (this.length == 11) {
+        this.split('_')
+            .joinToString(separator = " ") { word ->
+                word.replaceFirstChar { it.uppercaseChar() }
+            }
+    } else {
+        this.split('_')
+            .joinToString(separator = "\r\n") { word ->
+                word.replaceFirstChar { it.uppercaseChar() }
+            }
+    }
 }

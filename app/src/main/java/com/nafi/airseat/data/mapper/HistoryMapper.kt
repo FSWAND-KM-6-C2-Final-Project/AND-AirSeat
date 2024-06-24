@@ -1,5 +1,6 @@
 package com.nafi.airseat.data.mapper
 
+import com.nafi.airseat.data.model.AirlineHistory
 import com.nafi.airseat.data.model.BookingDetailHistory
 import com.nafi.airseat.data.model.History
 import com.nafi.airseat.data.model.HistoryArrivalAirport
@@ -10,6 +11,7 @@ import com.nafi.airseat.data.model.HistoryReturnDepartureAirport
 import com.nafi.airseat.data.model.HistoryReturnFlight
 import com.nafi.airseat.data.model.PassengerHistory
 import com.nafi.airseat.data.model.SeatHistory
+import com.nafi.airseat.data.source.network.model.history.Airline
 import com.nafi.airseat.data.source.network.model.history.ArrivalAirport
 import com.nafi.airseat.data.source.network.model.history.Booking
 import com.nafi.airseat.data.source.network.model.history.BookingDetail
@@ -43,6 +45,13 @@ fun Flight?.toHistoryFlightModel() =
         departureTime = this?.departureTime.orEmpty(),
         flightNumber = this?.flightNumber.orEmpty(),
         information = this?.information.orEmpty(),
+        airline = this?.airline.toAirlineHistory(),
+    )
+
+fun Airline?.toAirlineHistory() =
+    AirlineHistory(
+        airlineName = this?.airlineName.orEmpty(),
+        airlinePicture = this?.airlinePicture.orEmpty(),
     )
 
 fun ReturnFlight?.toHistoryReturnFlightModel() =
@@ -119,7 +128,7 @@ fun Passenger?.toPassengerHistory() =
         nationality = this?.nationality.orEmpty(),
         title = this?.title.orEmpty(),
         updatedAt = this?.createdAt.orEmpty(),
-        passengerType = this?.passengerType.orEmpty()
+        passengerType = this?.passengerType.orEmpty(),
     )
 
 fun Collection<BookingDetail>?.toBookingListDetailList() =

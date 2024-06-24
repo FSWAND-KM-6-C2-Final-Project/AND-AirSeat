@@ -71,6 +71,7 @@ import com.nafi.airseat.presentation.biodata.OrdererBioViewModel
 import com.nafi.airseat.presentation.biodata.PassengerBioViewModel
 import com.nafi.airseat.presentation.deleteaccount.DeleteAccountViewModel
 import com.nafi.airseat.presentation.detailflight.DetailFlightViewModel
+import com.nafi.airseat.presentation.detailhistory.DetailHistoryViewModel
 import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceViewModel
 import com.nafi.airseat.presentation.history.HistoryViewModel
 import com.nafi.airseat.presentation.home.HomeViewModel
@@ -224,6 +225,9 @@ object AppModules {
             }
             viewModel {
                 UpdateProfileViewModel(get())
+            }
+            viewModel {
+                DetailHistoryViewModel(get(), get())
             }
             viewModel {
                 ResultSearchReturnViewModel(get())

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FinalProject</string>
+    <string name="app_name">AirSeat</string>
     <string name="title_tab_home">Beranda</string>
     <string name="title_tab_history">Riwayat</string>
     <string name="title_tab_notification">Notifikasi</string>
@@ -213,4 +213,11 @@
     <string name="text_agree_delete_account">Check to agree to delete account</string>
     <string name="select_seat">Select seat</string>
     <string name="text_detail_ticket">Detail ticket</string>
+    <string name="text_header_detail_flight">Detail Flight</string>
+    <string name="text_title_passenger">Passenger :</string>
+    <string name="text_title_passenger_id">ID :</string>
+    <string name="text_detail_history_adults">%1$s Adults</string>
+    <string name="text_detail_history_child">%1$s Child</string>
+    <string name="text_detail_history_baby">%1$s Baby</string>
+    <string name="text_detail_history_airport_terminal_departure">%1$s - %2$s</string>
 </resources>
