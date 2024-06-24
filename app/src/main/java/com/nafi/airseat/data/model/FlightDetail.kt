@@ -19,6 +19,7 @@ data class FlightDetail(
     val airline: FlightDetailAirline,
     val departureAirport: FlightDetailDeparture,
     val arrivalAirport: FlightDetailArrival,
+    val duration: String,
 )
 
 data class FlightDetailAirline(

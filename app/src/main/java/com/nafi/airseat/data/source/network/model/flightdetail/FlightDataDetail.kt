@@ -41,4 +41,6 @@ data class FlightDataDetail(
     val departureAirport: FlightDetailDepartureResponse,
     @SerializedName("arrivalAirport")
     val arrivalAirport: FlightDetailArrivalResponse,
+    @SerializedName("duration")
+    val duration: String?,
 )

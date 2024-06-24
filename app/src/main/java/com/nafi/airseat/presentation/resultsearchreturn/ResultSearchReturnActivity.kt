@@ -68,9 +68,6 @@ class ResultSearchReturnActivity : AppCompatActivity(), FilterBottomSheetFragmen
         val roundTrip = intent.getBooleanExtra("isReturnFlight", false)
         isReturnFlight = roundTrip
         typeSeatClass = seatClassChoose
-        binding.tvTestToDetail.setOnClickListener {
-            navigateToDetailTest()
-        }
 
         if (startDateString != null && endDateString != null) {
             startDate = LocalDate.parse(startDateString)
@@ -231,6 +228,7 @@ class ResultSearchReturnActivity : AppCompatActivity(), FilterBottomSheetFragmen
             Intent(this, DetailFlightActivity::class.java).apply {
                 putExtra("returnFlight", id)
                 putExtra("priceReturn", price)
+                putExtra("isReturnFlight", isReturnFlight)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
@@ -250,15 +248,6 @@ class ResultSearchReturnActivity : AppCompatActivity(), FilterBottomSheetFragmen
             val bottomSheet = FilterBottomSheetFragment()
             bottomSheet.show(supportFragmentManager, bottomSheet.tag)
         }
-    }
-
-    private fun navigateToDetailTest() {
-        startActivity(
-            Intent(this, DetailFlightActivity::class.java).apply {
-                putExtra("returnFlight", 1)
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            },
-        )
     }
 
     override fun onFilterSelected(filterSelected: String) {

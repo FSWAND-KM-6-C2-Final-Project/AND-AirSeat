@@ -29,6 +29,7 @@ fun FlightDataDetail?.toDetailFlight() =
         airline = this?.airline.toDetailAirline(),
         departureAirport = this?.departureAirport.toDetailDeparture(),
         arrivalAirport = this?.arrivalAirport.toDetailArrival(),
+        duration = this?.duration.orEmpty(),
     )
 
 fun FlightDetailAirlineResponse?.toDetailAirline() =

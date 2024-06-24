@@ -21,9 +21,6 @@ import com.nafi.airseat.utils.toCurrencyFormat
 import com.nafi.airseat.utils.toTimeFormat
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
 
 class DetailFlightActivity : AppCompatActivity() {
     private val binding: ActivityDetailFlightBinding by lazy {
@@ -37,6 +34,7 @@ class DetailFlightActivity : AppCompatActivity() {
     private var passengerCount: String? = null
     private var seatClassChoose: String? = null
     private var idDepart: String? = null
+    private var idFlightReturn: Int? = null
     private var isReturn: Boolean? = null
     private var priceDepart: Int? = null
     private var priceReturn: Int? = null
@@ -64,6 +62,8 @@ class DetailFlightActivity : AppCompatActivity() {
     private fun handleIntent(intent: Intent) {
         if (intent.hasExtra("returnFlight")) {
             val returnFlight = intent.getIntExtra("returnFlight", -1)
+            idFlightReturn = returnFlight
+            isReturn = false
             if (returnFlight != 0) {
                 val idReturn = intent.getIntExtra("returnFlight", 0)
                 binding.llFlightReturnTicket.isVisible = true
@@ -80,6 +80,7 @@ class DetailFlightActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val id = intent.getStringExtra("id")
+        idFlightReturn = intent.getIntExtra("returnFlight", 0)
         val price = intent.getIntExtra("price", 0)
         binding.tvTotalPrice.text = price.toLong().toCurrencyFormat()
         val adultCount = intent.getIntExtra("adultCount", 0)
@@ -103,11 +104,7 @@ class DetailFlightActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             if (isReturn as Boolean) {
                 navigateBackToResultSearch()
-                isReturn = false
             } else {
-                /*flightDetail?.let {
-                    //navigateToOrderBio()
-                }*/
                 handleLogin()
             }
         }
@@ -192,34 +189,11 @@ class DetailFlightActivity : AppCompatActivity() {
         }
     }
 
-    private fun calculateDuration(
-        departureTime: String,
-        arrivalTime: String,
-    ): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        sdf.timeZone = TimeZone.getTimeZone("UTC")
-
-        try {
-            val departureDateTime = sdf.parse(departureTime)
-            val arrivalDateTime = sdf.parse(arrivalTime)
-
-            val diffInMillis = (arrivalDateTime?.time ?: 0) - (departureDateTime?.time ?: 0)
-
-            val hours = diffInMillis / (1000 * 60 * 60)
-            val minutes = (diffInMillis % (1000 * 60 * 60)) / (1000 * 60)
-
-            return "(${hours}h ${minutes}m)"
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return ""
-        }
-    }
-
     private fun bindView(detail: FlightDetail) {
         detail.let {
             binding.tvDeparturePlace.text = it.departureAirport.airportCity
             binding.tvArrivalPlace.text = it.arrivalAirport.airportCity
-            binding.tvDurationDetail.text = calculateDuration(it.departureTime, it.arrivalTime)
+            binding.tvDurationDetail.text = it.duration
             binding.layoutDetail.tvDepartureTime.text = it.departureTime.toTimeFormat()
             binding.layoutDetail.tvDepartureDate.text = it.departureTime.toCompleteDateFormat()
             binding.layoutDetail.tvDepartureAirportDetail.text = it.departureAirport.airportName
@@ -240,7 +214,7 @@ class DetailFlightActivity : AppCompatActivity() {
         detail.let {
             binding.tvDeparturePlaceReturn.text = it.departureAirport.airportCity
             binding.tvArrivalPlaceReturn.text = it.arrivalAirport.airportCity
-            binding.tvDurationDetailReturn.text = calculateDuration(it.departureTime, it.arrivalTime)
+            binding.tvDurationDetailReturn.text = it.duration
             binding.layoutDetailReturn.tvDepartureTime.text = it.departureTime.toTimeFormat()
             binding.layoutDetailReturn.tvDepartureDate.text = it.departureTime.toCompleteDateFormat()
             binding.layoutDetailReturn.tvDepartureAirportDetail.text = it.departureAirport.airportName
@@ -277,6 +251,7 @@ class DetailFlightActivity : AppCompatActivity() {
                 putExtra("childCount", childCount)
                 putExtra("babyCount", babyCount)
                 putExtra("idDepart", idDepart)
+                putExtra("idFlightReturn", idFlightReturn)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
@@ -284,7 +259,7 @@ class DetailFlightActivity : AppCompatActivity() {
 
     private fun navigateBackToResultSearch() {
         val intent = Intent(this, ResultSearchReturnActivity::class.java)
-        intent.putExtra("departureAirportId", flightDetail?.arrivalAirportId)
+        intent.putExtra("departAirportId", flightDetail?.arrivalAirportId)
         intent.putExtra("destinationAirportId", flightDetail?.departureAirportId)
         intent.putExtra("airportCityCodeDeparture", flightDetail?.arrivalAirport?.airportCityCode)
         intent.putExtra("airportCityCodeDestination", flightDetail?.departureAirport?.airportCityCode)
