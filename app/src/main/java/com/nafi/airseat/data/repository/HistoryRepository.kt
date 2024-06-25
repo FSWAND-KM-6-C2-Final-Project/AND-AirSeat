@@ -10,18 +10,36 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface HistoryRepository {
-    fun getHistoryData(bookingCode: String?): Flow<ResultWrapper<List<History>>>
+    fun getHistoryData(
+        bookingCode: String?,
+        startDate: String?,
+        endDate: String?,
+    ): Flow<ResultWrapper<List<History>>>
 
-    fun getHistoryDetail(bookingCode: String?): Flow<ResultWrapper<Triple<List<History>, String, String>>>
+    fun getHistoryDetail(
+        bookingCode: String?,
+        startDate: String?,
+        endDate: String?,
+    ): Flow<ResultWrapper<Triple<List<History>, String, String>>>
 }
 
 class HistoryRepositoryImpl(private val dataSource: HistoryDataSource) : HistoryRepository {
-    override fun getHistoryData(bookingCode: String?): Flow<ResultWrapper<List<History>>> {
-        return proceedFlow { dataSource.getHistoryData(bookingCode = bookingCode).data?.booking.toHistoryList() }
+    override fun getHistoryData(
+        bookingCode: String?,
+        startDate: String?,
+        endDate: String?,
+    ): Flow<ResultWrapper<List<History>>> {
+        return proceedFlow {
+            dataSource.getHistoryData(bookingCode = bookingCode, startDate = startDate, endDate = endDate).data?.booking.toHistoryList()
+        }
     }
 
-    override fun getHistoryDetail(bookingCode: String?): Flow<ResultWrapper<Triple<List<History>, String, String>>> {
-        return proceedFlow { dataSource.getHistoryData(bookingCode).data?.booking.toHistoryList() }.map {
+    override fun getHistoryDetail(
+        bookingCode: String?,
+        startDate: String?,
+        endDate: String?,
+    ): Flow<ResultWrapper<Triple<List<History>, String, String>>> {
+        return proceedFlow { dataSource.getHistoryData(bookingCode, startDate = null, endDate = null).data?.booking.toHistoryList() }.map {
             proceed {
                 val listHistory = it.payload.orEmpty()
 

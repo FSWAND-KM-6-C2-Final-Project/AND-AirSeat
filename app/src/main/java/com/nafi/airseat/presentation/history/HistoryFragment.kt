@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nafi.airseat.R
 import com.nafi.airseat.data.model.History
 import com.nafi.airseat.databinding.FragmentHistoryBinding
+import com.nafi.airseat.presentation.calendar.CalendarBottomSheetFragment
+import com.nafi.airseat.presentation.calendar.CalendarHistoryBottomSheetFragment
 import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.detailhistory.DetailHistoryActivity
 import com.nafi.airseat.presentation.history.adapter.HistoryDataItem
@@ -25,9 +28,11 @@ import com.nafi.airseat.utils.toMonthYearFormat
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.viewbinding.BindableItem
+import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.time.LocalDate
 
-class HistoryFragment : Fragment() {
+class HistoryFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedListener {
     private val viewModel: HistoryViewModel by viewModel()
     private lateinit var binding: FragmentHistoryBinding
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
@@ -50,6 +55,12 @@ class HistoryFragment : Fragment() {
         setUpAdapter()
         observeHistoryData()
         setOnClickListener()
+    }
+
+    override fun onDateSelected(
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+    ) {
     }
 
     private fun setUpAdapter() {
@@ -81,10 +92,28 @@ class HistoryFragment : Fragment() {
         binding.layoutLoginProtectionHistory.btnLogin.setOnClickListener {
             navigateToLogin()
         }
+
+        binding.btnFilterDateHistory.setOnClickListener {
+            val bottomSheet = CalendarHistoryBottomSheetFragment()
+            bottomSheet.show(childFragmentManager, bottomSheet.tag)
+            childFragmentManager.setFragmentResultListener(
+                "rangeDate",
+                this,
+            ) { _, bundle ->
+                val startDate = bundle.getString("startDate")
+                val endDate = bundle.getString("endDate")
+                Toast.makeText(requireContext(), "$startDate $endDate", Toast.LENGTH_SHORT).show()
+                observeSearchDataByDate(startDate = startDate, endDate = endDate)
+            }
+        }
+
+        binding.btnClearFilterDateHistory.setOnClickListener {
+            observeHistoryData()
+        }
     }
 
     private fun observeHistoryData() {
-        viewModel.getHistoryData(bookingCode = null).observe(viewLifecycleOwner) { result ->
+        viewModel.getHistoryData(bookingCode = null, startDate = null, endDate = null).observe(viewLifecycleOwner) { result ->
             result.proceedWhen(
                 doOnLoading = {
                     binding.layoutLoginProtectionHistory.root.isVisible = false
@@ -101,7 +130,10 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = false
                     binding.ivClearHistory.isVisible = false
                     binding.ivClearWhiteHistory.isVisible = false
+                    binding.btnFilterDateHistory.isVisible = false
                     binding.layoutLoginProtectionHistory.root.isVisible = false
+                    binding.btnFilterDateHistory.isVisible = false
+                    binding.btnClearFilterDateHistory.isVisible = false
                 },
                 doOnSuccess = {
                     binding.layoutLoginProtectionHistory.root.isVisible = false
@@ -118,7 +150,11 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = true
                     binding.ivClearHistory.isVisible = false
                     binding.ivClearWhiteHistory.isVisible = false
+                    binding.btnFilterDateHistory.isVisible = true
                     binding.layoutLoginProtectionHistory.root.isVisible = false
+                    binding.btnFilterDateHistory.isVisible = true
+                    binding.btnClearFilterDateHistory.isVisible = false
+                    binding.ivSearchHistory.drawable.setTint(resources.getColor(R.color.white))
                     result.payload?.let { data ->
                         val items = mutableListOf<BindableItem<*>>()
 
@@ -152,7 +188,10 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = false
                     binding.ivClearHistory.isVisible = false
                     binding.ivClearWhiteHistory.isVisible = false
+                    binding.btnFilterDateHistory.isVisible = true
                     binding.layoutLoginProtectionHistory.root.isVisible = false
+                    binding.btnFilterDateHistory.isVisible = true
+                    binding.btnClearFilterDateHistory.isVisible = false
                 },
                 doOnError = {
                     binding.bgHistoryGradient.isVisible = false
@@ -167,6 +206,9 @@ class HistoryFragment : Fragment() {
                     binding.ivClearHistory.isVisible = false
                     binding.ivClearWhiteHistory.isVisible = false
                     binding.layoutHistory.isVisible = false
+                    binding.btnFilterDateHistory.isVisible = false
+                    binding.btnFilterDateHistory.isVisible = true
+                    binding.btnClearFilterDateHistory.isVisible = false
                     if (it.exception is ApiErrorException) {
                         val errorBody = it.exception.errorResponse.message
                         if (errorBody == "jwt malformed" || errorBody == "Token not found!") {
@@ -183,7 +225,7 @@ class HistoryFragment : Fragment() {
     }
 
     private fun observeSearchData(bookingCode: String?) {
-        viewModel.getHistoryData(bookingCode).observe(viewLifecycleOwner) { result ->
+        viewModel.getHistoryData(bookingCode, startDate = null, endDate = null).observe(viewLifecycleOwner) { result ->
             result.proceedWhen(
                 doOnLoading = {
                     binding.bgHistoryGradient.isVisible = false
@@ -243,8 +285,6 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = false
                     binding.ivClearHistory.isVisible = true
                     binding.ivClearWhiteHistory.isVisible = false
-                    binding.layoutLoginProtectionHistory.btnLogin.setOnClickListener {
-                    }
                 },
                 doOnError = {
                     binding.bgHistoryGradient.isVisible = false
@@ -258,6 +298,102 @@ class HistoryFragment : Fragment() {
                     binding.ivSearchHistory.isVisible = false
                     binding.ivClearHistory.isVisible = false
                     binding.ivClearWhiteHistory.isVisible = false
+                    if (it.exception is ApiErrorException) {
+                        val errorBody = it.exception.errorResponse.message
+                        if (errorBody == "jwt malformed" || errorBody == "Token not found!") {
+                            binding.layoutLoginProtectionHistory.root.isVisible = true
+                        } else {
+                            binding.csvHistory.setState(ContentState.ERROR_GENERAL)
+                        }
+                    } else if (it.exception is NoInternetException) {
+                        binding.csvHistory.setState(ContentState.ERROR_NETWORK)
+                    }
+                },
+            )
+        }
+    }
+
+    private fun observeSearchDataByDate(
+        startDate: String?,
+        endDate: String?,
+    ) {
+        viewModel.getHistoryData(bookingCode = null, startDate, endDate).observe(viewLifecycleOwner) { result ->
+            result.proceedWhen(
+                doOnLoading = {
+                    binding.bgHistoryGradient.isVisible = false
+                    binding.rvHistory.isVisible = false
+                    binding.tvTitleHistory.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.black,
+                        ),
+                    )
+                    binding.csvHistory.setState(ContentState.LOADING)
+                    binding.ivSearchHistory.isVisible = false
+                    binding.ivSearchHistory.drawable.setTint(resources.getColor(R.color.white))
+                    binding.btnFilterDateHistory.isVisible = false
+                    binding.btnClearFilterDateHistory.isVisible = false
+                },
+                doOnSuccess = {
+                    binding.bgHistoryGradient.isVisible = true
+                    binding.rvHistory.isVisible = true
+                    binding.tvTitleHistory.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white,
+                        ),
+                    )
+                    binding.csvHistory.setState(ContentState.SUCCESS)
+
+                    result.payload?.let { data ->
+                        val items = mutableListOf<BindableItem<*>>()
+
+                        val groupedData = data.groupBy { it.createdAt.toMonthYearFormat() }
+
+                        groupedData.forEach { (monthYear, dataList) ->
+                            items.add(MonthHeaderItem(monthYear))
+                            dataList.forEach { data ->
+                                items.add(
+                                    HistoryDataItem(data) { history ->
+                                        navigateToDetailHistory(history)
+                                    },
+                                )
+                            }
+                        }
+                        groupAdapter.update(items)
+                    }
+                    binding.ivSearchHistory.isVisible = true
+                    binding.ivSearchHistory.drawable.setTint(resources.getColor(R.color.white))
+                    binding.btnFilterDateHistory.isVisible = false
+                    binding.btnClearFilterDateHistory.isVisible = true
+                },
+                doOnEmpty = {
+                    binding.bgHistoryGradient.isVisible = false
+                    binding.rvHistory.isVisible = false
+                    binding.tvTitleHistory.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.black,
+                        ),
+                    )
+                    binding.csvHistory.setState(ContentState.EMPTY)
+                    binding.ivSearchHistory.isVisible = true
+                    binding.ivSearchHistory.drawable.setTint(resources.getColor(R.color.black))
+                    binding.btnFilterDateHistory.isVisible = false
+                    binding.btnClearFilterDateHistory.isVisible = true
+                },
+                doOnError = {
+                    binding.bgHistoryGradient.isVisible = false
+                    binding.rvHistory.isVisible = false
+                    binding.tvTitleHistory.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.black,
+                        ),
+                    )
+                    binding.ivSearchHistory.isVisible = false
+                    binding.ivClearHistory.isVisible = false
+                    binding.btnClearFilterDateHistory.isVisible = false
                     if (it.exception is ApiErrorException) {
                         val errorBody = it.exception.errorResponse.message
                         if (errorBody == "jwt malformed" || errorBody == "Token not found!") {

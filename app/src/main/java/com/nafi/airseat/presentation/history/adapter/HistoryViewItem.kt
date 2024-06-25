@@ -44,7 +44,7 @@ class HistoryDataItem(
         viewBinding.tvDate.text = data.flight.departureTime.toCompleteDateFormat()
         viewBinding.tvDateDestination.text = data.flight.arrivalTime.toCompleteDateFormat()
         viewBinding.tvTime.text = data.flight.departureTime.toTimeFormat()
-        viewBinding.tvTimeDestination.text = data.flight.departureTime.toTimeFormat()
+        viewBinding.tvTimeDestination.text = data.flight.arrivalTime.toTimeFormat()
         viewBinding.tvJourneyTime.text = data.duration
         viewBinding.bookingCode.text = data.bookingCode
         viewBinding.classSeat.text = data.classes.toSeatClassNameMultiLine()
