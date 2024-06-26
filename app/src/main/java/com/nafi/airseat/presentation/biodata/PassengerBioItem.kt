@@ -21,7 +21,6 @@ class PassengerBioItem(
     private val countryNames: List<String>,
     private val passengerBioViewModel: PassengerBioViewModel,
     private val lifecycleOwner: LifecycleOwner,
-    private val isBaby: Boolean,
 ) : BindableItem<LayoutFormOrderTicketBinding>() {
     lateinit var binding: LayoutFormOrderTicketBinding
 
@@ -58,28 +57,30 @@ class PassengerBioItem(
             passengerBioViewModel.setFamilyNameModeForPassenger(position, isChecked)
         }
 
-        // Observe Family Name mode specific to this passenger
         passengerBioViewModel.getFamilyNameModeForPassenger(position)
             .observe(lifecycleOwner) { isFamilyNameMode ->
                 updateFamilyNameVisibility(isFamilyNameMode)
             }
 
-        // Set initial visibility based on switch state
         updateFamilyNameVisibility(switchFamilyName.isChecked)
 
-        if (isBaby) {
-            viewBinding.tilIdType.isVisible = false
-            viewBinding.actvIdType.isVisible = false
-            viewBinding.tvIdType.isVisible = false
-            viewBinding.tilIdCard.isVisible = false
-            viewBinding.etIdCard.isVisible = false
-            viewBinding.tvIdCard.isVisible = false
-            viewBinding.tilCountry.isVisible = false
-            viewBinding.actvCountry.isVisible = false
-            viewBinding.tvCountry.isVisible = false
-            viewBinding.tilValidId.isVisible = false
-            viewBinding.etValidId.isVisible = false
-            viewBinding.tvValid.isVisible = false
+        viewBinding.actvIdType.setOnItemClickListener { _, _, position, _ ->
+            val selectedIdType = itemIdType[position]
+            if (selectedIdType.equals("KTP/NIK", ignoreCase = true)) {
+                viewBinding.tilCountry.isVisible = false
+                viewBinding.actvCountry.isVisible = false
+                viewBinding.tvCountry.isVisible = false
+                viewBinding.tilValidId.isVisible = false
+                viewBinding.etValidId.isVisible = false
+                viewBinding.tvValid.isVisible = false
+            } else {
+                viewBinding.tilCountry.isVisible = true
+                viewBinding.actvCountry.isVisible = true
+                viewBinding.tvCountry.isVisible = true
+                viewBinding.tilValidId.isVisible = true
+                viewBinding.etValidId.isVisible = true
+                viewBinding.tvValid.isVisible = true
+            }
         }
     }
 
@@ -148,27 +149,6 @@ class PassengerBioItem(
         binding: LayoutFormOrderTicketBinding,
         context: Context,
     ): Boolean {
-        if (isBaby) {
-            val title = binding.actvTitle.text.toString().lowercase(Locale.getDefault())
-            val fullName = binding.etFullname.text.toString().trim()
-            val dateOfBirth = binding.etDateOfBirth.text.toString().trim()
-            val citizenship = binding.etCitizenship.text.toString().trim()
-            val isFamilyNameMode = passengerBioViewModel.isFamilyNameMode.value ?: false
-
-            return ValidationUtil.checkTitleValidation(title, binding, context) &&
-                ValidationUtil.checkFullnameValidation(fullName, binding, context) &&
-                (
-                    !isFamilyNameMode ||
-                        ValidationUtil.checkFamilyNameValidation(
-                            binding.etFamilyName.text.toString().trim(),
-                            binding,
-                            context,
-                        )
-                ) &&
-                ValidationUtil.checkDateOfBirthValidation(dateOfBirth, binding, context) &&
-                ValidationUtil.checkCitizenshipValidation(citizenship, binding, context)
-        }
-
         val title = binding.actvTitle.text.toString().lowercase(Locale.getDefault())
         val country = binding.actvCountry.text.toString()
         val fullName = binding.etFullname.text.toString().trim()
@@ -179,20 +159,35 @@ class PassengerBioItem(
         val dateOfBirth = binding.etDateOfBirth.text.toString().trim()
         val isFamilyNameMode = passengerBioViewModel.isFamilyNameMode.value ?: false
 
-        return ValidationUtil.checkTitleValidation(title, binding, context) &&
-            ValidationUtil.checkFullnameValidation(fullName, binding, context) &&
-            (
-                !isFamilyNameMode ||
-                    ValidationUtil.checkFamilyNameValidation(
-                        binding.etFamilyName.text.toString().trim(), binding, context,
-                    )
-            ) &&
-            ValidationUtil.checkDateOfBirthValidation(dateOfBirth, binding, context) &&
-            ValidationUtil.checkCitizenshipValidation(citizenship, binding, context) &&
-            ValidationUtil.checkIdTypeValidation(idType, binding, context) &&
-            ValidationUtil.checkIdCardValidation(idCard, binding, context) &&
-            ValidationUtil.checkCountryValidation(country, binding, context) &&
-            ValidationUtil.checkValidIdValidation(validId, binding, context)
+        if (idType.equals("KTP/NIK", ignoreCase = true)) {
+            return ValidationUtil.checkTitleValidation(title, binding, context) &&
+                ValidationUtil.checkFullnameValidation(fullName, binding, context) &&
+                (
+                    !isFamilyNameMode ||
+                        ValidationUtil.checkFamilyNameValidation(
+                            binding.etFamilyName.text.toString().trim(), binding, context,
+                        )
+                ) &&
+                ValidationUtil.checkDateOfBirthValidation(dateOfBirth, binding, context) &&
+                ValidationUtil.checkCitizenshipValidation(citizenship, binding, context) &&
+                ValidationUtil.checkIdTypeValidation(idType, binding, context) &&
+                ValidationUtil.checkIdCardValidation(idCard, idType, binding, context)
+        } else {
+            return ValidationUtil.checkTitleValidation(title, binding, context) &&
+                ValidationUtil.checkFullnameValidation(fullName, binding, context) &&
+                (
+                    !isFamilyNameMode ||
+                        ValidationUtil.checkFamilyNameValidation(
+                            binding.etFamilyName.text.toString().trim(), binding, context,
+                        )
+                ) &&
+                ValidationUtil.checkDateOfBirthValidation(dateOfBirth, binding, context) &&
+                ValidationUtil.checkCitizenshipValidation(citizenship, binding, context) &&
+                ValidationUtil.checkIdTypeValidation(idType, binding, context) &&
+                ValidationUtil.checkIdCardValidation(idCard, idType, binding, context) &&
+                ValidationUtil.checkCountryValidation(country, binding, context) &&
+                ValidationUtil.checkValidIdValidation(validId, binding, context)
+        }
     }
 }
 
@@ -279,17 +274,33 @@ object ValidationUtil {
 
     fun checkIdCardValidation(
         idCard: String,
+        idType: String,
         binding: LayoutFormOrderTicketBinding,
         context: Context,
     ): Boolean {
-        return if (idCard.isEmpty()) {
-            binding.tilIdCard.isErrorEnabled = true
-            binding.tilIdCard.error =
-                context.getString(R.string.text_error_id_card_cannot_be_empty)
-            false
-        } else {
-            binding.tilIdCard.isErrorEnabled = false
-            true
+        return when {
+            idCard.isEmpty() -> {
+                binding.tilIdCard.isErrorEnabled = true
+                binding.tilIdCard.error =
+                    context.getString(R.string.text_error_id_card_cannot_be_empty)
+                false
+            }
+            idType.equals("KTP/NIK", ignoreCase = true) && !idCard.matches(Regex("\\d+")) -> {
+                binding.tilIdCard.isErrorEnabled = true
+                binding.tilIdCard.error =
+                    context.getString(R.string.text_error_id_card_must_be_numbers_only)
+                false
+            }
+            idType.equals("Paspor", ignoreCase = true) && !idCard.matches(Regex("[a-zA-Z0-9]+")) -> {
+                binding.tilIdCard.isErrorEnabled = true
+                binding.tilIdCard.error =
+                    context.getString(R.string.text_error_passport_must_be_alphanumeric)
+                false
+            }
+            else -> {
+                binding.tilIdCard.isErrorEnabled = false
+                true
+            }
         }
     }
 

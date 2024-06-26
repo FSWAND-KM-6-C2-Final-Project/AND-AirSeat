@@ -33,7 +33,15 @@
             android:exported="false" />
         <activity
             android:name=".presentation.payment.PaymentSuccessActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="airseat.netlify.app" android:pathPrefix="/payment-success" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.splashscreen.SplashScreenActivity"
             android:exported="false" />
