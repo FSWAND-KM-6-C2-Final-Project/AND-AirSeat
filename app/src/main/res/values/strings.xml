@@ -183,8 +183,8 @@
     <string name="sum_child">1</string>
     <string name="sum_baby">1</string>
     <string name="passenger_passengerindex">Passenger %1$d - %2$s</string>
-    <string name="title_intro_started">Enjoy the trip with friendly price</string>
-    <string name="desc_intro_started">Always prioritize safety while traveling</string>
+    <string name="title_intro_started">Discover the World, Together</string>
+    <string name="desc_intro_started">From solo adventures to family vacations, our app simplifies flight booking for everyone. Discover the world, whether you are traveling alone or with loved ones.</string>
     <string name="text_login_failed">"Login Failed, please check your credentials and try again "</string>
     <string name="text_version_app">Version 1.0.0</string>
     <string name="text_change_profile">Change Profile</string>
@@ -220,4 +220,11 @@
     <string name="text_detail_history_child">%1$s Child</string>
     <string name="text_detail_history_baby">%1$s Baby</string>
     <string name="text_detail_history_airport_terminal_departure">%1$s - %2$s</string>
+    <string name="text_title_splash">Air Seat</string>
+    <string name="text_adult_passenger_fragment">Adult\n(Over 12 years old)</string>
+    <string name="text_plus_passenger">+</string>
+    <string name="text_child_passenger_fragment">Child\n(2 - 11 years old)</string>
+    <string name="text_baby_passenger_fragment">Baby\n(Under 2 years old)</string>
+    <string name="text_result_search_title">Result Searches</string>
+    <string name="text_delete_all_title">Delete All</string>
 </resources>

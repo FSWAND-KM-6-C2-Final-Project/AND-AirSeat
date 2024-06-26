@@ -66,8 +66,6 @@ class ResultSearchActivity : AppCompatActivity(), FilterBottomSheetFragment.OnFi
         val orderBy = intent.getStringExtra("orderDesc")
         val passengerCount = intent.getStringExtra("passengerCount")
         val seatClassChoose = intent.getStringExtra("seatClassChoose")
-        /*val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
-        val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")*/
         val roundTrip = intent.getBooleanExtra("isReturnFlight", false)
         isReturnFlight = roundTrip
         val adultCount = intent.getIntExtra("adultCount", 0)
@@ -93,8 +91,13 @@ class ResultSearchActivity : AppCompatActivity(), FilterBottomSheetFragment.OnFi
             finish()
         }
 
-        binding.layoutHeader.textName.text = "$airportCityCodeDeparture > $airportCityCodeDestination"
-        binding.layoutHeader.textGreetings.text = "$passengerCount Passengers"
+        binding.layoutHeader.textName.text =
+            getString(
+                R.string.text_code_depart_destination_header,
+                airportCityCodeDeparture,
+                airportCityCodeDestination,
+            )
+        binding.layoutHeader.textGreetings.text = getString(R.string.text_count_passenger_header, passengerCount)
         binding.layoutHeader.tvClass.text = seatClassChoose
         setupFilter()
 
