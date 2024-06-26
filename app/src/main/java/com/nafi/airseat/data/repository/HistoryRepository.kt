@@ -49,8 +49,8 @@ class HistoryRepositoryImpl(private val dataSource: HistoryDataSource) : History
                 for (history in listHistory) {
                     for (bookingDetail in history.bookingDetail) {
                         when (bookingDetail.passenger.passengerType) {
-                            "Adult" -> amountPriceAdult += bookingDetail.price
-                            "Child" -> amountPriceChild += bookingDetail.price
+                            "adult" -> amountPriceAdult += bookingDetail.price
+                            "child" -> amountPriceChild += bookingDetail.price
                         }
                     }
                 }

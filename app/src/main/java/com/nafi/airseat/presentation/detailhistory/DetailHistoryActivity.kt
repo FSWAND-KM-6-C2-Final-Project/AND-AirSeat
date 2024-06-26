@@ -85,8 +85,9 @@ class DetailHistoryActivity : AppCompatActivity() {
                 it.flight.arrivalAirport.airportName
 
             val passengerSummary = aggregatePassengerData(it.bookingDetail)
-            displayPassengerSummary(passengerSummary)
             bindDataToLayout(passengerSummary)
+
+            binding.layoutFlightInfo.tvTotalPriceDetail.text = it.totalAmount.toCurrencyFormat()
         }
     }
 
@@ -116,13 +117,7 @@ class DetailHistoryActivity : AppCompatActivity() {
 
             passengerSummary[passengerType] = Pair(newCount, newPrice)
         }
-
         return passengerSummary
-    }
-
-    private fun displayPassengerSummary(passengerSummary: Map<String, Pair<Int, Int>>) {
-        val totalPrice = passengerSummary.values.sumOf { it.second }
-        binding.layoutFlightInfo.tvTotalPriceDetail.text = totalPrice.toLong().toCurrencyFormat()
     }
 
     private fun bindDataToLayout(passengerSummary: Map<String, Pair<Int, Int>>) {
@@ -131,7 +126,7 @@ class DetailHistoryActivity : AppCompatActivity() {
             val price = countPrice.second
 
             when (passengerType) {
-                "Adult" -> {
+                "adult" -> {
                     binding.layoutFlightInfo.layoutPrice.llPriceAdults.visibility = View.VISIBLE
                     binding.layoutFlightInfo.layoutPrice.tvAdults.text =
                         getString(R.string.text_detail_history_adults, count.toString())
@@ -139,7 +134,7 @@ class DetailHistoryActivity : AppCompatActivity() {
                         price.toLong().toCurrencyFormat()
                 }
 
-                "Child" -> {
+                "children" -> {
                     binding.layoutFlightInfo.layoutPrice.llPriceChild.visibility = View.VISIBLE
                     binding.layoutFlightInfo.layoutPrice.tvChild.text =
                         getString(R.string.text_detail_history_child, count.toString())
@@ -147,7 +142,7 @@ class DetailHistoryActivity : AppCompatActivity() {
                         price.toLong().toCurrencyFormat()
                 }
 
-                "Baby" -> {
+                "infant" -> {
                     binding.layoutFlightInfo.layoutPrice.llPriceBaby.visibility = View.VISIBLE
                     binding.layoutFlightInfo.layoutPrice.tvBaby.text =
                         getString(R.string.text_detail_history_baby, count.toString())
