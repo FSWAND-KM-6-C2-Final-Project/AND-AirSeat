@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_seat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="18dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/md_theme_primaryContainer"
+        app:strokeWidth="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/type_seat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/md_theme_primaryContainer"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                tools:text="Economy - 64 Seats Available"
+                android:textColor="@color/md_theme_onPrimary"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.nafi.airseat.utils.seatbookreturn.SeatBookReturnView
+                android:id="@+id/layout_seat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:available_seats_text_color="@color/md_theme_onPrimary"
+                app:seat_gaping="10dp"
+                app:seat_select_limit="2"
+                app:seat_text_size="15sp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

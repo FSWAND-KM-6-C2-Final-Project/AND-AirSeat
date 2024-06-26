@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Congratulations!"
+            android:text="@string/text_congratulations"
             android:textColor="@color/md_theme_primary"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Ticket payment has been successful"
+            android:text="@string/text_ticket_payment_has_been_successful"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:layout_marginVertical="4dp"/>
@@ -54,7 +54,7 @@
         android:layout_marginHorizontal="18dp"
         android:layout_marginBottom="36dp"
         android:padding="12dp"
-        android:text="@string/text_detail_ticket"
+        android:text="@string/text_home"
         android:textSize="16sp"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent" />

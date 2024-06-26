@@ -88,6 +88,7 @@ import com.nafi.airseat.presentation.resultsearchreturn.ResultSearchReturnViewMo
 import com.nafi.airseat.presentation.searchticket.SearchTicketViewModel
 import com.nafi.airseat.presentation.searcthistory.SearchHistoryViewModel
 import com.nafi.airseat.presentation.seatbook.SeatViewModel
+import com.nafi.airseat.presentation.seatbookreturn.SeatReturnViewModel
 import com.nafi.airseat.presentation.splashscreen.SplashScreenViewModel
 import com.nafi.airseat.presentation.updateprofile.UpdateProfileViewModel
 import com.nafi.airseat.utils.SharedPreferenceUtils
@@ -174,7 +175,9 @@ object AppModules {
             viewModel {
                 SeatViewModel(get())
             }
-
+            viewModel {
+                SeatReturnViewModel(get())
+            }
             viewModelOf(::AppIntroViewModel)
             viewModelOf(::SplashScreenViewModel)
             viewModelOf(::DeleteAccountViewModel)

@@ -1,4 +1,4 @@
-package com.nafi.airseat.presentation.seatbook
+package com.nafi.airseat.presentation.seatbookreturn
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,23 +8,22 @@ import androidx.core.view.isVisible
 import com.nafi.airseat.R
 import com.nafi.airseat.data.source.network.model.booking.BookingPassenger
 import com.nafi.airseat.data.source.network.model.booking.SeatPassenger
-import com.nafi.airseat.databinding.ActivitySeatBookBinding
+import com.nafi.airseat.databinding.ActivitySeatBookReturnBinding
 import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceActivity
-import com.nafi.airseat.presentation.seatbookreturn.SeatBookReturnActivity
 import com.nafi.airseat.utils.proceedWhen
-import com.nafi.airseat.utils.seatbook.SeatBookView
+import com.nafi.airseat.utils.seatbookreturn.SeatBookReturnView
 import com.nafi.airseat.utils.showSnackBarError
 import dev.jahidhasanco.seatbookview.SeatClickListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SeatBookActivity : AppCompatActivity() {
-    private lateinit var seatBookView: SeatBookView
+class SeatBookReturnActivity : AppCompatActivity() {
+    private lateinit var seatBookReturnView: SeatBookReturnView
 
-    private val seatViewModel: SeatViewModel by viewModel()
+    private val seatViewModel: SeatReturnViewModel by viewModel()
 
-    private val binding: ActivitySeatBookBinding by lazy {
-        ActivitySeatBookBinding.inflate(layoutInflater)
+    private val binding: ActivitySeatBookReturnBinding by lazy {
+        ActivitySeatBookReturnBinding.inflate(layoutInflater)
     }
 
     private lateinit var passengerList: MutableList<BookingPassenger>
@@ -32,25 +31,25 @@ class SeatBookActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        seatBookView = findViewById(R.id.layout_seat)
+        seatBookReturnView = findViewById(R.id.layout_seat)
 
-        val flightId = intent.getStringExtra("flightId")
-        val idReturn = intent.getIntExtra("idReturn", 0)
-        val adultCount = intent.getIntExtra("adultCount", 0)
-        val childCount = intent.getIntExtra("childCount", 0)
-        val babyCount = intent.getIntExtra("babyCount", 0)
+        val idDepart = intent.getStringExtra("idDepart")
+        val flightId = intent.getIntExtra("idReturn", 0)
+        val adultCount = intent.getIntExtra("adults", 0)
+        val childCount = intent.getIntExtra("child", 0)
+        val babyCount = intent.getIntExtra("baby", 0)
+        val totalPassenger = intent.getIntExtra("totalPassenger", 0)
         val price = intent.getIntExtra("price", 0)
-        val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDeparture")
-        val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDestination")
+        val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDeparture")
+        val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDestination")
         val seatClassChoose = intent.getStringExtra("seatClassChoose")
         passengerList = intent.getParcelableArrayListExtra("passenger_list") ?: mutableListOf()
 
-        val totalPassengers = adultCount + childCount
-        if (flightId != null && seatClassChoose != null) {
-            getSeatData(flightId, seatClassChoose)
+        if (seatClassChoose != null) {
+            getSeatData(flightId.toString(), seatClassChoose)
         }
 
-        seatBookView.setSelectSeatLimit(totalPassengers)
+        seatBookReturnView.setSelectSeatLimit(totalPassenger)
 
         binding.tvHeaderDestinationInfo.text =
             getString(
@@ -62,33 +61,22 @@ class SeatBookActivity : AppCompatActivity() {
         binding.layoutSeatbook.typeSeat.text = getString(R.string.text_type_seat, seatClassChoose)
 
         binding.btnSave.setOnClickListener {
-            if (seatBookView.getSelectedSeatCount() == totalPassengers) {
-                val nextActivityClass =
-                    if (idReturn != 0) {
-                        SeatBookReturnActivity::class.java
-                    } else {
-                        FlightDetailPriceActivity::class.java
-                    }
-
+            if (seatBookReturnView.getSelectedSeatCount() == totalPassenger) {
                 val intent =
-                    Intent(this, nextActivityClass).apply {
+                    Intent(this, FlightDetailPriceActivity::class.java).apply {
                         putExtra("adults", adultCount)
                         putExtra("child", childCount)
                         putExtra("baby", babyCount)
-                        putExtra("totalPassenger", totalPassengers)
                         putExtra("price", price)
                         putExtra("full_name", intent.getStringExtra("full_name"))
                         putExtra("number_phone", intent.getStringExtra("number_phone"))
                         putExtra("email", intent.getStringExtra("email"))
                         putExtra("family_name", intent.getStringExtra("family_name"))
-                        putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
-                        putExtra("airportCityCodeDestination", airportCityCodeDestination)
-                        putExtra("seatClassChoose", seatClassChoose)
-                        putExtra("idDepart", flightId)
+                        putExtra("idReturn", flightId)
+                        putExtra("idDepart", idDepart)
                         putExtra("tax", 300000.0)
                         putExtra("promo", 0.0)
                         putExtra("passenger_list", ArrayList(passengerList))
-                        putExtra("idReturn", idReturn)
                     }
                 startActivity(intent)
             } else {
@@ -142,20 +130,20 @@ class SeatBookActivity : AppCompatActivity() {
         formattedSeatStatus: String,
         formattedSeatNames: List<String>,
     ) {
-        seatBookView.setSeatsLayoutString(formattedSeatStatus)
+        seatBookReturnView.setSeatsLayoutString(formattedSeatStatus)
             .isCustomTitle(true)
             .setCustomTitle(formattedSeatNames)
             .setSeatLayoutPadding(2)
             .setSeatSizeBySeatsColumnAndLayoutWidth(7, -1)
 
-        seatBookView.show()
+        seatBookReturnView.show()
     }
 
     private fun setClickListenerSeat(seatNamesList: List<String>) {
         val adult = passengerList.indices.filter { passengerList[it].passengerType == "adult" }
         val baby = passengerList.indices.filter { passengerList[it].passengerType == "infant" }
 
-        seatBookView.setSeatClickListener(
+        seatBookReturnView.setSeatClickListener(
             object : SeatClickListener {
                 override fun onAvailableSeatClick(
                     selectedIdList: List<Int>,
@@ -168,13 +156,13 @@ class SeatBookActivity : AppCompatActivity() {
                             val column = seatName.dropLast(1)
                             val seatPassenger = SeatPassenger(seatRow = row, seatColumn = column)
 
-                            passengerList[index].seatDeparture = seatPassenger
+                            passengerList[index].seatReturn = seatPassenger
 
                             if (index in adult) {
                                 val adultIndex = adult.indexOf(index)
                                 if (adultIndex < baby.size) {
                                     val babyIndex = baby[adultIndex]
-                                    passengerList[babyIndex].seatDeparture = seatPassenger
+                                    passengerList[babyIndex].seatReturn = seatPassenger
                                 }
                             }
                         }

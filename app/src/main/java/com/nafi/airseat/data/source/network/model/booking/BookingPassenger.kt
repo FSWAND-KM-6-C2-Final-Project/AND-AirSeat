@@ -27,9 +27,9 @@ data class BookingPassenger(
     @SerializedName("passenger_type")
     val passengerType: String,
     @SerializedName("seat_departure")
-    var seatDeparture: SeatPassenger? = null,
+    var seatDeparture: SeatPassenger?,
     @SerializedName("seat_return")
-    val seatReturn: SeatPassenger? = null,
+    var seatReturn: SeatPassenger?,
 ) : Parcelable
 
 @Parcelize

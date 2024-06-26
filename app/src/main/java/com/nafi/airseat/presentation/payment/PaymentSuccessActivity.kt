@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.nafi.airseat.databinding.ActivityPaymentSuccessBinding
-import com.nafi.airseat.presentation.order.OrderInfoActivity
+import com.nafi.airseat.presentation.main.MainActivity
 
 class PaymentSuccessActivity : AppCompatActivity() {
     private val binding: ActivityPaymentSuccessBinding by lazy {
@@ -16,16 +16,14 @@ class PaymentSuccessActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.mbDetailTicket.setOnClickListener {
-            navigateToOrderInfo()
+            navigateToDetailTicket()
         }
     }
 
-    private fun navigateToOrderInfo() {
-        val flightId = intent.getStringExtra("flightId")
+    private fun navigateToDetailTicket() {
         startActivity(
-            Intent(this, OrderInfoActivity::class.java).apply {
-                putExtra("flightId", flightId)
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             },
         )
     }

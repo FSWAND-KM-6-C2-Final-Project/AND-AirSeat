@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import coil.load
+import com.nafi.airseat.R
 import com.nafi.airseat.data.model.FlightDetail
 import com.nafi.airseat.databinding.ActivityDetailFlightBinding
 import com.nafi.airseat.presentation.biodata.OrdererBioActivity
@@ -38,6 +39,7 @@ class DetailFlightActivity : AppCompatActivity() {
     private var isReturn: Boolean? = null
     private var priceDepart: Int? = null
     private var priceReturn: Int? = null
+    private var totalPrice: Int = 0
 
     override fun onResume() {
         super.onResume()
@@ -193,7 +195,7 @@ class DetailFlightActivity : AppCompatActivity() {
         detail.let {
             binding.tvDeparturePlace.text = it.departureAirport.airportCity
             binding.tvArrivalPlace.text = it.arrivalAirport.airportCity
-            binding.tvDurationDetail.text = it.duration
+            binding.tvDurationDetail.text = getString(R.string.text_duration_estimation, it.duration)
             binding.layoutDetail.tvDepartureTime.text = it.departureTime.toTimeFormat()
             binding.layoutDetail.tvDepartureDate.text = it.departureTime.toCompleteDateFormat()
             binding.layoutDetail.tvDepartureAirportDetail.text = it.departureAirport.airportName
@@ -214,7 +216,7 @@ class DetailFlightActivity : AppCompatActivity() {
         detail.let {
             binding.tvDeparturePlaceReturn.text = it.departureAirport.airportCity
             binding.tvArrivalPlaceReturn.text = it.arrivalAirport.airportCity
-            binding.tvDurationDetailReturn.text = it.duration
+            binding.tvDurationDetailReturn.text = getString(R.string.text_duration_estimation, it.duration)
             binding.layoutDetailReturn.tvDepartureTime.text = it.departureTime.toTimeFormat()
             binding.layoutDetailReturn.tvDepartureDate.text = it.departureTime.toCompleteDateFormat()
             binding.layoutDetailReturn.tvDepartureAirportDetail.text = it.departureAirport.airportName
@@ -238,12 +240,11 @@ class DetailFlightActivity : AppCompatActivity() {
         val adultCount = intent.getIntExtra("adultCount", 0)
         val childCount = intent.getIntExtra("childCount", 0)
         val babyCount = intent.getIntExtra("babyCount", 0)
-        val price = intent.getIntExtra("price", 0)
 
         startActivity(
             Intent(this, OrdererBioActivity::class.java).apply {
                 putExtra("id", idDepart)
-                putExtra("price", price)
+                putExtra("price", totalPrice)
                 putExtra("airportCityCodeDeparture", airportCityCodeDeparture)
                 putExtra("airportCityCodeDestination", airportCityCodeDestination)
                 putExtra("seatClassChoose", seatClassChoose)
@@ -271,8 +272,8 @@ class DetailFlightActivity : AppCompatActivity() {
     }
 
     private fun totalPrice() {
-        val totalPrice = priceReturn?.let { priceDepart?.plus(it) }
-        binding.tvTotalPrice.text = totalPrice?.toLong()?.toCurrencyFormat()
+        totalPrice = priceDepart?.plus(priceReturn ?: 0) ?: 0
+        binding.tvTotalPrice.text = totalPrice.toLong().toCurrencyFormat()
     }
 
     private fun getPriceDepart(data: FlightDetail) {

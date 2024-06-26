@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.seatbookreturn.SeatBookReturnActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.detailhistory.DetailHistoryActivity"
             android:exported="false" />
         <activity
@@ -30,7 +33,15 @@
             android:exported="false" />
         <activity
             android:name=".presentation.payment.PaymentSuccessActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="airseat.netlify.app" android:pathPrefix="/payment-success" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.splashscreen.SplashScreenActivity"
             android:exported="false" />
@@ -84,7 +95,7 @@
             android:exported="false" />
         <activity
             android:name=".presentation.main.MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".presentation.appintro.AppIntroActivity"
             android:exported="true">

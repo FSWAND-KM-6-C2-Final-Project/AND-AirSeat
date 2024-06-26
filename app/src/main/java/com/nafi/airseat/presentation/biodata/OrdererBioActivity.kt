@@ -3,7 +3,6 @@ package com.nafi.airseat.presentation.biodata
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.nafi.airseat.R
@@ -20,10 +19,6 @@ class OrdererBioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        val flightId = intent.getStringExtra("id")
-        if (flightId != null) {
-            Toast.makeText(this, "Received flight ID: $flightId", Toast.LENGTH_SHORT).show()
-        }
         setupForm()
         setClickListener()
         observeInputMode()
@@ -141,6 +136,7 @@ class OrdererBioActivity : AppCompatActivity() {
             val childCount = intent.getIntExtra("childCount", 0)
             val babyCount = intent.getIntExtra("babyCount", 0)
             val flightId = intent.getStringExtra("id")
+            val idReturnFlight = intent.getIntExtra("idFlightReturn", 0)
             val price = intent.getIntExtra("price", 0)
 
             val intent =
@@ -157,6 +153,7 @@ class OrdererBioActivity : AppCompatActivity() {
                     putExtra("adultCount", adultCount)
                     putExtra("childCount", childCount)
                     putExtra("babyCount", babyCount)
+                    putExtra("idReturn", idReturnFlight)
                 }
             startActivity(intent)
         }
