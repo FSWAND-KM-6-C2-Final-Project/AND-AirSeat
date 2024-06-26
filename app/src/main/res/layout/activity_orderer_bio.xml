@@ -42,8 +42,8 @@
         android:id="@+id/sv_form_bio_order"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/mb_save"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_bio_orderer">
 
         <LinearLayout
