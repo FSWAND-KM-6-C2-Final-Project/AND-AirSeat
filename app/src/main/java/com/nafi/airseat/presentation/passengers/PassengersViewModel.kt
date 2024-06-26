@@ -1,5 +1,7 @@
 package com.nafi.airseat.presentation.passengers
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class PassengersViewModel : ViewModel() {
@@ -12,7 +14,9 @@ class PassengersViewModel : ViewModel() {
     var babyCount = 0
         private set
 
-    // Increment methods
+    private val _showWarning = MutableLiveData<String>()
+    val showWarning: LiveData<String> get() = _showWarning
+
     fun incrementAdultCount() {
         adultCount++
     }
@@ -22,7 +26,11 @@ class PassengersViewModel : ViewModel() {
     }
 
     fun incrementBabyCount() {
-        babyCount++
+        if (babyCount < adultCount) {
+            babyCount++
+        } else {
+            _showWarning.value = "The number of babies should not exceed the number of adults"
+        }
     }
 
     fun decrementAdultCount() {
