@@ -9,9 +9,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo_not_background"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo_not_background"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
@@ -33,9 +33,6 @@
             android:exported="false" />
         <activity
             android:name=".presentation.splashscreen.SplashScreenActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.blank.BlankActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.updateprofile.UpdateProfileActivity"

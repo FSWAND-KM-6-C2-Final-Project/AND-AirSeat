@@ -43,7 +43,7 @@
             android:id="@+id/tv_recent_searches"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Result Searches"
+            android:text="@string/text_result_search_title"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -52,7 +52,7 @@
             android:id="@+id/tv_delete_history_searches"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete All"
+            android:text="@string/text_delete_all_title"
             android:textSize="14sp"
             android:textColor="@color/md_theme_error"
             app:layout_constraintEnd_toEndOf="parent"
