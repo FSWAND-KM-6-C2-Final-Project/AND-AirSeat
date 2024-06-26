@@ -44,19 +44,33 @@
 
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_payment"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="18dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="36dp"
-            android:padding="12dp"
-            android:text="@string/payment"
-            android:textSize="16sp"
-            app:cornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_total" />
+            app:layout_constraintTop_toBottomOf="@id/ll_total"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="36dp">
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_payment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="18dp"
+                android:padding="12dp"
+                android:text="@string/payment"
+                android:textSize="16sp"
+                app:cornerRadius="12dp" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/pb_loading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
     </LinearLayout>
 

@@ -21,7 +21,7 @@ class PassengerBioActivity : AppCompatActivity() {
     private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
     private val itemTitle = listOf("Mr", "Mrs")
-    private val itemIdType = listOf("KTP", "Paspor")
+    private val itemIdType = listOf("KTP/NIK", "Paspor")
     private val countryNames =
         listOf(
             "Afghanistan",
@@ -253,6 +253,12 @@ class PassengerBioActivity : AppCompatActivity() {
                         isValid = false
                         break
                     } else {
+                        val identificationType =
+                            if (item.binding.actvIdType.text.toString().equals("KTP/NIK", ignoreCase = true)) {
+                                "ktp"
+                            } else {
+                                item.binding.actvIdType.text.toString().lowercase(Locale.getDefault()).trim()
+                            }
                         val passengerData =
                             BookingPassenger(
                                 firstName = item.binding.etFullname.text.toString().trim(),
@@ -260,7 +266,7 @@ class PassengerBioActivity : AppCompatActivity() {
                                 title = item.binding.actvTitle.text.toString().lowercase(Locale.getDefault()).trim(),
                                 dob = item.binding.etDateOfBirth.text.toString().trim(),
                                 nationality = item.binding.etCitizenship.text.toString().trim(),
-                                identificationType = item.binding.actvIdType.text.toString().lowercase(Locale.getDefault()).trim(),
+                                identificationType = identificationType,
                                 identificationNumber = item.binding.etIdCard.text.toString().trim(),
                                 identificationCountry = item.binding.actvCountry.text.toString().trim(),
                                 identificationExpired = item.binding.etValidId.text.toString().trim(),
@@ -323,13 +329,12 @@ class PassengerBioActivity : AppCompatActivity() {
         for (i in 0 until adultCount) {
             val passengerItem =
                 PassengerBioItem(
-                    "Adult",
+                    "adult",
                     itemTitle,
                     itemIdType,
                     countryNames,
                     passengerBioViewModel,
                     lifecycleOwner = this,
-                    isBaby = false,
                 )
             groupAdapter.add(passengerItem)
             passengerBioViewModel.passengerBioItemList.add(passengerItem)
@@ -338,13 +343,12 @@ class PassengerBioActivity : AppCompatActivity() {
         for (i in 0 until childCount) {
             val passengerItem =
                 PassengerBioItem(
-                    "Child",
+                    "children",
                     itemTitle,
                     itemIdType,
                     countryNames,
                     passengerBioViewModel,
                     lifecycleOwner = this,
-                    isBaby = false,
                 )
             groupAdapter.add(passengerItem)
             passengerBioViewModel.passengerBioItemList.add(passengerItem)
@@ -353,13 +357,12 @@ class PassengerBioActivity : AppCompatActivity() {
         for (i in 0 until babyCount) {
             val passengerItem =
                 PassengerBioItem(
-                    "Baby",
+                    "infant",
                     itemTitle,
                     itemIdType,
                     countryNames,
                     passengerBioViewModel,
                     lifecycleOwner = this,
-                    isBaby = true,
                 )
             groupAdapter.add(passengerItem)
             passengerBioViewModel.passengerBioItemList.add(passengerItem)

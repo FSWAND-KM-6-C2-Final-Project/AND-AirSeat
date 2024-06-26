@@ -4,11 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.nafi.airseat.R
-import com.nafi.airseat.data.model.Seat
 import com.nafi.airseat.data.source.network.model.booking.BookingPassenger
 import com.nafi.airseat.data.source.network.model.booking.SeatPassenger
 import com.nafi.airseat.databinding.ActivitySeatBookReturnBinding
@@ -16,6 +14,7 @@ import com.nafi.airseat.presentation.common.views.ContentState
 import com.nafi.airseat.presentation.flightdetail.FlightDetailPriceActivity
 import com.nafi.airseat.utils.proceedWhen
 import com.nafi.airseat.utils.seatbookreturn.SeatBookReturnView
+import com.nafi.airseat.utils.showSnackBarError
 import dev.jahidhasanco.seatbookview.SeatClickListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,9 +28,6 @@ class SeatBookReturnActivity : AppCompatActivity() {
     }
 
     private lateinit var passengerList: MutableList<BookingPassenger>
-    // private lateinit var seats: List<Seat>
-    // private lateinit var seatNames: List<String>
-    // private lateinit var seatNamesList: List<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,18 +41,11 @@ class SeatBookReturnActivity : AppCompatActivity() {
         val babyCount = intent.getIntExtra("baby", 0)
         val totalPassenger = intent.getIntExtra("totalPassenger", 0)
         val price = intent.getIntExtra("price", 0)
-        Log.d("SeatBookActivity", "Seat: $flightId, Seat Return: $idDepart")
         val airportCityCodeDestination = intent.getStringExtra("airportCityCodeDeparture")
         val airportCityCodeDeparture = intent.getStringExtra("airportCityCodeDestination")
         val seatClassChoose = intent.getStringExtra("seatClassChoose")
-        Log.d("SeatBookActivity", "Seat Class: $seatClassChoose")
         passengerList = intent.getParcelableArrayListExtra("passenger_list") ?: mutableListOf()
 
-        passengerList.forEach { passenger ->
-            Log.d("SeatBookReturnActivity", "Passenger: $passenger")
-        }
-
-        Log.d("SeatBookReturn", "Total Passenger: $totalPassenger")
         if (seatClassChoose != null) {
             getSeatData(flightId.toString(), seatClassChoose)
         }
@@ -64,8 +53,13 @@ class SeatBookReturnActivity : AppCompatActivity() {
         seatBookReturnView.setSelectSeatLimit(totalPassenger)
 
         binding.tvHeaderDestinationInfo.text =
-            "($airportCityCodeDeparture > $airportCityCodeDestination - $seatClassChoose)"
-        binding.layoutSeatbook.typeSeat.text = "$seatClassChoose"
+            getString(
+                R.string.text_destination_info,
+                airportCityCodeDeparture,
+                airportCityCodeDestination,
+                seatClassChoose,
+            )
+        binding.layoutSeatbook.typeSeat.text = getString(R.string.text_type_seat, seatClassChoose)
 
         binding.btnSave.setOnClickListener {
             if (seatBookReturnView.getSelectedSeatCount() == totalPassenger) {
@@ -87,8 +81,7 @@ class SeatBookReturnActivity : AppCompatActivity() {
                     }
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Please select seats for all passengers.", Toast.LENGTH_SHORT)
-                    .show()
+                showSnackBarError(getString(R.string.text_please_select_seat))
             }
         }
 
@@ -117,9 +110,6 @@ class SeatBookReturnActivity : AppCompatActivity() {
                     val formattedSeatStatus = it.payload?.first.orEmpty()
                     val formattedSeatNames = it.payload?.second.orEmpty()
                     val seatName = it.payload?.third.orEmpty()
-                    Log.d("formattedSeatStatus", formattedSeatStatus)
-                    Log.d("formattedSeatNames", formattedSeatNames.toString())
-                    Log.d("seatName", seatName.toString())
                     showSeatBookView(formattedSeatStatus, formattedSeatNames)
                     setClickListenerSeat(seatName)
                 },
@@ -151,62 +141,33 @@ class SeatBookReturnActivity : AppCompatActivity() {
     }
 
     private fun setClickListenerSeat(seatNamesList: List<String>) {
+        val adult = passengerList.indices.filter { passengerList[it].passengerType == "adult" }
+        val baby = passengerList.indices.filter { passengerList[it].passengerType == "infant" }
+
         seatBookReturnView.setSeatClickListener(
             object : SeatClickListener {
                 override fun onAvailableSeatClick(
                     selectedIdList: List<Int>,
                     view: View,
                 ) {
-                    if (selectedIdList.isNotEmpty()) {
-                        val selectedSeatId = selectedIdList.first()
-                        val seatName = seatNamesList[selectedSeatId - 1]
-                        val row = seatName.last().toString()
-                        val column = seatName.dropLast(1).toString()
-                        Toast.makeText(
-                            this@SeatBookReturnActivity,
-                            "Seat Row : $row",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        Toast.makeText(
-                            this@SeatBookReturnActivity,
-                            "Seat Column : $column",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        val seatPassenger = SeatPassenger(seatRow = row, seatColumn = column)
+                    selectedIdList.forEachIndexed { index, selectedSeatId ->
+                        if (index < passengerList.size) {
+                            val seatName = seatNamesList[selectedSeatId - 1]
+                            val row = seatName.last().toString()
+                            val column = seatName.dropLast(1)
+                            val seatPassenger = SeatPassenger(seatRow = row, seatColumn = column)
 
-                        val passengerIndex = selectedIdList.size - 1
-                        if (passengerIndex < passengerList.size) {
-                            passengerList[passengerIndex].seatReturn = seatPassenger
-                            // Log the updated passenger info
-                            Log.d(
-                                "SeatBookActivity",
-                                "Updated Passenger: ${passengerList[passengerIndex]}",
-                            )
+                            passengerList[index].seatReturn = seatPassenger
+
+                            if (index in adult) {
+                                val adultIndex = adult.indexOf(index)
+                                if (adultIndex < baby.size) {
+                                    val babyIndex = baby[adultIndex]
+                                    passengerList[babyIndex].seatReturn = seatPassenger
+                                }
+                            }
                         }
-
-                        Toast.makeText(
-                            this@SeatBookReturnActivity,
-                            "Seat Row : $row, Seat Column : $column",
-                            Toast.LENGTH_SHORT,
-                        ).show()
                     }
-                    /*if (selectedIdList.isNotEmpty()) {
-                        val selectedSeatId = selectedIdList.last()
-                        val seatName = seatNamesList[selectedSeatId - 1]
-                        val row = seatName.last().toString()
-                        val column = seatName.first().toString()
-                        Toast.makeText(this@SeatBookActivity, "Seat Row : $row", Toast.LENGTH_SHORT).show()
-                        Toast.makeText(this@SeatBookActivity, "Seat Column : $column", Toast.LENGTH_SHORT).show()
-                        val seatPassenger = SeatPassenger(seatRow = row, seatColumn = column)
-
-                        val nextPassengerIndex = passengerList.indexOfFirst { it.seatDeparture == null }
-                        if (nextPassengerIndex != -1) {
-                            passengerList[nextPassengerIndex].seatDeparture = seatPassenger
-                            Log.d("SeatBookActivity", "Updated Passenger: ${passengerList[nextPassengerIndex]}")
-                        }
-
-                        Toast.makeText(this@SeatBookActivity, "Seat Row : $row, Seat Column : $column", Toast.LENGTH_SHORT).show()
-                    }*/
                 }
 
                 override fun onBookedSeatClick(view: View) {
@@ -216,10 +177,5 @@ class SeatBookReturnActivity : AppCompatActivity() {
                 }
             },
         )
-    }
-
-    private fun getSeatNames(seats: List<Seat>): List<String> {
-        return seats.sortedWith(compareBy({ it.seatColumn }, { it.seatRow }))
-            .map { it.seatName }
     }
 }
