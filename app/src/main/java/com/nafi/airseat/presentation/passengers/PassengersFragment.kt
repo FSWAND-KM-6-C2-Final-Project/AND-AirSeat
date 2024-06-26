@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nafi.airseat.databinding.FragmentPassengersBinding
+import com.nafi.airseat.utils.showSnackBarError
 
 class PassengersFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentPassengersBinding
@@ -71,17 +72,17 @@ class PassengersFragment : BottomSheetDialogFragment() {
             updatePassengerCount()
         }
 
-        // Save button click listener
+        viewModel.showWarning.observe(viewLifecycleOwner) { warningMessage ->
+            showSnackBarError(warningMessage)
+        }
+
         binding.btnSave.setOnClickListener {
-            // Update the passenger count in HomeFragment
             listener?.onPassengerCountUpdated(
                 viewModel.getTotalPassengerCount(),
                 viewModel.adultCount,
                 viewModel.childCount,
                 viewModel.babyCount,
             )
-
-            // Dismiss the bottom sheet
             dismiss()
         }
     }
