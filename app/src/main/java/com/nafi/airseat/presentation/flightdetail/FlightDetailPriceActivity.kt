@@ -1,6 +1,5 @@
 package com.nafi.airseat.presentation.flightdetail
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
