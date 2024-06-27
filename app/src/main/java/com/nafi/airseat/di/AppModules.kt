@@ -20,8 +20,6 @@ import com.nafi.airseat.data.datasource.airport.AirportApiDataSource
 import com.nafi.airseat.data.datasource.airport.AirportDataSource
 import com.nafi.airseat.data.datasource.booking.BookingApiDataSource
 import com.nafi.airseat.data.datasource.booking.BookingDataSource
-import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSource
-import com.nafi.airseat.data.datasource.favoritedestination.FavoriteDestinationDataSourceImpl
 import com.nafi.airseat.data.datasource.flight.FlightApiDataSource
 import com.nafi.airseat.data.datasource.flight.FlightDataSource
 import com.nafi.airseat.data.datasource.flightdetail.FlightDetailApiDataSource
@@ -36,8 +34,6 @@ import com.nafi.airseat.data.repository.AirportRepository
 import com.nafi.airseat.data.repository.AirportRepositoryImpl
 import com.nafi.airseat.data.repository.BookingRepository
 import com.nafi.airseat.data.repository.BookingRepositoryImpl
-import com.nafi.airseat.data.repository.FavoriteDestinationRepository
-import com.nafi.airseat.data.repository.FavoriteDestinationRepositoryImpl
 import com.nafi.airseat.data.repository.FlightDetailRepository
 import com.nafi.airseat.data.repository.FlightDetailRepositoryImpl
 import com.nafi.airseat.data.repository.FlightRepository
@@ -132,7 +128,6 @@ object AppModules {
             single<NotificationDataSource> { NotificationDataSourceImpl(get()) }
             single<BookingDataSource> { BookingApiDataSource(get()) }
             single<AirportDataSource> { AirportApiDataSource(get()) }
-            single<FavoriteDestinationDataSource> { FavoriteDestinationDataSourceImpl() }
             single<FlightDataSource> { FlightApiDataSource(get()) }
             single<FlightDetailDataSource> { FlightDetailApiDataSource(get()) }
             single<ProfileDataSource> { ProfileDataSourceImpl(get()) }
@@ -150,7 +145,6 @@ object AppModules {
             single<UserRepository> { UserRepositoryImpl(get()) }
             single<SeatRepository> { SeatRepositoryImpl(get()) }
             single<AirportRepository> { AirportRepositoryImpl(get()) }
-            single<FavoriteDestinationRepository> { FavoriteDestinationRepositoryImpl(get()) }
             single<FlightRepository> { FlightRepositoryImpl(get()) }
             single<FlightDetailRepository> { FlightDetailRepositoryImpl(get()) }
             single<UserPrefRepository> { UserPrefRepositoryImpl(get()) }

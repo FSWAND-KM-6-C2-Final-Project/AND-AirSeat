@@ -239,7 +239,7 @@
     <string name="text_error_passport_must_be_alphanumeric">Paspor must be numbers and letters</string>
     <string name="text_ticket_payment_has_been_successful">Ticket payment has been successful</string>
     <string name="text_congratulations">Congratulations!</string>
-    <string name="text_title_splash">Air Seat</string>
+    <string name="text_title_splash">AirSeat</string>
     <string name="text_adult_passenger_fragment">Adult\n(Over 12 years old)</string>
     <string name="text_plus_passenger">+</string>
     <string name="text_child_passenger_fragment">Child\n(2 - 11 years old)</string>

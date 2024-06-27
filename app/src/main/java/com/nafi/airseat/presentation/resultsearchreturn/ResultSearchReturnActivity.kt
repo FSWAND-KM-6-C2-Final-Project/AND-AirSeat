@@ -166,7 +166,7 @@ class ResultSearchReturnActivity : AppCompatActivity(), FilterBottomSheetFragmen
         binding.exSevenCalendar.scrollToDate(startDate)
         setupAdapter()
         proceedResultTicket(
-            searchDateString ?: "",
+            selectedDate.toFormattedString(),
             sortByClass.toString(),
             orderBy.toString(),
             departureAirportId,
