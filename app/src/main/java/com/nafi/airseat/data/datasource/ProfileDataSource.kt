@@ -1,12 +1,12 @@
 package com.nafi.airseat.data.datasource
 
 import com.nafi.airseat.data.model.BaseResponse
-import com.nafi.airseat.data.source.network.model.profile.ProfileResponse
+import com.nafi.airseat.data.source.network.model.profile.ProfileData
 import com.nafi.airseat.data.source.network.model.profile.UpdateProfileRequest
 import com.nafi.airseat.data.source.network.services.AirSeatApiServiceWithAuthorization
 
 interface ProfileDataSource {
-    suspend fun getUserProfile(): ProfileResponse
+    suspend fun getUserProfile(): BaseResponse<ProfileData>
 
     suspend fun updateUserProfile(updateProfileRequest: UpdateProfileRequest): BaseResponse<Any>
 
@@ -14,7 +14,7 @@ interface ProfileDataSource {
 }
 
 class ProfileDataSourceImpl(private val service: AirSeatApiServiceWithAuthorization) : ProfileDataSource {
-    override suspend fun getUserProfile(): ProfileResponse {
+    override suspend fun getUserProfile(): BaseResponse<ProfileData> {
         return service.getUserProfile()
     }
 

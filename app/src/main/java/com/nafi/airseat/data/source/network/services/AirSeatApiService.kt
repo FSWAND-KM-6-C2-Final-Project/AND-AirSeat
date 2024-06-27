@@ -11,7 +11,7 @@ import com.nafi.airseat.data.source.network.model.flightdetail.FlightDetailRespo
 import com.nafi.airseat.data.source.network.model.history.HistoryData
 import com.nafi.airseat.data.source.network.model.login.LoginRequest
 import com.nafi.airseat.data.source.network.model.notification.NotificationResponse
-import com.nafi.airseat.data.source.network.model.profile.ProfileResponse
+import com.nafi.airseat.data.source.network.model.profile.ProfileData
 import com.nafi.airseat.data.source.network.model.profile.UpdateProfileRequest
 import com.nafi.airseat.data.source.network.model.register.RegisterData
 import com.nafi.airseat.data.source.network.model.register.RegisterRequest
@@ -131,7 +131,7 @@ interface AirSeatApiServiceWithAuthorization {
     ): BaseResponse<HistoryData>
 
     @GET("auth/me")
-    suspend fun getUserProfile(): ProfileResponse
+    suspend fun getUserProfile(): BaseResponse<ProfileData>
 
     @PATCH("profile")
     suspend fun updateProfile(
