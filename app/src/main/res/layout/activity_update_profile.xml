@@ -23,7 +23,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="8dp"
-            android:src="@drawable/ic_arrow_back" />
+            android:src="@drawable/btn_back" />
 
         <TextView
             android:id="@+id/tv_type_notification"

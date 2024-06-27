@@ -18,7 +18,7 @@ interface ProfileRepository {
 
 class ProfileRepositoryImpl(private val datasource: ProfileDataSource) : ProfileRepository {
     override fun getDataProfile(): Flow<ResultWrapper<DataProfile>> {
-        return proceedFlow { datasource.getUserProfile().data.user.toDataProfile() }
+        return proceedFlow { datasource.getUserProfile().data?.user.toDataProfile() }
     }
 
     override fun updateProfileData(updateProfileRequest: UpdateProfileRequest): Flow<ResultWrapper<String>> {
