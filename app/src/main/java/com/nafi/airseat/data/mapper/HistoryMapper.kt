@@ -34,6 +34,7 @@ fun Booking?.toHistoryModel() =
         returnFlight = this?.returnFlight?.toHistoryReturnFlightModel(),
         totalAmount = this?.totalAmount ?: 0,
         bookingDetail = this?.bookingDetail.toBookingListDetailList(),
+        paymentUrl = this?.paymentUrl.orEmpty(),
     )
 
 fun Flight?.toHistoryFlightModel() =
@@ -63,6 +64,7 @@ fun ReturnFlight?.toHistoryReturnFlightModel() =
         departureTime = this?.departureTime.orEmpty(),
         flightNumber = this?.flightNumber.orEmpty(),
         information = this?.information.orEmpty(),
+        airline = this?.airline.toAirlineHistory(),
     )
 
 fun DepartureAirport?.toHistoryDepartureAirportModel() =

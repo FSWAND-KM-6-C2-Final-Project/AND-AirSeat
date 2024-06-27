@@ -14,6 +14,7 @@ data class History(
     val returnFlight: HistoryReturnFlight?,
     val totalAmount: Long,
     val bookingDetail: List<BookingDetailHistory>,
+    val paymentUrl: String,
 ) : Parcelable
 
 @Parcelize
@@ -43,6 +44,7 @@ data class HistoryReturnFlight(
     val departureTime: String,
     val flightNumber: String,
     val information: String,
+    val airline: AirlineHistory,
 ) : Parcelable
 
 @Parcelize

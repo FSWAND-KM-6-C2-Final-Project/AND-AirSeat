@@ -33,4 +33,6 @@ data class Booking(
     val returnFlight: ReturnFlight?,
     @SerializedName("total_amount")
     val totalAmount: Long?,
+    @SerializedName("payment_url")
+    val paymentUrl: String?,
 )

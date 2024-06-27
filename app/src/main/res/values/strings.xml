@@ -246,4 +246,6 @@
     <string name="text_baby_passenger_fragment">Baby\n(Under 2 years old)</string>
     <string name="text_result_search_title">Result Searches</string>
     <string name="text_delete_all_title">Delete All</string>
+    <string name="text_btn_continue_payment">Continue Payment</string>
+    <string name="text_failed_to_continue_payment">Failed to Continue Payment</string>
 </resources>
