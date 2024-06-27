@@ -19,6 +19,10 @@ class ProfileSettingActivity : AppCompatActivity() {
     }
 
     private fun setOnClickListener() {
+        binding.ivArrowBack.setOnClickListener {
+            onBackPressed()
+        }
+
         binding.itemDeleteAccount.setOnClickListener {
             val dialog = DeleteAccountFragment()
             dialog.show(supportFragmentManager, dialog.tag)
