@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AirSeat</string>
+    <string name="app_name">Air/nSeat</string>
     <string name="title_tab_home">Beranda</string>
     <string name="title_tab_history">Riwayat</string>
     <string name="title_tab_notification">Notifikasi</string>
@@ -220,6 +220,8 @@
     <string name="text_detail_history_child">%1$s Child</string>
     <string name="text_detail_history_baby">%1$s Baby</string>
     <string name="text_detail_history_airport_terminal_departure">%1$s - %2$s</string>
+    <string name="text_button_filter_history">Filter</string>
+    <string name="text_clear_filter_date_history">Clear</string>
     <string name="text_detail_departure_ariport">%1$s - %2$s</string>
     <string name="text_child_count">%1$s Child</string>
     <string name="text_adult_count">%1$s Adult</string>
@@ -244,4 +246,6 @@
     <string name="text_baby_passenger_fragment">Baby\n(Under 2 years old)</string>
     <string name="text_result_search_title">Result Searches</string>
     <string name="text_delete_all_title">Delete All</string>
+    <string name="text_btn_continue_payment">Continue Payment</string>
+    <string name="text_failed_to_continue_payment">Failed to Continue Payment</string>
 </resources>

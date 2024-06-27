@@ -102,3 +102,8 @@ fun String.toConvertDateFormat(): String {
         "Invalid date format"
     }
 }
+
+fun LocalDate.toFormattedCompleteDateNumber(): String {
+    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    return this.format(formatter)
+}

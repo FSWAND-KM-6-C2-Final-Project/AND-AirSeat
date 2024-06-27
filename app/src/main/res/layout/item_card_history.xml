@@ -18,13 +18,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_status_rounded"
+            android:backgroundTint="@color/gray"
             android:paddingHorizontal="12dp"
             android:paddingVertical="6dp"
             android:textColor="@color/md_theme_onPrimary"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Unpaid" />
+            tools:text="Canceled" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/detail_history"

@@ -13,5 +13,13 @@ class DetailHistoryViewModel(
 ) : ViewModel() {
     private val detailHistoryData = extras?.getParcelable<History>(DetailHistoryActivity.EXTRAS_DETAIL_DATA)
 
-    fun getDetailHistory(bookingCode: String?) = repository.getHistoryDetail(bookingCode).asLiveData(Dispatchers.IO)
+    fun getDetailHistory(
+        bookingCode: String?,
+        startDate: String?,
+        endDate: String?,
+    ) = repository.getHistoryDetail(
+        bookingCode,
+        startDate,
+        endDate,
+    ).asLiveData(Dispatchers.IO)
 }

@@ -1,5 +1,6 @@
 package com.nafi.airseat.presentation.flightdetail
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -61,6 +62,7 @@ class FlightDetailPriceActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("StringFormatMatches")
     private fun bindPrice() {
         val price = intent.getIntExtra("price", 0).toLong()
         val priceBaby = 0.0

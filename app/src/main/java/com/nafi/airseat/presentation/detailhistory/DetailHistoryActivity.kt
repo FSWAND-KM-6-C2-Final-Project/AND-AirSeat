@@ -6,27 +6,31 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import coil.load
 import com.nafi.airseat.R
 import com.nafi.airseat.data.model.BookingDetailHistory
 import com.nafi.airseat.data.model.History
 import com.nafi.airseat.databinding.ActivityDetailHistoryBinding
 import com.nafi.airseat.presentation.detailhistory.adapter.PassengerAdapter
+import com.nafi.airseat.presentation.payment.WebViewMidtransActivity
 import com.nafi.airseat.utils.capitalizeFirstLetter
+import com.nafi.airseat.utils.showSnackBarError
 import com.nafi.airseat.utils.toCompleteDateFormat
 import com.nafi.airseat.utils.toCurrencyFormat
 import com.nafi.airseat.utils.toTimeClock
 import com.nafi.airseat.utils.toTimeFormat
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailHistoryActivity : AppCompatActivity() {
     private val binding: ActivityDetailHistoryBinding by lazy {
         ActivityDetailHistoryBinding.inflate(layoutInflater)
     }
-
-    private val viewModel: DetailHistoryViewModel by viewModel()
-    private val adapter: PassengerAdapter by lazy {
+    private val passengerDepartAdapter: PassengerAdapter by lazy {
+        PassengerAdapter()
+    }
+    private val passengerReturnAdapter: PassengerAdapter by lazy {
         PassengerAdapter()
     }
 
@@ -52,7 +56,10 @@ class DetailHistoryActivity : AppCompatActivity() {
     }
 
     private fun setAdapter() {
-        binding.layoutFlightInfo.layoutOrderInfo.rvPassengers.adapter = adapter
+        binding.layoutFlightInfo.layoutOrderInfo.rvPassengers.adapter =
+            this@DetailHistoryActivity.passengerDepartAdapter
+        binding.layoutFlightInfo.layoutReturnOrderInfo.rvPassengers.adapter =
+            this@DetailHistoryActivity.passengerReturnAdapter
     }
 
     private fun getIntentData() {
@@ -76,17 +83,79 @@ class DetailHistoryActivity : AppCompatActivity() {
             binding.layoutFlightInfo.layoutOrderInfo.ivAirplaneLogo.load(it.flight.airline.airlinePicture) {
                 crossfade(true)
             }
-            adapter.insertData(it.bookingDetail)
             binding.layoutFlightInfo.layoutOrderInfo.tvArrivalTime.text =
                 it.flight.arrivalTime.toTimeClock()
             binding.layoutFlightInfo.layoutOrderInfo.tvArrivalDate.text =
                 it.flight.arrivalTime.toCompleteDateFormat()
             binding.layoutFlightInfo.layoutOrderInfo.tvArrivalAirport.text =
                 it.flight.arrivalAirport.airportName
+            binding.layoutFlightInfo.tvTotalPriceDetail.text = it.totalAmount.toCurrencyFormat()
 
+            setAdapterData(it)
+            setViewReturnFlight(it)
             val passengerSummary = aggregatePassengerData(it.bookingDetail)
-            displayPassengerSummary(passengerSummary)
             bindDataToLayout(passengerSummary)
+            setButtonDetailHistory(it.bookingStatus)
+            continuePayment(it.paymentUrl)
+        }
+    }
+
+    private fun setAdapterData(data: History) {
+        val bookingDetailList = data.bookingDetail
+        val halfSize = bookingDetailList.size / 2
+        val firstHalfBookingDetailList = bookingDetailList.subList(0, halfSize)
+        val secondHalfBookingDetailList =
+            bookingDetailList.subList(halfSize, bookingDetailList.size)
+        if (data.returnFlight?.flightNumber?.length == null) {
+            passengerDepartAdapter.insertData(data.bookingDetail)
+            Toast.makeText(this, "${data.returnFlight?.flightNumber?.length}", Toast.LENGTH_SHORT)
+                .show()
+        } else {
+            passengerDepartAdapter.insertData(secondHalfBookingDetailList)
+            passengerReturnAdapter.insertData(firstHalfBookingDetailList)
+        }
+    }
+
+    private fun setViewReturnFlight(data: History) {
+        data.returnFlight.let {
+            if (data.returnFlight?.flightNumber?.length == null) {
+                binding.layoutFlightInfo.layoutReturnOrderInfo.root.isVisible = false
+            } else {
+                binding.layoutFlightInfo.layoutReturnOrderInfo.root.isVisible = true
+                binding.layoutFlightInfo.layoutReturnOrderInfo.tvDepartureTime.text =
+                    data.returnFlight.departureTime.toTimeFormat()
+                binding.layoutFlightInfo.layoutReturnOrderInfo.tvDepartureDate.text =
+                    data.returnFlight.departureTime.toCompleteDateFormat()
+                binding.layoutFlightInfo.layoutReturnOrderInfo.tvDepartureAirport.text =
+                    getString(
+                        R.string.text_detail_history_airport_terminal_departure,
+                        data.returnFlight.departureAirport.airportName,
+                        data.returnFlight.departureTerminal,
+                    )
+                binding.layoutFlightInfo.layoutReturnOrderInfo.tvAirplane.text =
+                    data.returnFlight.airline.airlineName
+                binding.layoutFlightInfo.layoutReturnOrderInfo.tvCodeAirplane.text =
+                    data.returnFlight.flightNumber
+                binding.layoutFlightInfo.layoutReturnOrderInfo.ivAirplaneLogo.load(data.returnFlight.airline.airlinePicture) {
+                    crossfade(true)
+                }
+                binding.layoutFlightInfo.layoutReturnOrderInfo.tvArrivalTime.text =
+                    data.returnFlight.arrivalTime.toTimeClock()
+                binding.layoutFlightInfo.layoutReturnOrderInfo.tvArrivalDate.text =
+                    data.returnFlight.arrivalTime.toCompleteDateFormat()
+                binding.layoutFlightInfo.layoutReturnOrderInfo.tvArrivalAirport.text =
+                    data.returnFlight.arrivalAirport.airportName
+            }
+        }
+    }
+
+    private fun setButtonDetailHistory(status: String) {
+        if (status == "unpaid") {
+            binding.btnHome.isVisible = false
+            binding.btnContinuePayment.isVisible = true
+        } else {
+            binding.btnHome.isVisible = true
+            binding.btnContinuePayment.isVisible = false
         }
     }
 
@@ -116,13 +185,7 @@ class DetailHistoryActivity : AppCompatActivity() {
 
             passengerSummary[passengerType] = Pair(newCount, newPrice)
         }
-
         return passengerSummary
-    }
-
-    private fun displayPassengerSummary(passengerSummary: Map<String, Pair<Int, Int>>) {
-        val totalPrice = passengerSummary.values.sumOf { it.second }
-        binding.layoutFlightInfo.tvTotalPriceDetail.text = totalPrice.toLong().toCurrencyFormat()
     }
 
     private fun bindDataToLayout(passengerSummary: Map<String, Pair<Int, Int>>) {
@@ -131,7 +194,7 @@ class DetailHistoryActivity : AppCompatActivity() {
             val price = countPrice.second
 
             when (passengerType) {
-                "Adult" -> {
+                "adult" -> {
                     binding.layoutFlightInfo.layoutPrice.llPriceAdults.visibility = View.VISIBLE
                     binding.layoutFlightInfo.layoutPrice.tvAdults.text =
                         getString(R.string.text_detail_history_adults, count.toString())
@@ -139,7 +202,7 @@ class DetailHistoryActivity : AppCompatActivity() {
                         price.toLong().toCurrencyFormat()
                 }
 
-                "Child" -> {
+                "children" -> {
                     binding.layoutFlightInfo.layoutPrice.llPriceChild.visibility = View.VISIBLE
                     binding.layoutFlightInfo.layoutPrice.tvChild.text =
                         getString(R.string.text_detail_history_child, count.toString())
@@ -147,7 +210,7 @@ class DetailHistoryActivity : AppCompatActivity() {
                         price.toLong().toCurrencyFormat()
                 }
 
-                "Baby" -> {
+                "infant" -> {
                     binding.layoutFlightInfo.layoutPrice.llPriceBaby.visibility = View.VISIBLE
                     binding.layoutFlightInfo.layoutPrice.tvBaby.text =
                         getString(R.string.text_detail_history_baby, count.toString())
@@ -164,6 +227,23 @@ class DetailHistoryActivity : AppCompatActivity() {
     private fun setOnClickListener() {
         binding.ibBackDetailHistory.setOnClickListener {
             onBackPressed()
+        }
+
+        binding.btnHome.setOnClickListener {
+            onBackPressed()
+        }
+    }
+
+    private fun continuePayment(redirectUrl: String?) {
+        binding.btnContinuePayment.setOnClickListener {
+            if (!redirectUrl.isNullOrBlank()) {
+                val intent = Intent(this, WebViewMidtransActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent.putExtra("URL", redirectUrl)
+                startActivity(intent)
+            } else {
+                showSnackBarError(getString(R.string.text_failed_to_continue_payment))
+            }
         }
     }
 }
