@@ -62,6 +62,7 @@ class FlightDetailPriceActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("StringFormatMatches")
     private fun bindPrice() {
         val price = intent.getIntExtra("price", 0).toLong()
         val priceBaby = 0.0
