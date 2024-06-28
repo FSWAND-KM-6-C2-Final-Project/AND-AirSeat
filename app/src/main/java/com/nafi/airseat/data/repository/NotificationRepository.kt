@@ -14,6 +14,6 @@ interface NotificationRepository {
 class NotificationRepositoryImpl(private val dataSource: NotificationDataSource) :
     NotificationRepository {
     override fun getNotification(): Flow<ResultWrapper<List<NotificationModel>>> {
-        return proceedFlow { dataSource.getNotification().data.notification.toNotificationList() }
+        return proceedFlow { dataSource.getNotification().data?.notification.toNotificationList() }
     }
 }

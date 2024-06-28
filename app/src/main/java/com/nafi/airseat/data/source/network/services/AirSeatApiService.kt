@@ -10,7 +10,7 @@ import com.nafi.airseat.data.source.network.model.flight.FlightsResponse
 import com.nafi.airseat.data.source.network.model.flightdetail.FlightDetailResponse
 import com.nafi.airseat.data.source.network.model.history.HistoryData
 import com.nafi.airseat.data.source.network.model.login.LoginRequest
-import com.nafi.airseat.data.source.network.model.notification.NotificationResponse
+import com.nafi.airseat.data.source.network.model.notification.NotificationList
 import com.nafi.airseat.data.source.network.model.profile.ProfileData
 import com.nafi.airseat.data.source.network.model.profile.UpdateProfileRequest
 import com.nafi.airseat.data.source.network.model.register.RegisterData
@@ -117,7 +117,7 @@ interface AirSeatApiServiceWithAuthorization {
     suspend fun getNotification(
         @Query("limit") limit: Int = 10,
         @Query("page") page: Int = 1,
-    ): NotificationResponse
+    ): BaseResponse<NotificationList>
 
     @GET("booking/detail")
     suspend fun getHistoryData(
