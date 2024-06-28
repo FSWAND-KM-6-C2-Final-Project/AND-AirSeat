@@ -146,7 +146,7 @@ class SeatBookActivity : AppCompatActivity() {
             .isCustomTitle(true)
             .setCustomTitle(formattedSeatNames)
             .setSeatLayoutPadding(2)
-            .setSeatSizeBySeatsColumnAndLayoutWidth(7, -1)
+            .setSeatSizeBySeatsColumnAndLayoutWidth(6, -1)
 
         seatBookView.show()
     }
