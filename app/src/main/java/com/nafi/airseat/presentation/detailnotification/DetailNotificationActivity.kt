@@ -42,7 +42,7 @@ class DetailNotificationActivity : AppCompatActivity() {
 
     private fun getIntentData() {
         intent.extras?.getParcelable<NotificationModel>(EXTRAS_DETAIL_DATA)?.let {
-            if (it.notificationType == "Notifikasi") {
+            if (it.notificationType == "Notification") {
                 binding.tvTermAndService.isVisible = false
             }
             binding.tvTypeNotification.text = it.notificationType

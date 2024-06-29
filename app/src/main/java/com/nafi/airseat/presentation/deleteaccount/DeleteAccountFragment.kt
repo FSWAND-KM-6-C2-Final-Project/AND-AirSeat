@@ -108,7 +108,7 @@ class DeleteAccountFragment : BottomSheetDialogFragment() {
         val displayMetrics = resources.displayMetrics
         val screenHeight = displayMetrics.heightPixels
 
-        val height = (screenHeight * 0.87).toInt()
+        val height = (screenHeight * 0.5).toInt()
         bottomSheet.layoutParams.height = height
 
         bottomSheet.layoutParams = bottomSheet.layoutParams

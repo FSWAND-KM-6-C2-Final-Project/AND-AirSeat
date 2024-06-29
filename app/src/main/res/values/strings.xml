@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Air/nSeat</string>
+    <string name="app_name">AirSeat</string>
     <string name="title_tab_home">Beranda</string>
     <string name="title_tab_history">Riwayat</string>
     <string name="title_tab_notification">Notifikasi</string>
@@ -248,4 +248,7 @@
     <string name="text_delete_all_title">Delete All</string>
     <string name="text_btn_continue_payment">Continue Payment</string>
     <string name="text_failed_to_continue_payment">Failed to Continue Payment</string>
+    <string name="text_title_calendar_arrivals">Arrivals</string>
+    <string name="text_title_calendar_departure">Departure</string>
+    <string name="text_calendar_btn_save">Save</string>
 </resources>

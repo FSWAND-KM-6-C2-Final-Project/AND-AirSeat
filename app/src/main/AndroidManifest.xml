@@ -26,9 +26,6 @@
             android:name=".presentation.resultsearchreturn.ResultSearchReturnActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.deleteaccount.DeleteAccountFragment"
-            android:exported="false" />
-        <activity
             android:name=".presentation.profilesetting.ProfileSettingActivity"
             android:exported="false" />
         <activity
