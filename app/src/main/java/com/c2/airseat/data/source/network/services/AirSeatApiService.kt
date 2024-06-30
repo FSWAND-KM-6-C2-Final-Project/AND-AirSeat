@@ -81,7 +81,7 @@ interface AirSeatApiService {
     suspend fun getFlights(
         @Query("searchDate") searchDate: String?,
         @Query("sortBy") sortBy: String?,
-        @Query("limit") limit: Int = 20,
+        @Query("limit") limit: Int = 99,
         @Query("page") page: Int = 1,
         @Query("order") order: String?,
         @Query("deptAirport") deptAirport: String?,
