@@ -19,7 +19,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <com.nafi.airseat.utils.seatbook.SeatBookView
+            <com.c2.airseat.utils.seatbook.SeatBookView
                 android:id="@+id/layout_seat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

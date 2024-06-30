@@ -251,4 +251,5 @@
     <string name="text_title_calendar_arrivals">Arrivals</string>
     <string name="text_title_calendar_departure">Departure</string>
     <string name="text_calendar_btn_save">Save</string>
+    <string name="text_empty" />
 </resources>
