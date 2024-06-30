@@ -31,6 +31,7 @@ http-logging = "3.8.0"
 paging = "3.3.0"
 
 view = "2.5.1"
+junitJunit = "4.12"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -91,6 +92,7 @@ paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.r
 
 #shimmer
 shimmer = "com.facebook.shimmer:shimmer:0.5.0"
+junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
