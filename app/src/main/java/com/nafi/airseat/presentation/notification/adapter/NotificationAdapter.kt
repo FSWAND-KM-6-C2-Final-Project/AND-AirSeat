@@ -64,7 +64,7 @@ class NotificationAdapter(private val typeNotification: String?, private val ite
         private val typeNotification: String?,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: NotificationModel) {
-            if (typeNotification == "Notifikasi") {
+            if (typeNotification == "Notification") {
                 binding.tvNotificationFooter.isVisible = false
             }
             binding.tvNotificationType.text = data.notificationType
