@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.nafi.airseat"
+    namespace = "com.c2.airseat"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.nafi.airseat"
+        applicationId = "com.c2.airseat"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -40,6 +40,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        //noinspection DataBindingWithoutKapt
         dataBinding = true
     }
     flavorDimensions += "env"
@@ -80,11 +81,7 @@ ktlint {
 }
 
 dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-
-    // otp
-    implementation("com.github.mukeshsolanki.android-otpview-pinview:otpview:3.1.0")
-
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -100,29 +97,25 @@ dependencies {
     implementation(libs.coroutine.core)
     implementation(libs.coroutine.android)
     implementation(libs.androidx.legacy.support.v4)
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
-    testImplementation("junit:junit:4.12")
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp)
     implementation(libs.koin.android)
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("com.github.JahidHasanCO:SeatBookView:1.0.4")
+    implementation(libs.material)
+    implementation(libs.seatbookview)
     implementation(libs.http.logging)
-    implementation("com.github.lisawray.groupie:groupie:2.10.1")
-    implementation("com.github.lisawray.groupie:groupie-viewbinding:2.10.1")
-
-    // Dependensi Groupie
-    implementation("com.github.lisawray.groupie:groupie:2.9.0")
-    implementation("com.github.lisawray.groupie:groupie-viewbinding:2.9.0")
-
-    // Dependensi Groupie
-    implementation("com.github.lisawray.groupie:groupie:2.9.0")
-    implementation("com.github.lisawray.groupie:groupie-viewbinding:2.9.0")
+    implementation(libs.groupie)
+    implementation(libs.groupie.viewbinding)
+    implementation(libs.paging.runtime)
+    implementation(libs.shimmer)
+    implementation(libs.view)
+    implementation(libs.appintro)
+    implementation(libs.otpview)
 
     testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
@@ -131,8 +124,4 @@ dependencies {
     testImplementation(libs.coroutine.test)
     testImplementation(libs.turbine)
     testImplementation(libs.core.testing)
-    implementation(libs.paging.runtime)
-    implementation(libs.shimmer)
-    implementation(libs.view)
-    implementation("com.github.AppIntro:AppIntro:6.3.1")
 }

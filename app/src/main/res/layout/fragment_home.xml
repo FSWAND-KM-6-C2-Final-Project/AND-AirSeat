@@ -72,7 +72,7 @@
                 tools:listitem="@layout/layout_favorite_destination"
                 app:spanCount="2" />
 
-            <com.nafi.airseat.presentation.common.views.ContentStateView
+            <com.c2.airseat.presentation.common.views.ContentStateView
                 android:id="@+id/csv_favorite_destination"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -18,7 +18,7 @@
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.nafi.airseat.utils.seatbookreturn.SeatBookReturnView
+            <com.c2.airseat.utils.seatbookreturn.SeatBookReturnView
                 android:id="@+id/layout_seat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
