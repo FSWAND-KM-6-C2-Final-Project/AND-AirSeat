@@ -6,7 +6,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import coil.load
@@ -108,8 +107,6 @@ class DetailHistoryActivity : AppCompatActivity() {
             bookingDetailList.subList(halfSize, bookingDetailList.size)
         if (data.returnFlight?.flightNumber?.length == null) {
             passengerDepartAdapter.insertData(data.bookingDetail)
-            Toast.makeText(this, "${data.returnFlight?.flightNumber?.length}", Toast.LENGTH_SHORT)
-                .show()
         } else {
             passengerDepartAdapter.insertData(secondHalfBookingDetailList)
             passengerReturnAdapter.insertData(firstHalfBookingDetailList)
