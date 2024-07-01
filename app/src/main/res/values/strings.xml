@@ -252,4 +252,8 @@
     <string name="text_title_calendar_departure">Departure</string>
     <string name="text_calendar_btn_save">Save</string>
     <string name="text_empty" />
+    <string name="text_home_select_flight">Select Flight</string>
+    <string name="text_home_select_date">Select date</string>
+    <string name="text_home_add_passenger">Add passenger</string>
+    <string name="text_home_select_seat_class">Select seat class</string>
 </resources>
