@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -101,7 +100,6 @@ class HistoryFragment : Fragment(), CalendarBottomSheetFragment.OnDateSelectedLi
             ) { _, bundle ->
                 val startDate = bundle.getString("startDate")
                 val endDate = bundle.getString("endDate")
-                Toast.makeText(requireContext(), "$startDate $endDate", Toast.LENGTH_SHORT).show()
                 observeSearchDataByDate(startDate = startDate, endDate = endDate)
             }
         }
