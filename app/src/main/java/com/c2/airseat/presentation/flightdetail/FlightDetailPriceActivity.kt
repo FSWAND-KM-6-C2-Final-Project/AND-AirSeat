@@ -201,7 +201,7 @@ class FlightDetailPriceActivity : AppCompatActivity() {
             binding.layoutFlightDetailPrice.layoutFlightInfo.tvDepartureTime.text =
                 it.departureTime.toTimeFormat()
             binding.layoutFlightDetailPrice.layoutFlightInfo.tvDepartureDate.text =
-                it.departureTime.toConvertDateFormat()
+                it.departureTime.toCompleteDateFormat()
             binding.layoutFlightDetailPrice.layoutFlightInfo.tvDepartureAirport.text =
                 getString(
                     R.string.text_detail_departure_ariport,
