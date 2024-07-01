@@ -1,7 +1,5 @@
-package com.c2.airseat.data.datasource.airport
+package com.c2.airseat.data.datasource
 
-import com.c2.airseat.data.datasource.AirportApiDataSource
-import com.c2.airseat.data.datasource.AirportDataSource
 import com.c2.airseat.data.source.network.model.airport.AirportResponse
 import com.c2.airseat.data.source.network.services.AirSeatApiService
 import io.mockk.MockKAnnotations

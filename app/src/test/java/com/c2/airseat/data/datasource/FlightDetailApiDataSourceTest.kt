@@ -1,7 +1,5 @@
-package com.c2.airseat.data.datasource.flightdetail
+package com.c2.airseat.data.datasource
 
-import com.c2.airseat.data.datasource.FlightDetailApiDataSource
-import com.c2.airseat.data.datasource.FlightDetailDataSource
 import com.c2.airseat.data.source.network.model.flightdetail.FlightDetailResponse
 import com.c2.airseat.data.source.network.services.AirSeatApiService
 import io.mockk.MockKAnnotations
