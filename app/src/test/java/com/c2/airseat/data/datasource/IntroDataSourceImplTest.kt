@@ -1,6 +1,5 @@
-package com.c2.airseat.data.datasource.intro
+package com.c2.airseat.data.datasource
 
-import com.c2.airseat.data.datasource.IntroDataSourceImpl
 import com.c2.airseat.data.source.local.pref.UserPreference
 import io.mockk.coEvery
 import io.mockk.coVerify

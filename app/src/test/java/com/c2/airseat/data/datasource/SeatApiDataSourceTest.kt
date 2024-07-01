@@ -1,7 +1,5 @@
-package com.c2.airseat.data.datasource.seat
+package com.c2.airseat.data.datasource
 
-import com.c2.airseat.data.datasource.SeatApiDataSource
-import com.c2.airseat.data.datasource.SeatDataSource
 import com.c2.airseat.data.source.network.model.seat.SeatResponse
 import com.c2.airseat.data.source.network.services.AirSeatApiServiceWithAuthorization
 import io.mockk.MockKAnnotations

@@ -1,7 +1,5 @@
-package com.c2.airseat.data.datasource.booking
+package com.c2.airseat.data.datasource
 
-import com.c2.airseat.data.datasource.BookingApiDataSource
-import com.c2.airseat.data.datasource.BookingDataSource
 import com.c2.airseat.data.model.BaseResponse
 import com.c2.airseat.data.source.network.model.booking.BookingData
 import com.c2.airseat.data.source.network.model.booking.BookingFlightRequest
