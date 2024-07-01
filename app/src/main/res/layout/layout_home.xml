@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginHorizontal="2dp"
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="12dp">
@@ -31,7 +30,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/text_from"
                 android:textSize="16sp"
-                android:fontFamily="@font/font_plusjakartasans_regular"
                 android:layout_marginStart="12dp"/>
 
             <TextView
@@ -41,8 +39,8 @@
                 android:layout_weight="1"
                 android:textSize="16sp"
                 android:paddingVertical="2dp"
-                android:hint="Select Flight"
-                android:fontFamily="@font/font_plusjakartasans_bold"
+                android:hint="@string/text_home_select_flight"
+                android:textStyle="bold"
                 android:layout_marginStart="12dp"
                 android:ellipsize="end"
                 android:maxLines="1"/>
@@ -93,7 +91,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/text_to"
                 android:textSize="16sp"
-                android:fontFamily="@font/font_plusjakartasans_regular"
                 android:layout_marginStart="12dp"/>
             <TextView
                 android:id="@+id/tv_destination"
@@ -102,8 +99,8 @@
                 android:layout_weight="1"
                 android:textSize="16sp"
                 android:paddingVertical="2dp"
-                android:hint="Select Flight"
-                android:fontFamily="@font/font_plusjakartasans_bold"
+                android:hint="@string/text_home_select_flight"
+                android:textStyle="bold"
                 android:layout_marginStart="12dp"
                 android:ellipsize="end"
                 android:maxLines="1"/>
@@ -119,8 +116,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_depart_return"
-                android:fontFamily="@font/font_plusjakartasans_regular"/>
+                android:text="@string/text_depart_return" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/sw_depart_return"
@@ -140,8 +136,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/text_departure"
-                android:fontFamily="@font/font_plusjakartasans_regular"/>
+                android:text="@string/text_departure" />
             <TextView
                 android:id="@+id/tv_space_1"
                 android:layout_width="60dp"
@@ -151,8 +146,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/text_return"
-                android:fontFamily="@font/font_plusjakartasans_regular"/>
+                android:text="@string/text_return" />
         </LinearLayout>
 
         <LinearLayout
@@ -168,8 +162,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/tv_border_radius"
                 android:paddingVertical="8dp"
-                android:hint="Select date"
-                android:fontFamily="@font/font_plusjakartasans_bold"/>
+                android:hint="@string/text_home_select_date" />
             <TextView
                 android:id="@+id/tv_space_2"
                 android:layout_width="60dp"
@@ -181,8 +174,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/tv_border_radius"
                 android:paddingVertical="8dp"
-                android:hint="Select date"
-                android:fontFamily="@font/font_plusjakartasans_bold"/>
+                android:hint="@string/text_home_select_date" />
         </LinearLayout>
 
         <LinearLayout
@@ -196,8 +188,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/text_passengers"
-                android:fontFamily="@font/font_plusjakartasans_regular"/>
+                android:text="@string/text_passengers" />
             <TextView
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"/>
@@ -205,8 +196,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/text_seat_class"
-                android:fontFamily="@font/font_plusjakartasans_regular"/>
+                android:text="@string/text_seat_class" />
         </LinearLayout>
 
         <LinearLayout
@@ -222,8 +212,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/tv_border_radius"
                 android:paddingVertical="8dp"
-                android:hint="Add passenger"
-                android:fontFamily="@font/font_plusjakartasans_bold"/>
+                android:hint="@string/text_home_add_passenger" />
             <TextView
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"/>
@@ -236,8 +225,7 @@
                 android:paddingVertical="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:hint="Select seat class"
-                android:fontFamily="@font/font_plusjakartasans_bold"/>
+                android:hint="@string/text_home_select_seat_class" />
         </LinearLayout>
 
 
@@ -249,7 +237,7 @@
             app:cornerRadius="12dp"
             android:layout_marginTop="24dp"
             android:paddingBottom="8dp"
-            android:fontFamily="@font/font_plusjakartasans_bold"/>
+            android:enabled="false"/>
 
     </LinearLayout>
 
